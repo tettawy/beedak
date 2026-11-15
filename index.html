@@ -1,0 +1,822 @@
+<!doctype html>
+<html lang="ar-EG" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>بإيدك | إرشاد فرق مشروعات التخرج</title>
+<meta name="description" content="جلسة تشخيص 45 دقيقة أونلاين لفريق مشروع التخرج، بـ350 جنيه للفريق كله. بتطلعوا بخطة للخطوة الجاية مكتوبة بإيدكم، ولو ما طلعتوش بخطة واضحة للخطوة الجاية، الـ350 ترجع كاملة.">
+<!-- Not published publicly yet: keep noindex until the launch decision exists. -->
+<meta name="robots" content="index, follow">
+<meta name="color-scheme" content="dark">
+<meta name="theme-color" content="#07090D">
+<meta property="og:type" content="website">
+<meta property="og:locale" content="ar_EG">
+<meta property="og:title" content="مشروع التخرج واقف؟ افهموه، وكمّلوه بإيدكم">
+<meta property="og:description" content="جلسة تشخيص 45 دقيقة أونلاين، 350 جنيه للفريق كله. ولو ما طلعتوش بخطة واضحة للخطوة الجاية، الـ350 ترجع كاملة.">
+<link rel="icon" href="assets/img/beedak-icon-circle.svg" type="image/svg+xml">
+<script>
+/* v3: "js" for progressive enhancement; motion state decided before first paint (app.js re-checks it and owns the pause buttons). */
+(function () {
+  var d = document.documentElement;
+  d.classList.add('js');
+  try {
+    var rm = window.matchMedia && matchMedia('(prefers-reduced-motion: reduce)').matches;
+    var saved = null;
+    try { saved = localStorage.getItem('beedak-motion'); } catch (e) { /* storage blocked */ }
+    var c = navigator.connection;
+    var light = (c && c.saveData === true) || (navigator.deviceMemory && navigator.deviceMemory <= 2);
+    if (rm) d.classList.add('rm');
+    if (!rm && saved !== 'off' && (saved === 'on' || !light)) d.classList.add('motion-on');
+  } catch (e) { /* motion stays off */ }
+  /* Font preloads only over http(s): opened from a local file, a crossorigin preload is blocked and logs an error. */
+  if (/^https?:/.test(location.protocol)) {
+    ['alexandria-var-500-900-arabic', 'plex-arabic-400-arabic'].forEach(function (f) {
+      var l = document.createElement('link');
+      l.rel = 'preload'; l.as = 'font'; l.type = 'font/woff2'; l.crossOrigin = 'anonymous';
+      l.href = 'assets/fonts/' + f + '.woff2';
+      document.head.appendChild(l);
+    });
+  }
+})();
+</script>
+<link rel="stylesheet" href="assets/css/styles.css">
+<script src="assets/js/app.js" defer></script>
+</head>
+<body class="has-cta" data-page="index">
+<svg width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false">
+  <symbol id="i-check" viewBox="0 0 24 24"><path d="M20 6 9 17l-5-5"/></symbol>
+  <symbol id="i-x" viewBox="0 0 24 24"><path d="M18 6 6 18M6 6l12 12"/></symbol>
+  <symbol id="i-copy" viewBox="0 0 24 24"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></symbol>
+  <symbol id="i-share" viewBox="0 0 24 24"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><path d="m8.6 13.5 6.8 4M15.4 6.5l-6.8 4"/></symbol>
+  <symbol id="i-chat" viewBox="0 0 24 24"><path fill="currentColor" stroke="none" d="M12 2a10 10 0 0 0-8.6 15.1L2 22l5-1.3A10 10 0 1 0 12 2Zm5.3 14.1c-.2.6-1.3 1.2-1.8 1.2-.5.1-1 .2-3.3-.7-2.8-1.1-4.5-4-4.7-4.2-.1-.2-1.1-1.5-1.1-2.9s.7-2 1-2.3c.2-.3.5-.3.7-.3h.5c.2 0 .4 0 .6.5l.8 2c.1.2.1.4 0 .5l-.4.6-.4.4c-.1.2-.3.3-.1.6.2.3.8 1.3 1.7 2.1 1.2 1 2.1 1.3 2.4 1.5.3.1.5.1.6-.1l.9-1.1c.2-.3.4-.2.7-.1l1.9.9c.3.1.5.2.5.3.1.2.1.7-.1 1.3Z"/></symbol>
+  <symbol id="i-lock" viewBox="0 0 24 24"><rect x="4" y="11" width="16" height="10" rx="2"/><path d="M8 11V7a4 4 0 0 1 8 0v4"/></symbol>
+  <symbol id="i-shield" viewBox="0 0 24 24"><path d="M12 22s8-3.5 8-10V5l-8-3-8 3v7c0 6.5 8 10 8 10Z"/><path d="m9 12 2 2 4-4"/></symbol>
+  <symbol id="i-minus" viewBox="0 0 24 24"><path d="M5 12h14"/></symbol>
+  <symbol id="i-plus" viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></symbol>
+  <symbol id="i-turn" viewBox="0 0 24 24"><path d="M3 12a9 9 0 1 0 3-6.7L3 8"/><path d="M3 3v5h5"/></symbol>
+  <symbol id="i-hourglass" viewBox="0 0 24 24"><path d="M5 22h14M5 2h14"/><path d="M17 22v-4.2a2 2 0 0 0-.6-1.4L12 12l-4.4 4.4a2 2 0 0 0-.6 1.4V22"/><path d="M7 2v4.2a2 2 0 0 0 .6 1.4L12 12l4.4-4.4a2 2 0 0 0 .6-1.4V2"/></symbol>
+  <symbol id="i-help" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M9.1 9a3 3 0 0 1 5.8 1c0 2-3 3-3 3"/><path d="M12 17h.01"/></symbol>
+  <symbol id="i-sprout" viewBox="0 0 24 24"><path d="M7 20h10"/><path d="M10 20c5.5-2.5.8-6.4 3-10"/><path d="M9.5 9.4c1.1.8 1.8 2.2 2.3 3.7-2 .4-3.5.4-4.8-.3-1.2-.6-2.3-1.9-3-4.2 2.8-.5 4.4 0 5.5.8z"/><path d="M14.1 6a7 7 0 0 0-1.1 4c1.9-.1 3.3-.6 4.3-1.4 1-1 1.6-2.3 1.7-4.6-2.7.1-4 1-4.9 2z"/></symbol>
+  <symbol id="i-play" viewBox="0 0 24 24"><path fill="currentColor" d="M7 4.5v15l12-7.5z"/></symbol>
+  <symbol id="i-pause" viewBox="0 0 24 24"><path fill="currentColor" d="M6.5 4.5h4v15h-4zM13.5 4.5h4v15h-4z"/></symbol>
+  <symbol id="i-alert" viewBox="0 0 24 24"><path d="M10.3 3.9 1.8 18a2 2 0 0 0 1.7 3h17a2 2 0 0 0 1.7-3L13.7 3.9a2 2 0 0 0-3.4 0Z"/><path d="M12 9v4M12 17h.01"/></symbol>
+  <symbol id="i-terminal" viewBox="0 0 24 24"><path d="m4 17 6-6-6-6M12 19h8"/></symbol>
+  <symbol id="i-branch" viewBox="0 0 24 24"><circle cx="6" cy="6" r="3"/><circle cx="18" cy="18" r="3"/><circle cx="6" cy="18" r="3"/><path d="M6 9v6M18 15a9 9 0 0 0-9-9"/></symbol>
+  <symbol id="i-link" viewBox="0 0 24 24"><path d="M10 13a5 5 0 0 0 7.5.5l3-3a5 5 0 0 0-7-7l-1.7 1.7"/><path d="M14 11a5 5 0 0 0-7.5-.5l-3 3a5 5 0 0 0 7 7l1.7-1.7"/></symbol>
+  <symbol id="i-move" viewBox="0 0 24 24"><path d="M12 2v20M2 12h20M12 2l-3 3M12 2l3 3M12 22l-3-3M12 22l3-3M2 12l3-3M2 12l3 3M22 12l-3-3M22 12l-3 3"/></symbol>
+  <symbol id="i-reset" viewBox="0 0 24 24"><path d="M3 12a9 9 0 1 0 3-6.7L3 8"/><path d="M3 3v5h5"/></symbol>
+  <symbol id="i-info" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4M12 8h.01"/></symbol>
+  <symbol id="i-lab" viewBox="0 0 24 24"><path d="M9 3h6M10 3v6.5L4.6 18.6A1.6 1.6 0 0 0 6 21h12a1.6 1.6 0 0 0 1.4-2.4L14 9.5V3"/><path d="M7.2 15h9.6"/></symbol>
+  <symbol id="i-back" viewBox="0 0 24 24"><path d="M5 12h14M13 6l6 6-6 6"/></symbol>
+</svg>
+
+<a class="skip" href="#book">انزلوا للحجز على طول</a>
+
+<!-- Header: an IDE title bar -->
+<header class="topbar" id="top">
+  <div class="wrap top">
+    <a class="logo" href="#top" aria-label="بإيدك، أول الصفحة">
+      <picture><source media="(min-width: 600px) and (min-height: 501px)" srcset="assets/img/beedak-logo-dark-nobg.svg" width="900" height="525"><img class="logo-img" src="assets/img/beedak-icon-circle.svg" alt="بإيدك" width="384" height="384"></picture>
+    </a>
+    <bdi class="crumb tok" dir="ltr" aria-hidden="true">beedak / graduation-project / main</bdi>
+    <div class="top-actions">
+      <a class="btn-ghost top-lab" href="lab.html"><svg class="i" aria-hidden="true" focusable="false"><use href="#i-lab"/></svg>المعمل</a>
+      <a class="btn btn-sm" href="https://wa.me/201068530159?text=%D9%82%D8%B6%D9%8A%D8%A9%0A%D8%A7%D8%B3%D9%85%20%D8%A7%D9%84%D9%85%D8%B4%D8%B1%D9%88%D8%B9%3A%20%0A%D9%85%D8%B1%D8%AD%D9%84%D8%AA%D9%87%3A%20%0A%D8%A3%D9%83%D8%A8%D8%B1%20%D8%AD%D8%A7%D8%AC%D8%A9%20%D9%88%D8%A7%D9%82%D9%81%D8%A9%3A%20" data-wa target="_blank" rel="noopener"><svg class="i" aria-hidden="true" focusable="false"><use href="#i-chat"/></svg>احجزوا التشخيص<span class="sr-only">، بيفتح واتساب</span></a>
+    </div>
+  </div>
+</header>
+
+<main id="main">
+  <section class="hero" aria-labelledby="hero-title">
+    <div class="wrap hero-grid">
+      <div class="hero-text scrim">
+        <div class="hero-top">
+          <p class="case-chip"><bdi class="tok" dir="ltr" aria-hidden="true">//</bdi>ملف القضية</p>
+          <!-- The detective duck peeks up from behind the headline (decorative; its space is reserved, so nothing moves). -->
+          <div class="duck-peek" id="duck-peek" aria-hidden="true">
+            <div class="dp-rise"><div class="dp-head">
+              <picture>
+                <source type="image/avif" srcset="assets/img/duck-head-96.avif 96w, assets/img/duck-head-192.avif 192w" sizes="(min-width: 900px) 128px, 96px">
+                <img src="assets/img/duck-head-192.webp" srcset="assets/img/duck-head-96.webp 96w, assets/img/duck-head-192.webp 192w" sizes="(min-width: 900px) 128px, 96px" width="192" height="154" alt="" decoding="async">
+              </picture>
+              <span class="lid"><span class="lid-skin"></span></span>
+            </div></div>
+          </div>
+        </div>
+        <h1 id="hero-title">مشروع التخرج <span class="bug-word" id="bug-word" data-text="واقف؟">واقف؟</span> <span class="hl">افهموه، وكمّلوه بإيدكم</span></h1>
+        <p class="sub">في جلسة تشخيص 45 دقيقة أونلاين بنحدد مع فريقكم إيه اللي واقف وسببه، وبتطلعوا بخطة للخطوة الجاية مكتوبة بإيدكم.</p>
+        <div class="hero-actions" id="hero-actions">
+          <div class="cta-box">
+            <a class="btn btn-shine" href="https://wa.me/201068530159?text=%D9%82%D8%B6%D9%8A%D8%A9%0A%D8%A7%D8%B3%D9%85%20%D8%A7%D9%84%D9%85%D8%B4%D8%B1%D9%88%D8%B9%3A%20%0A%D9%85%D8%B1%D8%AD%D9%84%D8%AA%D9%87%3A%20%0A%D8%A3%D9%83%D8%A8%D8%B1%20%D8%AD%D8%A7%D8%AC%D8%A9%20%D9%88%D8%A7%D9%82%D9%81%D8%A9%3A%20" data-wa target="_blank" rel="noopener"><svg class="i" aria-hidden="true" focusable="false"><use href="#i-chat"/></svg>احجزوا جلسة التشخيص<span class="sr-only">، بيفتح واتساب</span></a>
+            <span class="cta-ring" aria-hidden="true"></span>
+          </div>
+          <p class="price"><b class="num">350 جنيه للفريق كله</b><span>ولو ما طلعتوش بخطة واضحة للخطوة الجاية، الفلوس ترجع كاملة.</span></p>
+          <p class="reassure"><svg class="i" aria-hidden="true" focusable="false"><use href="#i-shield"/></svg><span>ما بتدفعوش غير بعد ما نتأكد إن مشروعكم جوه نطاقنا.</span></p>
+        </div>
+      </div>
+
+      <!-- Terminal "Problems": example breakpoints the visitor marks (red bug -> violet identified blocker). The site never turns them green. -->
+      <div class="term hero-term" id="hero-term" role="group" aria-labelledby="term-title">
+        <div class="term-bar">
+          <span class="dots" aria-hidden="true"><i></i><i></i><i></i></span>
+          <bdi class="term-title tok" dir="ltr" aria-hidden="true">TERMINAL · PROBLEMS</bdi>
+          <span class="ex-pill">مثال</span>
+        </div>
+        <div class="term-body">
+          <h2 class="sr-only" id="term-title">لعبة التيرمنال: أمثلة لحاجات ممكن توقّف مشروع تخرج</h2>
+          <p class="term-note">أمثلة من عندنا لحاجات ممكن توقّف مشروع تخرج، مش حالات حقيقية.</p>
+          <p class="cmd" dir="ltr" aria-hidden="true"><span class="prompt">$</span> <span class="cmd-text">npm run graduation-project</span><span class="caret"></span></p>
+          <ul class="problems" id="problems">
+            <li class="prob" data-i="0"><span class="pdot" aria-hidden="true"></span><bdi class="badge" dir="ltr" aria-hidden="true"><span class="b-off">500</span><span class="b-on">BLOCKER</span></bdi><span class="clue">الـ<bdi>API</bdi> بيرجّع <bdi class="nw">Error 500</bdi></span><span class="tag">اتحدد</span></li>
+            <li class="prob" data-i="1"><span class="pdot" aria-hidden="true"></span><bdi class="badge" dir="ltr" aria-hidden="true"><span class="b-off">NULL</span><span class="b-on">BLOCKER</span></bdi><span class="clue">مين ماسك الداتابيز؟</span><span class="tag">اتحدد</span></li>
+            <li class="prob" data-i="2"><span class="pdot" aria-hidden="true"></span><bdi class="badge" dir="ltr" aria-hidden="true"><span class="b-off">TIME</span><span class="b-on">BLOCKER</span></bdi><span class="clue">الميعاد قرّب</span><span class="tag">اتحدد</span></li>
+            <li class="prob" data-i="3"><span class="pdot" aria-hidden="true"></span><bdi class="badge" dir="ltr" aria-hidden="true"><span class="b-off">ESP</span><span class="b-on">BLOCKER</span></bdi><span class="clue">الـ<bdi>ESP</bdi> مش بيتصل بالواي فاي</span><span class="tag">اتحدد</span></li>
+            <li class="prob" data-i="4"><span class="pdot" aria-hidden="true"></span><bdi class="badge" dir="ltr" aria-hidden="true"><span class="b-off">MERGE</span><span class="b-on">BLOCKER</span></bdi><span class="clue">كل واحد شغال لوحده</span><span class="tag">اتحدد</span></li>
+          </ul>
+          <div class="duck-row">
+            <p class="duck-line"><bdi class="tok" dir="ltr" aria-hidden="true">duck&gt;</bdi> <span id="duck-say" aria-live="polite">«احكولي، وأنا هسأل. والحل عندكم.»</span></p>
+            <button class="duck-btn when-app" type="button" id="duck-btn" aria-describedby="duck-say">
+              <picture>
+                <source type="image/avif" srcset="assets/img/duck-160.avif 160w, assets/img/duck-320.avif 320w" sizes="72px">
+                <img src="assets/img/duck-160.webp" srcset="assets/img/duck-160.webp 160w, assets/img/duck-320.webp 320w" sizes="72px" width="160" height="189" alt="بطة المحقق" decoding="async">
+              </picture>
+            </button>
+          </div>
+          <p class="all-found when-app" id="all-found" hidden><a class="link wa-inline" href="https://wa.me/201068530159?text=%D9%82%D8%B6%D9%8A%D8%A9%0A%D8%A7%D8%B3%D9%85%20%D8%A7%D9%84%D9%85%D8%B4%D8%B1%D9%88%D8%B9%3A%20%0A%D9%85%D8%B1%D8%AD%D9%84%D8%AA%D9%87%3A%20%0A%D8%A3%D9%83%D8%A8%D8%B1%20%D8%AD%D8%A7%D8%AC%D8%A9%20%D9%88%D8%A7%D9%82%D9%81%D8%A9%3A%20" data-wa target="_blank" rel="noopener"><svg class="i" aria-hidden="true" focusable="false"><use href="#i-chat"/></svg>احجزوا التشخيص<span class="sr-only">، بيفتح واتساب</span></a></p>
+          <p class="term-count when-app"><bdi class="tok" dir="ltr" aria-hidden="true">#</bdi> <span id="desk-count">دوسوا على الأدلة وعلى البطة: لقيتوا 0 من 5.</span></p>
+        </div>
+      </div>
+    </div>
+
+    <nav class="wrap quick" aria-labelledby="quick-title">
+      <div class="palette">
+        <h2 id="quick-title"><bdi class="tok" dir="ltr" aria-hidden="true">&gt;_</bdi> أسئلتكم الأولى:</h2>
+        <ul>
+          <li><a href="#offers"><span class="pc" aria-hidden="true">&gt;</span><span class="pl">بكام؟</span></a></li>
+          <li><a href="#guarantee"><span class="pc" aria-hidden="true">&gt;</span><span class="pl">لو ما استفدناش؟</span></a></li>
+          <li><a href="#principle"><span class="pc" aria-hidden="true">&gt;</span><span class="pl">هتعملولنا المشروع؟</span></a></li>
+          <li><a href="#scope"><span class="pc" aria-hidden="true">&gt;</span><span class="pl">مشروعنا جوه النطاق؟</span></a></li>
+        </ul>
+      </div>
+    </nav>
+  </section>
+
+  <!-- The method as a call stack: four chapters, each one passes only through the visitor's own action -->
+  <section id="method" aria-labelledby="method-title">
+    <div class="wrap">
+      <div class="case-intro has-prop scrim">
+        <p class="eyebrow"><bdi class="tok" dir="ltr" aria-hidden="true">// call stack</bdi> المنهج</p>
+        <div class="prop prop-git prop-wide" aria-hidden="true"><svg viewBox="0 0 140 90" focusable="false">
+          <text class="p-cap" x="8" y="12">git log --graph</text>
+          <path class="pg-main" d="M8 62H132"/>
+          <path class="pg-br" d="M30 62C44 62 44 30 60 30H82C98 30 98 62 112 62"/>
+          <circle class="pg-n" cx="30" cy="62" r="4.5"/><circle class="pg-n" cx="70" cy="62" r="4.5"/>
+          <circle class="pg-n pg-nb" cx="60" cy="30" r="4.5"/><circle class="pg-n pg-nb" cx="82" cy="30" r="4.5"/>
+          <circle class="pg-m" cx="112" cy="62" r="7"/>
+          <text class="p-st p-bad" x="104" y="84">CONFLICT</text><text class="p-st p-ok" x="104" y="84">merged</text>
+        </svg></div>
+        <h2 id="method-title">القضية بتمشي في 4 خطوات</h2>
+        <p class="method"><span class="method-words" aria-hidden="true"><span class="mw">افهم<bdi class="tok" dir="ltr">read()</bdi></span><span class="arr">←</span><span class="mw">شخّص<bdi class="tok" dir="ltr">trace()</bdi></span><span class="arr">←</span><span class="mw">خطّط<bdi class="tok" dir="ltr">plan()</bdi></span><span class="arr">←</span><span class="mw">اشرح<bdi class="tok" dir="ltr">explain()</bdi></span></span><span class="sr-only">افهم، بعدها شخّص، بعدها خطّط، بعدها اشرح</span></p>
+        <p class="lede">دي طريقتنا في كل مرحلة. والهدف الأخير إنكم تقدروا تشرحوا مشروعكم في المناقشة. وكل خطوة تحت فيها حاجة تجرّبوها بإيدكم.</p>
+      </div>
+
+      <div class="thread-wrap">
+        <span class="thread-dot" id="thread-dot" aria-hidden="true"><svg class="i"><use href="#i-play"/></svg></span>
+        <ol class="thread" id="thread">
+          <li class="step" id="step-1" data-s="idle">
+            <span class="pin" aria-hidden="true"><span class="pin-n">1</span></span>
+            <article class="page" aria-labelledby="ch1">
+              <span class="tab" aria-hidden="true"><bdi class="tok" dir="ltr">frame 1/4</bdi> الخطوة 1 من 4</span>
+              <h3 id="ch1">افهم <small>البلاغ</small></h3>
+              <p class="lead">المطلوب منكم إيه بالظبط، واللي اتعمل لحد دلوقتي.</p>
+              <p>علشان كده أول حاجة بنطلبها منكم 3 سطور بس. وده شكلها:</p>
+              <div class="term report-term">
+                <div class="term-bar">
+                  <span class="dots" aria-hidden="true"><i></i><i></i><i></i></span>
+                  <bdi class="term-title tok" dir="rtl" aria-hidden="true">قضية.txt</bdi>
+                  <span class="ex-pill">مثال</span>
+                </div>
+                <figure class="report term-body" id="report">
+                  <figcaption>مثال لبلاغ، مش من فريق حقيقي</figcaption>
+                  <p class="cmd" dir="ltr" aria-hidden="true"><span class="prompt">$</span> cat قضية.txt</p>
+                  <p class="report-line"><b>قضية</b></p>
+                  <p class="report-line"><span>اسم المشروع:</span> <span class="type-me">نظام حضور بالـQR للمحاضرات</span></p>
+                  <p class="report-line"><span>مرحلته:</span> <span class="type-me">في نص التنفيذ</span></p>
+                  <p class="report-line bug-line" id="bug-line"><span>أكبر حاجة واقفة:</span> <span class="type-me bug-text">الأبلكيشن مش بيقرا الـQR من الموبايل</span> <span class="tag">اتحدد</span></p>
+                </figure>
+              </div>
+              <div class="report-ctl when-app">
+                <button class="btn-ghost" type="button" id="report-mark" aria-pressed="false"><svg class="i" aria-hidden="true" focusable="false"><use href="#i-alert"/></svg>علّموا على العطل</button>
+                <button class="btn-ghost replay" type="button" id="report-replay"><svg class="i" aria-hidden="true" focusable="false"><use href="#i-turn"/></svg>اطبعوها تاني</button>
+              </div>
+              <div class="duck-note">
+                <picture>
+                  <source type="image/avif" srcset="assets/img/duck-head-96.avif 1x, assets/img/duck-head-192.avif 2x">
+                  <img src="assets/img/duck-head-96.webp" srcset="assets/img/duck-head-96.webp 1x, assets/img/duck-head-192.webp 2x" width="96" height="77" alt="" loading="lazy" decoding="async">
+                </picture>
+                <div class="cmt">
+                  <bdi class="tok cmt-label" dir="ltr" aria-hidden="true">/* rubber duck debugging */</bdi>
+                  <p><b>ليه بطة؟</b> المبرمجين ساعات بيشرحوا الكود لبطة بلاستيك سطر سطر، وساعات وهما بيشرحوا بياخدوا بالهم من الغلطة بنفسهم. البطة عندنا بنفس الفكرة: بتسأل، وانتو اللي بتلاقوا.</p>
+                </div>
+              </div>
+              <a class="link mini wa-inline" href="https://wa.me/201068530159?text=%D9%82%D8%B6%D9%8A%D8%A9%0A%D8%A7%D8%B3%D9%85%20%D8%A7%D9%84%D9%85%D8%B4%D8%B1%D9%88%D8%B9%3A%20%0A%D9%85%D8%B1%D8%AD%D9%84%D8%AA%D9%87%3A%20%0A%D8%A3%D9%83%D8%A8%D8%B1%20%D8%AD%D8%A7%D8%AC%D8%A9%20%D9%88%D8%A7%D9%82%D9%81%D8%A9%3A%20" data-wa target="_blank" rel="noopener"><svg class="i" aria-hidden="true" focusable="false"><use href="#i-chat"/></svg>احجزوا التشخيص: 350 جنيه<span class="sr-only">، بيفتح واتساب</span></a>
+            </article>
+          </li>
+
+          <li class="step knot" id="step-2" data-s="idle">
+            <span class="pin" aria-hidden="true"><span class="pin-n">2</span></span>
+            <article class="page" aria-labelledby="ch2">
+              <span class="tab" aria-hidden="true"><bdi class="tok" dir="ltr">frame 2/4</bdi> الخطوة 2 من 4</span>
+              <h3 id="ch2">شخّص <small>العقدة</small></h3>
+              <p class="lead">إيه اللي واقف، وسببه الأرجح، والأولوية الأولى.</p>
+              <div class="untangle" id="untangle">
+                <bdi class="root-label tok" dir="ltr" aria-hidden="true">root_cause: <span class="rc-q">???</span><span class="rc-ok">found</span></bdi>
+                <div class="knot-stage">
+                  <svg class="knot-svg" id="knot-svg" viewBox="0 0 300 90" aria-hidden="true" focusable="false">
+                    <path id="knot-path" d="M20 45 L280 45" fill="none" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/>
+                    <circle cx="280" cy="45" r="7" class="knot-end"/>
+                  </svg>
+                  <bdi class="xtag xt-1" dir="ltr" aria-hidden="true">merge conflict</bdi>
+                  <bdi class="xtag xt-2" dir="ltr" aria-hidden="true">undefined</bdi>
+                  <bdi class="xtag xt-3" dir="ltr" aria-hidden="true">timeout</bdi>
+                </div>
+                <div class="untangle-ctl when-app">
+                  <label for="knot-range">فكّوا العقدة بإيدكم: اسحبوا الزرار اللي تحت للناحية التانية</label>
+                  <input type="range" id="knot-range" min="0" max="100" value="0" step="1" aria-valuetext="العقدة لسه مقفولة">
+                </div>
+                <p class="knot-status" id="knot-status" aria-live="polite"></p>
+              </div>
+              <div class="duck-note">
+                <picture>
+                  <source type="image/avif" srcset="assets/img/duck-head-96.avif 1x, assets/img/duck-head-192.avif 2x">
+                  <img src="assets/img/duck-head-96.webp" srcset="assets/img/duck-head-96.webp 1x, assets/img/duck-head-192.webp 2x" width="96" height="77" alt="" loading="lazy" decoding="async">
+                </picture>
+                <div class="cmt">
+                  <bdi class="tok cmt-label" dir="ltr" aria-hidden="true">/* duck.ask() */</bdi>
+                  <p><b>البطة:</b> «أنا مش هحلّها مكانكم. هسأل لحد ما العقدة تبان، وانتو اللي تفكّوها.»</p>
+                </div>
+              </div>
+              <a class="link mini wa-inline" href="https://wa.me/201068530159?text=%D9%82%D8%B6%D9%8A%D8%A9%0A%D8%A7%D8%B3%D9%85%20%D8%A7%D9%84%D9%85%D8%B4%D8%B1%D9%88%D8%B9%3A%20%0A%D9%85%D8%B1%D8%AD%D9%84%D8%AA%D9%87%3A%20%0A%D8%A3%D9%83%D8%A8%D8%B1%20%D8%AD%D8%A7%D8%AC%D8%A9%20%D9%88%D8%A7%D9%82%D9%81%D8%A9%3A%20" data-wa target="_blank" rel="noopener"><svg class="i" aria-hidden="true" focusable="false"><use href="#i-chat"/></svg>احجزوا التشخيص: 350 جنيه<span class="sr-only">، بيفتح واتساب</span></a>
+            </article>
+          </li>
+
+          <li class="step" id="step-3" data-s="idle">
+            <span class="pin" aria-hidden="true"><span class="pin-n">3</span></span>
+            <article class="page" aria-labelledby="ch3">
+              <span class="tab" aria-hidden="true"><bdi class="tok" dir="ltr">frame 3/4</bdi> الخطوة 3 من 4</span>
+              <h3 id="ch3">خطّط <small>الخطة</small></h3>
+              <p class="lead">خطة للخطوة الجاية، مكتوبة بإيدكم. ولو كمّلتوا في «خطة ومتابعة»، فيها جلسة تخطيط وتوزيع أدوار.</p>
+              <!-- Mirrors the guarantee criterion in terms.html word for word (decided 15 Nov 2026). Works without JS: PASS/FAIL visuals are pure CSS. -->
+              <fieldset class="plan" id="plan">
+                <legend>الخطة الواضحة مكتوب فيها 3 حاجات. علّموا على اللي في خطتكم دلوقتي:</legend>
+                <label class="plan-item"><input type="checkbox" id="plan-1"><bdi class="tf tok" dir="ltr" aria-hidden="true">test(</bdi><span class="t-name">الخطوة الجاية</span><bdi class="tf tok" dir="ltr" aria-hidden="true">)</bdi><span class="t-res" aria-hidden="true"><svg class="i r-fail"><use href="#i-x"/></svg><svg class="i r-pass"><use href="#i-check"/></svg><bdi class="tok r-fail" dir="ltr">FAIL</bdi><bdi class="tok r-pass" dir="ltr">PASS</bdi></span></label>
+                <label class="plan-item"><input type="checkbox" id="plan-2"><bdi class="tf tok" dir="ltr" aria-hidden="true">test(</bdi><span class="t-name">مين في الفريق مسؤول عنها</span><bdi class="tf tok" dir="ltr" aria-hidden="true">)</bdi><span class="t-res" aria-hidden="true"><svg class="i r-fail"><use href="#i-x"/></svg><svg class="i r-pass"><use href="#i-check"/></svg><bdi class="tok r-fail" dir="ltr">FAIL</bdi><bdi class="tok r-pass" dir="ltr">PASS</bdi></span></label>
+                <label class="plan-item"><input type="checkbox" id="plan-3"><bdi class="tf tok" dir="ltr" aria-hidden="true">test(</bdi><span class="t-name">ميعاد تنفيذها</span><bdi class="tf tok" dir="ltr" aria-hidden="true">)</bdi><span class="t-res" aria-hidden="true"><svg class="i r-fail"><use href="#i-x"/></svg><svg class="i r-pass"><use href="#i-check"/></svg><bdi class="tok r-fail" dir="ltr">FAIL</bdi><bdi class="tok r-pass" dir="ltr">PASS</bdi></span></label>
+                <p class="plan-result" id="plan-result" aria-live="polite"></p>
+                <bdi class="plan-count tok when-app" id="plan-count" dir="ltr" aria-hidden="true">0/3 passing</bdi>
+              </fieldset>
+              <div class="term guarantee" id="guarantee">
+                <div class="term-bar">
+                  <svg class="i" aria-hidden="true" focusable="false"><use href="#i-shield"/></svg>
+                  <bdi class="term-title tok" dir="ltr" aria-hidden="true">assert(plan)</bdi>
+                </div>
+                <div class="term-body stamp-box">
+                  <span class="stamp">ضمان التشخيص</span>
+                  <h4 class="sweepable">ما طلعتوش بخطة واضحة للخطوة الجاية؟ الـ350 ترجع كاملة.</h4>
+                  <p>اطلبوا الاسترداد في خلال 24 ساعة من الجلسة. الضمان على جلسة التشخيص بس، لأن نتيجة المراحل التانية مرتبطة بشغلكم انتو كمان.</p>
+                </div>
+              </div>
+              <a class="link mini wa-inline" href="https://wa.me/201068530159?text=%D9%82%D8%B6%D9%8A%D8%A9%0A%D8%A7%D8%B3%D9%85%20%D8%A7%D9%84%D9%85%D8%B4%D8%B1%D9%88%D8%B9%3A%20%0A%D9%85%D8%B1%D8%AD%D9%84%D8%AA%D9%87%3A%20%0A%D8%A3%D9%83%D8%A8%D8%B1%20%D8%AD%D8%A7%D8%AC%D8%A9%20%D9%88%D8%A7%D9%82%D9%81%D8%A9%3A%20" data-wa target="_blank" rel="noopener"><svg class="i" aria-hidden="true" focusable="false"><use href="#i-chat"/></svg>احجزوا التشخيص: 350 جنيه<span class="sr-only">، بيفتح واتساب</span></a>
+            </article>
+          </li>
+
+          <li class="step" id="step-4" data-s="idle">
+            <span class="pin" aria-hidden="true"><span class="pin-n">4</span></span>
+            <article class="page" aria-labelledby="ch4">
+              <span class="tab" aria-hidden="true"><bdi class="tok" dir="ltr">frame 4/4</bdi> الخطوة 4 من 4</span>
+              <h3 id="ch4">اشرح <small>قدام اللجنة</small></h3>
+              <p class="lead">الهدف إنكم تفهموا قراراتكم الفنية، وتقدروا تدافعوا عنها قدام اللجنة.</p>
+              <div class="principle" id="principle">
+                <h4 class="sweepable">هتعملولنا المشروع؟ لأ.</h4>
+                <p>اللجنة هتسألكم انتو. علشان كده بنشرح ونراجع ونرتب معاكم، وانتو اللي بتكتبوا الكود والتقرير وبتنفذوا.</p>
+                <div class="diff" aria-hidden="true">
+                  <p class="d-del"><span class="dm" aria-hidden="true">-</span><del>نكتب المشروع بدالكم</del></p>
+                  <p class="d-add"><span class="dm" aria-hidden="true">+</span><ins>إحنا بنرشد ونراجع، وانتو اللي بتنفذوا</ins></p>
+                </div>
+              </div>
+              <div class="drill">
+                <p class="drill-title">أمثلة لأسئلة ممكن تيجي في المناقشة. <span class="when-app">اقلبوا الكارت.</span></p>
+                <div class="flips">
+                  <div class="flip">
+                    <div class="face front"><bdi class="tok rv" dir="ltr" aria-hidden="true">review:</bdi><p class="q" id="fq1">«ليه اخترتوا التقنية دي بالذات؟»</p><span class="turn when-app" aria-hidden="true"><svg class="i"><use href="#i-turn"/></svg>اقلبوا</span></div>
+                    <button class="flip-btn when-app" type="button" aria-expanded="false" aria-controls="fa1" aria-describedby="fq1"><span class="sr-only">اقلبوا الكارت</span></button>
+                    <div class="face back" id="fa1"><bdi class="tok rv" dir="ltr" aria-hidden="true">suggested change</bdi><p>جهّزوا البدائل اللي قارنتوا بيها، وسبب واحد واضح للاختيار.</p></div>
+                  </div>
+                  <div class="flip">
+                    <div class="face front"><bdi class="tok rv" dir="ltr" aria-hidden="true">review:</bdi><p class="q" id="fq2">«لو الجزء ده وقع وقت العرض، هتعملوا إيه؟»</p><span class="turn when-app" aria-hidden="true"><svg class="i"><use href="#i-turn"/></svg>اقلبوا</span></div>
+                    <button class="flip-btn when-app" type="button" aria-expanded="false" aria-controls="fa2" aria-describedby="fq2"><span class="sr-only">اقلبوا الكارت</span></button>
+                    <div class="face back" id="fa2"><bdi class="tok rv" dir="ltr" aria-hidden="true">suggested change</bdi><p>جهّزوا خطة بديلة، وصور أو فيديو للنسخة وهي شغالة.</p></div>
+                  </div>
+                  <div class="flip">
+                    <div class="face front"><bdi class="tok rv" dir="ltr" aria-hidden="true">review:</bdi><p class="q" id="fq3">«مين عمل الجزء ده؟ اشرحه لنا.»</p><span class="turn when-app" aria-hidden="true"><svg class="i"><use href="#i-turn"/></svg>اقلبوا</span></div>
+                    <button class="flip-btn when-app" type="button" aria-expanded="false" aria-controls="fa3" aria-describedby="fq3"><span class="sr-only">اقلبوا الكارت</span></button>
+                    <div class="face back" id="fa3"><bdi class="tok rv" dir="ltr" aria-hidden="true">suggested change</bdi><p>جهّزوا إن كل واحد فيكم يقدر يشرح أي جزء، مش جزءه بس. ده معنى إن المشروع بإيدكم.</p></div>
+                  </div>
+                </div>
+              </div>
+              <a class="link mini wa-inline" href="https://wa.me/201068530159?text=%D9%82%D8%B6%D9%8A%D8%A9%0A%D8%A7%D8%B3%D9%85%20%D8%A7%D9%84%D9%85%D8%B4%D8%B1%D9%88%D8%B9%3A%20%0A%D9%85%D8%B1%D8%AD%D9%84%D8%AA%D9%87%3A%20%0A%D8%A3%D9%83%D8%A8%D8%B1%20%D8%AD%D8%A7%D8%AC%D8%A9%20%D9%88%D8%A7%D9%82%D9%81%D8%A9%3A%20" data-wa target="_blank" rel="noopener"><svg class="i" aria-hidden="true" focusable="false"><use href="#i-chat"/></svg>احجزوا التشخيص: 350 جنيه<span class="sr-only">، بيفتح واتساب</span></a>
+            </article>
+          </li>
+        </ol>
+        <div class="thread-end scrim">
+          <span class="end-dot" aria-hidden="true"></span>
+          <div class="end-text">
+            <bdi class="tok exit" dir="ltr" aria-hidden="true">exit 0</bdi>
+            <p>آخر الخيط عندكم انتو. <a class="link" href="#offers">شوفوا الأسعار</a></p>
+            <p class="thread-final when-app" id="thread-final" aria-live="polite"></p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Lab teaser: the interactive lab (CSS 3D devices + safe ESP32 code box) lives on its own page, lab.html (owner order, 15 Nov 2026).
+       Static only: no JS, no animation; the picture is decorative. -->
+  <section id="lab" class="lab-teaser" aria-labelledby="lab-title">
+    <div class="wrap">
+      <div class="term teaser-card">
+        <div class="term-bar">
+          <span class="dots" aria-hidden="true"><i></i><i></i><i></i></span>
+          <bdi class="term-title tok" dir="ltr" aria-hidden="true">lab.html</bdi>
+        </div>
+        <div class="teaser-body">
+          <div class="teaser-text">
+            <p class="eyebrow"><bdi class="tok" dir="ltr" aria-hidden="true">// lab.ino</bdi> المعمل</p>
+            <h2 id="lab-title">المعمل: جرّبوا بإيدكم</h2>
+            <p class="lede">لعبة صغيرة للتجربة، مش مشروع حقيقي: لفّوا الأجهزة وحرّكوها، واكتبوا أوامر بسيطة للـ<bdi>ESP32</bdi> وشوفوه بيرد.</p>
+            <a class="btn btn-quiet lab-enter" href="lab.html"><svg class="i" aria-hidden="true" focusable="false"><use href="#i-lab"/></svg>ادخلوا المعمل</a>
+          </div>
+          <div class="teaser-pic" aria-hidden="true">
+            <svg viewBox="0 0 240 150" focusable="false">
+              <defs>
+                <linearGradient id="tz-metal" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#E4E9EF"/><stop offset=".45" stop-color="#A9B4C0"/><stop offset=".55" stop-color="#C9D1DA"/><stop offset="1" stop-color="#8B96A3"/></linearGradient>
+                <radialGradient id="tz-glow"><stop offset="0" stop-color="#3DF58C" stop-opacity=".9"/><stop offset="1" stop-color="#3DF58C" stop-opacity="0"/></radialGradient>
+              </defs>
+              <ellipse cx="122" cy="132" rx="104" ry="12" fill="#000" opacity=".55"/>
+              <path d="M44 22a14 14 0 0 1 24 0" fill="none" stroke="#FF4D5E" stroke-width="3" stroke-linecap="round"/>
+              <path d="M37 16a24 24 0 0 1 38 0" fill="none" stroke="#A78BFA" stroke-width="3" stroke-linecap="round"/>
+              <path d="M30 10a34 34 0 0 1 52 0" fill="none" stroke="#3DF58C" stroke-width="3" stroke-linecap="round"/>
+              <rect x="22" y="34" width="196" height="92" rx="5" fill="#0A1628"/>
+              <rect x="22" y="30" width="196" height="92" rx="5" fill="#10213A" stroke="#1E3A5F"/>
+              <rect x="24" y="44" width="62" height="64" rx="2" fill="#0B1626"/>
+              <path d="M36 50h10v8H36v8h10v8H36v8h10v8H36v8h8" fill="none" stroke="#D9B44A" stroke-width="2"/>
+              <rect x="56" y="46" width="56" height="60" rx="2" fill="url(#tz-metal)"/>
+              <text x="84" y="74" text-anchor="middle" font-family="ui-monospace, Consolas, monospace" font-size="7" font-weight="700" fill="#46505C">ESP32-WROOM</text>
+              <g fill="#C9A43C">
+                <rect x="96" y="33" width="5" height="5" rx="1"/><rect x="106" y="33" width="5" height="5" rx="1"/><rect x="116" y="33" width="5" height="5" rx="1"/><rect x="126" y="33" width="5" height="5" rx="1"/><rect x="136" y="33" width="5" height="5" rx="1"/><rect x="146" y="33" width="5" height="5" rx="1"/><rect x="156" y="33" width="5" height="5" rx="1"/><rect x="166" y="33" width="5" height="5" rx="1"/><rect x="176" y="33" width="5" height="5" rx="1"/><rect x="186" y="33" width="5" height="5" rx="1"/><rect x="196" y="33" width="5" height="5" rx="1"/>
+                <rect x="96" y="114" width="5" height="5" rx="1"/><rect x="106" y="114" width="5" height="5" rx="1"/><rect x="116" y="114" width="5" height="5" rx="1"/><rect x="126" y="114" width="5" height="5" rx="1"/><rect x="136" y="114" width="5" height="5" rx="1"/><rect x="146" y="114" width="5" height="5" rx="1"/><rect x="156" y="114" width="5" height="5" rx="1"/><rect x="166" y="114" width="5" height="5" rx="1"/><rect x="176" y="114" width="5" height="5" rx="1"/><rect x="186" y="114" width="5" height="5" rx="1"/><rect x="196" y="114" width="5" height="5" rx="1"/>
+              </g>
+              <rect x="128" y="64" width="22" height="22" rx="2" fill="#1A1A1A"/>
+              <text x="170" y="80" font-family="ui-monospace, Consolas, monospace" font-size="7" fill="#C9D6E6">DevKit</text>
+              <rect x="206" y="66" width="16" height="20" rx="2" fill="url(#tz-metal)"/>
+              <circle cx="166" cy="98" r="12" fill="url(#tz-glow)"/>
+              <circle cx="166" cy="98" r="3.4" fill="#3DF58C"/>
+            </svg>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+
+  <!-- Offers: run configurations -->
+  <section id="offers" aria-labelledby="offers-title">
+    <div class="wrap">
+      <div class="head has-prop scrim">
+        <p class="eyebrow"><bdi class="tok" dir="ltr" aria-hidden="true">// run configurations</bdi> الخدمات والأسعار</p>
+        <div class="prop prop-api" aria-hidden="true"><svg viewBox="0 0 140 90" focusable="false">
+          <rect class="pa-card" x="4" y="12" width="132" height="66" rx="10"/>
+          <text class="pa-m" x="16" y="36">GET</text><text class="pa-path" x="44" y="36">/api/plan</text>
+          <rect class="pa-pill" x="16" y="48" width="66" height="20" rx="10"/>
+          <text class="p-st p-bad pa-s" x="49" y="62">500</text><text class="p-st p-ok pa-s" x="49" y="62">200 OK</text>
+          <circle class="pa-dot" cx="118" cy="58" r="4.5"/>
+        </svg></div>
+        <h2 id="offers-title" class="sweepable">بكام؟ كل مرحلة لوحدها، والسعر للفريق كله</h2>
+        <p class="lede">الدفع مقدمًا لكل مرحلة، عن طريق <bdi>InstaPay</bdi> أو محفظة موبايل، والإيصال بيوصلكم على واتساب.</p>
+      </div>
+      <p class="hint"><svg class="i" aria-hidden="true" focusable="false"><use href="#i-info"/></svg><b>أول مرة؟</b><span>ابدأوا بجلسة التشخيص. في آخرها هتعرفوا محتاجين تكملوا مرحلة ولا لأ، ومش لازم تشتروا أي حاجة تانية.</span></p>
+
+      <div class="offer-main">
+        <article class="card main" aria-labelledby="o-diag">
+          <bdi class="card-cmd tok" dir="ltr" aria-hidden="true"><span class="prompt">$</span> npm run diagnosis</bdi>
+          <div class="row"><h3 id="o-diag">جلسة تشخيص</h3><span class="amount num">350 <small>جنيه</small></span></div>
+          <p class="when">45 دقيقة، أونلاين، والبداية من هنا</p>
+          <p class="per">للفريق كله، والمنسق بيحوّلها مرة واحدة. يعني حوالي من 70 لـ90 جنيه للفرد في فريق من 4 أو 5.</p>
+          <div class="split when-app" role="group" aria-labelledby="split-label">
+            <bdi class="split-fn tok" dir="ltr" aria-hidden="true">split(350, n)</bdi>
+            <p id="split-label" class="split-label">لو قسمتوها: الفريق كام واحد؟</p>
+            <div class="split-ctl">
+              <button type="button" class="split-btn" id="split-plus" aria-label="عضو زيادة"><svg class="i" aria-hidden="true"><use href="#i-plus"/></svg></button>
+              <span class="split-n num" id="split-n" aria-hidden="true">4</span>
+              <button type="button" class="split-btn" id="split-minus" aria-label="عضو أقل"><svg class="i" aria-hidden="true"><use href="#i-minus"/></svg></button>
+            </div>
+            <p class="split-out" id="split-out"><span class="sr-only" id="split-sr">4 أعضاء: </span><span id="split-pre">يعني حوالي </span><b class="num" id="split-each">88</b> جنيه على الواحد</p>
+          </div>
+          <ul class="checks">
+            <li><svg class="i" aria-hidden="true"><use href="#i-check"/></svg><span>نحدد اللي واقف وسببه الأرجح</span></li>
+            <li><svg class="i" aria-hidden="true"><use href="#i-check"/></svg><span>أولوية واحدة تبدأوا بيها بدل التشتت</span></li>
+            <li><svg class="i" aria-hidden="true"><use href="#i-check"/></svg><span>خطة للخطوة الجاية بيكتبها الفريق بإيده</span></li>
+          </ul>
+          <p class="fine">الـ350 بتتخصم مرة واحدة من أول مرحلة كبيرة تشتروها في خلال 14 يوم: «خطة ومتابعة» أو «جاهزية المناقشة». ولو ما طلعتوش بخطة واضحة، الفلوس ترجع.</p>
+          <a class="btn btn-block btn-shine" href="https://wa.me/201068530159?text=%D9%82%D8%B6%D9%8A%D8%A9%0A%D8%A7%D8%B3%D9%85%20%D8%A7%D9%84%D9%85%D8%B4%D8%B1%D9%88%D8%B9%3A%20%0A%D9%85%D8%B1%D8%AD%D9%84%D8%AA%D9%87%3A%20%0A%D8%A3%D9%83%D8%A8%D8%B1%20%D8%AD%D8%A7%D8%AC%D8%A9%20%D9%88%D8%A7%D9%82%D9%81%D8%A9%3A%20" data-wa target="_blank" rel="noopener"><svg class="i" aria-hidden="true" focusable="false"><use href="#i-chat"/></svg>احجزوا جلسة التشخيص<span class="sr-only">، بيفتح واتساب</span></a>
+        </article>
+        <article class="card why" aria-labelledby="o-why">
+          <bdi class="tok cmt-mark" dir="ltr" aria-hidden="true">/*</bdi>
+          <h3 id="o-why">ليه ندفع وفيه حاجات مجانية؟</h3>
+          <p>المشرف بيقيّم، ومش فاضي يقعد معاكم ساعة. وChatGPT بيجاوب على اللي بتسألوه، بس مش بيشخّص الفريق كله. والمبادرات المجانية ممكن تستنوا دوركم فيها. إحنا في 45 دقيقة بنحدد اللي واقف، وبتطلعوا بخطة مكتوبة بإيدكم. ولو ما طلعتوش بيها، الفلوس ترجع.</p>
+          <bdi class="tok cmt-mark" dir="ltr" aria-hidden="true">*/</bdi>
+        </article>
+      </div>
+
+      <p class="next-label scrim">ولو احتجتوا تكملوا معانا بعد التشخيص:</p>
+      <div class="offers-next">
+        <article class="card" aria-labelledby="o-plan">
+          <bdi class="card-cmd tok" dir="ltr" aria-hidden="true"><span class="prompt">$</span> run plan --weeks 4</bdi>
+          <div class="row"><h3 id="o-plan">خطة ومتابعة</h3><span class="amount num">1,800 <small>جنيه</small></span></div>
+          <p class="when">4 أسابيع</p>
+          <ul><li>جلسة تخطيط وتوزيع أدوار</li><li>4 متابعات أسبوعية، كل واحدة 45 دقيقة</li><li>مراجعة تعليمية مكتوبة لنقطة فنية</li><li>رد على واتساب في مواعيد محددة</li></ul>
+        </article>
+        <article class="card" aria-labelledby="o-def">
+          <bdi class="card-cmd tok" dir="ltr" aria-hidden="true"><span class="prompt">$</span> run defense</bdi>
+          <div class="row"><h3 id="o-def">جاهزية المناقشة</h3><span class="amount num">1,200 <small>جنيه</small></span></div>
+          <p class="when">قبل المناقشة</p>
+          <ul><li>مراجعة التقرير والعرض</li><li>بروفة مناقشة 60 دقيقة</li><li>قائمة الأسئلة المتوقعة من اللجنة</li></ul>
+        </article>
+        <article class="card" aria-labelledby="o-tech">
+          <bdi class="card-cmd tok" dir="ltr" aria-hidden="true"><span class="prompt">$</span> run tech-session</bdi>
+          <div class="row"><h3 id="o-tech">جلسة فنية إضافية</h3><span class="amount num">450 <small>جنيه</small></span></div>
+          <p class="when">60 دقيقة، وقت ما تحتاجوها</p>
+          <ul><li>نقطة فنية واحدة بنفهمها ونراجعها سوا</li><li>انتو اللي بتكتبوا الكود وبتصلّحوه</li></ul>
+        </article>
+      </div>
+      <p class="band-note scrim"><bdi class="tok" dir="ltr" aria-hidden="true">//</bdi> في الصيف: <b>جلسة اختيار فكرة مشروع التخرج</b> لطلاب سنة تالتة، بـ350 جنيه.</p>
+    </div>
+  </section>
+
+  <!-- Scope: a linter -->
+  <section id="scope" aria-labelledby="scope-title">
+    <div class="wrap">
+      <div class="head has-prop scrim">
+        <p class="eyebrow"><bdi class="tok" dir="ltr" aria-hidden="true">// lint</bdi> النطاق</p>
+        <div class="prop prop-esp" aria-hidden="true"><svg viewBox="0 0 140 90" focusable="false">
+          <text class="p-st p-bad pe-st" x="70" y="12">WL_DISCONNECTED</text><text class="p-st p-ok pe-st" x="70" y="12">WL_CONNECTED</text>
+          <path class="pe-pins" d="M20 30v-5M28 30v-5M36 30v-5M44 30v-5M52 30v-5M60 30v-5M68 30v-5M76 30v-5M84 30v-5M20 76v5M28 76v5M36 76v5M44 76v5M52 76v5M60 76v5M68 76v5M76 76v5M84 76v5"/>
+          <rect class="pe-pcb" x="14" y="30" width="78" height="46" rx="4"/>
+          <rect class="pe-shield" x="22" y="37" width="38" height="31" rx="2"/>
+          <text class="pe-t" x="41" y="56">ESP32</text>
+          <path class="pe-ant" d="M64 38h22v6h-6v6h6v6"/>
+          <circle class="pe-led" cx="80" cy="68" r="3.5"/>
+          <path class="pe-arc a1" d="M108 47a8 8 0 0 1 12 0"/><path class="pe-arc a2" d="M103 41a15 15 0 0 1 22 0"/><path class="pe-arc a3" d="M98 35a22 22 0 0 1 32 0"/>
+          <circle class="pe-src" cx="114" cy="53" r="2.5"/>
+        </svg></div>
+        <h2 id="scope-title" class="sweepable">مشروعنا جوه النطاق؟</h2>
+      </div>
+      <div class="scope" data-reveal>
+        <div class="box yes">
+          <h3><svg class="i i-lg" aria-hidden="true"><use href="#i-check"/></svg>جوه نطاقنا</h3>
+          <ul>
+            <li style="--n:0"><span class="lint-ic" aria-hidden="true"><svg class="i"><use href="#i-check"/></svg></span><span>برمجيات: ويب، وموبايل، وقواعد بيانات</span><bdi class="tok lint-tok" dir="ltr" aria-hidden="true">ok</bdi></li>
+            <li style="--n:1"><span class="lint-ic" aria-hidden="true"><svg class="i"><use href="#i-check"/></svg></span><span>ذكاء اصطناعي وتعلّم آلة على المستوى الأساسي</span><bdi class="tok lint-tok" dir="ltr" aria-hidden="true">ok</bdi></li>
+            <li style="--n:2"><span class="lint-ic" aria-hidden="true"><svg class="i"><use href="#i-check"/></svg></span><span><bdi>IoT / Arduino / ESP</bdi></span><bdi class="tok lint-tok" dir="ltr" aria-hidden="true">ok</bdi></li>
+          </ul>
+          <p class="small">وجوه المجالات دي: تنظيم الفريق والخطة والتقرير والعرض.</p>
+        </div>
+        <div class="box no">
+          <h3><svg class="i i-lg" aria-hidden="true"><use href="#i-x"/></svg>برّه نطاقنا</h3>
+          <ul>
+            <li style="--n:3"><span class="lint-ic" aria-hidden="true"><svg class="i"><use href="#i-x"/></svg></span><span>الباور والتصميم الميكانيكي</span><bdi class="tok lint-tok" dir="ltr" aria-hidden="true">error</bdi></li>
+            <li style="--n:4"><span class="lint-ic" aria-hidden="true"><svg class="i"><use href="#i-x"/></svg></span><span>الاتصالات المتقدمة والأجهزة الطبية</span><bdi class="tok lint-tok" dir="ltr" aria-hidden="true">error</bdi></li>
+            <li style="--n:5"><span class="lint-ic" aria-hidden="true"><svg class="i"><use href="#i-x"/></svg></span><span>إننا نكتب الكود أو التقرير بدالكم</span><bdi class="tok lint-tok" dir="ltr" aria-hidden="true">error</bdi></li>
+          </ul>
+        </div>
+      </div>
+      <div class="scope-note scrim">
+        <p class="strong">بنتأكد من النطاق قبل ما تدفعوا. ولو اتضح بعد الدفع إن المشروع برّه النطاق، الفلوس بترجع كاملة قبل الجلسة.</p>
+        <p class="info-block"><svg class="i" aria-hidden="true" focusable="false"><use href="#i-info"/></svg><span>مش متأكدين؟ ابعتوا «قضية» ونتأكد معاكم قبل أي دفع. ولو طلع برّه النطاق، مش هتدفعوا حاجة.</span></p>
+      </div>
+    </div>
+  </section>
+
+  <!-- Season: crontab -->
+  <section id="season" class="cv" aria-labelledby="season-title">
+    <div class="wrap">
+      <div class="head has-prop scrim">
+        <p class="eyebrow"><bdi class="tok" dir="ltr" aria-hidden="true">// crontab</bdi> طول السنة</p>
+        <div class="prop prop-gauge prop-wide z-low" id="prop-gauge" aria-hidden="true"><svg viewBox="0 0 140 90" focusable="false">
+          <text class="p-cap" x="70" y="10" text-anchor="middle">analogRead(A0)</text>
+          <path class="pz-lo" d="M22 70A48 48 0 0 1 42.5 30.7"/><path class="pz-ok" d="M42.5 30.7A48 48 0 0 1 97.5 30.7"/><path class="pz-hi" d="M97.5 30.7A48 48 0 0 1 118 70"/>
+          <g class="pz-needle"><path d="M70 70V28"/></g><circle class="pz-hub" cx="70" cy="70" r="4.5"/>
+          <text class="p-st pz-t-lo" x="70" y="88">LOW</text><text class="p-st pz-t-ok" x="70" y="88">OK</text><text class="p-st pz-t-hi" x="70" y="88">HIGH</text>
+        </svg></div>
+        <h2 id="season-title">كل مرحلة في وقتها</h2>
+      </div>
+      <ol class="season" data-reveal>
+        <li data-months="10 11 12"><bdi class="cron tok" dir="ltr" aria-hidden="true">* * * 10-12 *</bdi><span class="m">أكتوبر لديسمبر</span><b>البداية</b><p>تشخيص، و«خطة ومتابعة»، وتحديد النطاق والأدوار.</p><span class="job tok" aria-hidden="true"><i class="jdot"></i><bdi class="j-run" dir="ltr">// now</bdi><bdi class="j-sch" dir="ltr">// later</bdi></span><span class="now">دلوقتي تقريبًا</span></li>
+        <li data-months="2 3 4"><bdi class="cron tok" dir="ltr" aria-hidden="true">* * * 2-4 *</bdi><span class="m">فبراير لأبريل</span><b>التنفيذ</b><p>متابعة وجلسات فنية للدمج والاختبار.</p><span class="job tok" aria-hidden="true"><i class="jdot"></i><bdi class="j-run" dir="ltr">// now</bdi><bdi class="j-sch" dir="ltr">// later</bdi></span><span class="now">دلوقتي تقريبًا</span></li>
+        <li data-months="5 6 7"><bdi class="cron tok" dir="ltr" aria-hidden="true">* * * 5-7 *</bdi><span class="m">مايو ليوليو</span><b>المناقشة</b><p>«جاهزية المناقشة»: التقرير والعرض والبروفة.</p><span class="job tok" aria-hidden="true"><i class="jdot"></i><bdi class="j-run" dir="ltr">// now</bdi><bdi class="j-sch" dir="ltr">// later</bdi></span><span class="now">دلوقتي تقريبًا</span></li>
+        <li data-months="8 9"><bdi class="cron tok" dir="ltr" aria-hidden="true">* * * 8-9 *</bdi><span class="m">أغسطس وسبتمبر</span><b>السنة الجاية</b><p>جلسة اختيار فكرة لطلاب سنة تالتة.</p><span class="job tok" aria-hidden="true"><i class="jdot"></i><bdi class="j-run" dir="ltr">// now</bdi><bdi class="j-sch" dir="ltr">// later</bdi></span><span class="now">دلوقتي تقريبًا</span></li>
+      </ol>
+      <p class="small season-note scrim">المواعيد تقريبية، وبتختلف من جامعة لجامعة.</p>
+    </div>
+  </section>
+
+  <!-- Referral: fork and merge -->
+  <section id="referral" class="cv" aria-labelledby="ref-title">
+    <div class="wrap">
+      <div class="referral term">
+        <div class="term-bar">
+          <svg class="i" aria-hidden="true" focusable="false"><use href="#i-branch"/></svg>
+          <bdi class="term-title tok" dir="ltr" aria-hidden="true">git merge referral</bdi>
+        </div>
+        <div class="term-body ref-body">
+          <div>
+            <h2 id="ref-title" class="h-sm">رشّحوا فريق تاني</h2>
+            <p class="lede">الفريق الجديد يكتب اسم فريقكم في رسالة «قضية». والمكافأة بتتحسب بعد ما ياخد جلسته وتعدّي 24 ساعة من غير استرداد، وبتبقى خصم مش كاش.</p>
+          </div>
+          <div class="gitgraph" data-reveal aria-hidden="true">
+            <span class="gg-node gg-a">فريقكم</span>
+            <svg class="gg-line" viewBox="0 0 120 40" preserveAspectRatio="none" focusable="false"><path d="M120 20 C 90 20, 85 4, 60 4 S 30 20, 0 20" pathLength="100"/></svg>
+            <span class="gg-node gg-b">الفريق الجديد</span>
+          </div>
+          <div class="nums">
+            <p class="n"><b class="num">150</b> جنيه خصم لفريقكم على المرحلة الجاية</p>
+            <p class="n"><b class="num">50</b> جنيه خصم للفريق الجديد على التشخيص</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Who we are: the approved post_04 founder story (approved 14 Nov 2026), first person, no new facts.
+       The closing quote of post_04 is left out on purpose: its wording is waiting for the owner's own edit. -->
+  <section id="about" class="cv" aria-labelledby="about-title">
+    <div class="wrap">
+      <div class="about term">
+        <div class="term-bar">
+          <span class="dots" aria-hidden="true"><i></i><i></i><i></i></span>
+          <bdi class="term-title tok" dir="ltr" aria-hidden="true">README.md</bdi>
+        </div>
+        <div class="term-body about-body">
+          <div class="about-head has-prop">
+            <p class="eyebrow"><bdi class="tok" dir="ltr" aria-hidden="true">#</bdi> مين إحنا</p>
+            <div class="prop prop-uno prop-wide" aria-hidden="true"><svg viewBox="0 0 140 90" focusable="false">
+              <rect class="pu-bb" x="100" y="20" width="34" height="62" rx="3"/>
+              <path class="pu-holes" d="M106 28h0M112 28h0M122 28h0M128 28h0M106 36h0M112 36h0M122 36h0M128 36h0M106 44h0M112 44h0M122 44h0M128 44h0M106 52h0M112 52h0M122 52h0M128 52h0"/>
+              <rect class="pu-pcb" x="6" y="26" width="82" height="54" rx="5"/>
+              <rect class="pu-hdr" x="18" y="30" width="62" height="7" rx="1"/>
+              <rect class="pu-chip" x="28" y="52" width="42" height="12" rx="1"/>
+              <text class="pu-t" x="14" y="76">UNO</text>
+              <path class="pu-w w1" d="M26 30C26 6 104 6 106 28"/><path class="pu-w w2" d="M44 30C44 10 114 12 117 44"/><path class="pu-w w3" d="M62 30C62 14 124 18 128 60"/>
+              <circle class="pu-led" cx="117" cy="68" r="4.5"/>
+            </svg></div>
+            <h2 id="about-title" class="h-sm">«بإيدك» بدأت من تجربتي كطالب مرّ بمشاريع كتير</h2>
+          </div>
+          <ul class="about-list">
+            <li>
+              <span class="about-ic" aria-hidden="true"><svg class="i"><use href="#i-hourglass"/></svg></span>
+              <div><h3>تجربة حقيقية، مش حكاية متألفة</h3><p>مشاريع كتير، لوحدي ومع فرق، في مدرسة تكنولوجية وبعدها في كلية حاسبات.</p></div>
+            </li>
+            <li>
+              <span class="about-ic is-q" aria-hidden="true"><svg class="i"><use href="#i-help"/></svg></span>
+              <div><h3>أسئلة بتيجي في بال أي فريق</h3><p>نبدأ منين؟ مين يعمل إيه؟ المشكلة الفنية هنحلها إزاي؟ وهنعرف نشرحه في المناقشة؟</p></div>
+            </li>
+            <li>
+              <span class="about-ic" aria-hidden="true"><svg class="i"><use href="#i-sprout"/></svg></span>
+              <div><h3>ومن هنا اتولدت فكرة «بإيدك»</h3><p>مش حل جاهز. إرشاد ومراجعة معاكم، لحد ما تفهموا مشروعكم وتعرضوه بنفسكم.</p></div>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- FAQ: a REPL -->
+  <section id="faq" class="cv" aria-labelledby="faq-title">
+    <div class="wrap">
+      <div class="head has-prop scrim">
+        <p class="eyebrow"><bdi class="tok" dir="ltr" aria-hidden="true">$ beedak --help</bdi> أسئلة ممكن تكون في بالكم</p>
+        <div class="prop prop-db" aria-hidden="true"><svg viewBox="0 0 140 90" focusable="false">
+          <path class="pd-body" d="M10 22v46c0 4 9 7 20 7s20-3 20-7V22"/><ellipse class="pd-top" cx="30" cy="22" rx="20" ry="7"/>
+          <path class="pd-ring" d="M10 38c0 4 9 7 20 7s20-3 20-7M10 54c0 4 9 7 20 7s20-3 20-7"/>
+          <text class="pd-q" x="60" y="22">SELECT *</text><text class="pd-q" x="60" y="34">FROM plan;</text>
+          <text class="p-st p-bad pd-null" x="60" y="62">NULL</text>
+          <g class="pd-rows"><rect x="60" y="46" width="70" height="7" rx="2"/><rect x="60" y="57" width="58" height="7" rx="2"/><rect x="60" y="68" width="64" height="7" rx="2"/></g>
+        </svg></div>
+        <h2 id="faq-title">دوركم تسألوا</h2>
+      </div>
+      <div class="faq">
+        <details><summary><span class="q-caret" aria-hidden="true"></span><span>هتعملولنا المشروع؟</span></summary><p>لأ. بنشرح ونراجع ونرتب معاكم، وانتو اللي بتكتبوا وبتنفذوا. ده اللي هيخليكم تقدروا تدافعوا عن مشروعكم في المناقشة.</p></details>
+        <details><summary><span class="q-caret" aria-hidden="true"></span><span>مين لازم يحضر الجلسة؟</span></summary><p>الأحسن الفريق كله يحضر. وأقل حاجة، منسق الفريق والأعضاء المسؤولين عن الجزء اللي واقف.</p></details>
+        <details><summary><span class="q-caret" aria-hidden="true"></span><span>الجلسات أونلاين ولا حضوري؟</span></summary><p>أونلاين على <bdi>Google Meet</bdi>، ونقدر نشتغل مع فرق من أي محافظة في مصر.</p></details>
+        <details><summary><span class="q-caret" aria-hidden="true"></span><span>ندفع إزاي؟</span></summary><p>بعد ما نتأكد إن مشروعكم جوه النطاق، منسق الفريق بيحوّل المبلغ كله مقدمًا عن الفريق، عن طريق <bdi>InstaPay</bdi> أو محفظة موبايل. والإيصال بيوصل على واتساب.</p></details>
+        <details><summary><span class="q-caret" aria-hidden="true"></span><span>لو حصل ظرف وعايزين نأجل؟</span></summary><p>التأجيل مجاني مرة واحدة لو بلّغتونا قبلها بـ24 ساعة. ولو الفريق ما حضرش، الجلسة بتتحسب. ولو إحنا اللي لغينا، بنحدد ميعاد تاني، أو الفلوس ترجع كاملة.</p></details>
+      </div>
+    </div>
+  </section>
+
+  <!-- Booking: deploy. The WhatsApp number is set (owner decision, 15 Nov 2026) and shown as selectable text. -->
+  <section class="book" id="book" aria-labelledby="book-title" tabindex="-1">
+    <div class="wrap">
+      <div class="book-head has-prop scrim">
+        <p class="eyebrow"><bdi class="tok" dir="ltr" aria-hidden="true">$ deploy</bdi> الحجز</p>
+        <div class="prop prop-pcb" aria-hidden="true"><svg viewBox="0 0 140 90" focusable="false">
+          <path class="pp-tr" d="M4 22H40L50 34H58M88 34H96L106 22H136M4 46H58M88 46H136M4 70H40L50 58H58M88 58H96L106 70H136"/>
+          <path class="pp-flow" d="M4 22H40L50 34H58M88 34H96L106 22H136M4 46H58M88 46H136M4 70H40L50 58H58M88 58H96L106 70H136"/>
+          <path class="pp-pad" d="M4 22h0M136 22h0M4 46h0M136 46h0M4 70h0M136 70h0"/>
+          <rect class="pp-chip" x="58" y="26" width="30" height="40" rx="3"/><text class="pp-t" x="73" y="50">MCU</text>
+        </svg></div>
+        <h2 id="book-title">احجزوا جلسة التشخيص</h2>
+        <p class="lede">ابعتوا كلمة <span class="keyword">«قضية»</span> على واتساب، ومعاها اسم المشروع ومرحلته وأكبر حاجة واقفة. وما بتدفعوش غير بعد ما نتأكد إن مشروعكم جوه نطاقنا.</p>
+      </div>
+
+      <div class="book-grid">
+        <div class="action" id="action">
+          <div class="slot is-set" id="slot">
+            <span class="hazard" aria-hidden="true"></span>
+            <div class="slot-in">
+              <span class="miss-pill" aria-hidden="true">DEPLOYED</span>
+              <code class="slot-code" dir="ltr" aria-hidden="true"><span class="k">const</span> BOOKING_NUMBER = <span class="s">"201068530159"</span>;  <span class="c slot-cmt">// WhatsApp</span></code>
+              <b>رقم واتساب الحجز: <bdi class="wa-num num" dir="ltr">+20 106 853 0159</bdi></b>
+              <span>ابعتوا عليه كلمة «قضية»، ومعاها اسم المشروع ومرحلته وأكبر حاجة واقفة. وبنرد في خلال 24 ساعة.</span>
+            </div>
+          </div>
+          <div class="action-buttons">
+            <a class="btn btn-shine" id="wa-link" href="https://wa.me/201068530159?text=%D9%82%D8%B6%D9%8A%D8%A9%0A%D8%A7%D8%B3%D9%85%20%D8%A7%D9%84%D9%85%D8%B4%D8%B1%D9%88%D8%B9%3A%20%0A%D9%85%D8%B1%D8%AD%D9%84%D8%AA%D9%87%3A%20%0A%D8%A3%D9%83%D8%A8%D8%B1%20%D8%AD%D8%A7%D8%AC%D8%A9%20%D9%88%D8%A7%D9%82%D9%81%D8%A9%3A%20" data-wa target="_blank" rel="noopener"><svg class="i" aria-hidden="true" focusable="false"><use href="#i-chat"/></svg>ابعتوا «قضية» على واتساب<span class="sr-only">، بيفتح واتساب</span></a>
+            <button class="btn btn-quiet copy" type="button" id="copy-btn" data-status="idle" hidden>
+              <span class="ic" aria-hidden="true">
+                <svg class="i" data-for="idle"><use href="#i-copy"/></svg>
+                <svg class="i" data-for="copied"><use href="#i-check"/></svg>
+                <svg class="i" data-for="error"><use href="#i-x"/></svg>
+              </span>
+              <span class="lb" aria-hidden="true">
+                <span data-for="idle">انسخوا رسالة «قضية»</span>
+                <span data-for="copied">اتنسخت</span>
+                <span data-for="error">ما اتنسختش</span>
+              </span>
+              <span class="sr-only">انسخوا رسالة «قضية»</span>
+            </button>
+            <button class="btn btn-quiet" type="button" id="share-btn" hidden><svg class="i" aria-hidden="true"><use href="#i-share"/></svg>ابعتوا الصفحة لجروب الفريق</button>
+          </div>
+          <p class="toast" id="toast" role="status" aria-live="polite"></p>
+        </div>
+
+        <ol class="steps" aria-label="اللي بيحصل بعد ما تبعتوا">
+          <li><bdi class="stage tok" dir="ltr" aria-hidden="true">send</bdi><b>تبعتوا «قضية»</b><span>ومعاها اسم المشروع، ومرحلته، وأكبر حاجة واقفة.</span></li>
+          <li><bdi class="stage tok" dir="ltr" aria-hidden="true">scope</bdi><b>نتأكد من النطاق</b><span>نرد عليكم في خلال 24 ساعة ونتأكد إن مشروعكم جوه نطاقنا، قبل ما تدفعوا أي حاجة.</span></li>
+          <li><bdi class="stage tok" dir="ltr" aria-hidden="true">pay</bdi><b>تدفعوا 350 جنيه</b><span>منسق الفريق بيحوّل عن طريق <bdi>InstaPay</bdi> أو محفظة، والإيصال بيوصل على واتساب.</span></li>
+          <li><bdi class="stage tok" dir="ltr" aria-hidden="true">schedule</bdi><b>يوصلكم الميعاد</b><span>ولينك <bdi>Google Meet</bdi> لجلسة 45 دقيقة أونلاين.</span></li>
+        </ol>
+
+        <!-- A plain group, not a <form>: nothing is ever submitted, so nothing can end up in a URL. -->
+        <div class="builder" id="case-form" role="group" aria-labelledby="builder-title">
+          <h3 class="builder-title" id="builder-title">عايزين الرسالة تطلع جاهزة؟ <small class="when-app">اختياري. اختاروا بالضغط، والرسالة بتتكتب لوحدها.</small><small class="when-noapp">انسخوا الرسالة دي، وكمّلوا الفاضي بإيدكم، وابعتوها على واتساب للرقم <bdi class="wa-num num" dir="ltr">+20 106 853 0159</bdi>.</small></h3>
+
+          <div class="field when-app">
+            <label for="f-project">اسم المشروع</label>
+            <input class="input" id="f-project" name="project" type="text" dir="auto" maxlength="80" autocomplete="off" enterkeyhint="done" placeholder="مثلًا: نظام حجز عيادات">
+          </div>
+
+          <fieldset class="field when-app">
+            <legend>نوع المشروع <span class="hint-text">(ممكن أكتر من اختيار)</span></legend>
+            <div class="chips">
+              <label class="chip"><input type="checkbox" name="type" value="ويب"><span>ويب</span></label>
+              <label class="chip"><input type="checkbox" name="type" value="موبايل"><span>موبايل</span></label>
+              <label class="chip"><input type="checkbox" name="type" value="قواعد بيانات"><span>قواعد بيانات</span></label>
+              <label class="chip"><input type="checkbox" name="type" value="ذكاء اصطناعي"><span>ذكاء اصطناعي</span></label>
+              <label class="chip"><input type="checkbox" name="type" value="IoT / Arduino / ESP"><span><bdi>IoT / Arduino / ESP</bdi></span></label>
+              <label class="chip"><input type="checkbox" name="type" value="حاجة تانية"><span>حاجة تانية</span></label>
+            </div>
+          </fieldset>
+
+          <fieldset class="field when-app">
+            <legend>وصلتوا لحد فين؟</legend>
+            <div class="chips">
+              <label class="chip"><input type="radio" name="stage" value="لسه بنختار الفكرة"><span>لسه بنختار الفكرة</span></label>
+              <label class="chip"><input type="radio" name="stage" value="الفكرة موجودة ولسه ما بدأناش"><span>الفكرة موجودة ولسه ما بدأناش</span></label>
+              <label class="chip"><input type="radio" name="stage" value="في نص التنفيذ"><span>في نص التنفيذ</span></label>
+              <label class="chip"><input type="radio" name="stage" value="بنجمّع الأجزاء ونختبر"><span>بنجمّع الأجزاء ونختبر</span></label>
+              <label class="chip"><input type="radio" name="stage" value="قرّبنا من المناقشة"><span>قرّبنا من المناقشة</span></label>
+            </div>
+          </fieldset>
+
+          <fieldset class="field when-app">
+            <legend>إيه أكبر حاجة واقفة؟</legend>
+            <div class="chips">
+              <label class="chip"><input type="radio" name="blocker" value="مش عارفين نبدأ منين"><span>مش عارفين نبدأ منين</span></label>
+              <label class="chip"><input type="radio" name="blocker" value="جزء فني مش شغال"><span>جزء فني مش شغال</span></label>
+              <label class="chip"><input type="radio" name="blocker" value="الشغل مش متوزّع على الفريق"><span>الشغل مش متوزّع على الفريق</span></label>
+              <label class="chip"><input type="radio" name="blocker" value="الوقت ضيّق والخطة مش واضحة"><span>الوقت ضيّق والخطة مش واضحة</span></label>
+              <label class="chip"><input type="radio" name="blocker" value="مش فاهمين المطلوب بالظبط"><span>مش فاهمين المطلوب بالظبط</span></label>
+              <label class="chip"><input type="radio" name="blocker" value=""><span>حاجة تانية، هنكتبها</span></label>
+            </div>
+          </fieldset>
+
+          <div class="field when-app">
+            <label for="f-ref">رشّحنا فريق <span class="hint-text">(اختياري)</span></label>
+            <input class="input" id="f-ref" name="ref" type="text" dir="auto" maxlength="80" autocomplete="off" enterkeyhint="done" placeholder="اسم الفريق اللي رشّحنا لكم، لو فيه" aria-describedby="f-ref-hint">
+            <p class="field-hint" id="f-ref-hint">السطر ده بيظهر في الرسالة بس لو كتبتوا فيه.</p>
+          </div>
+
+          <div class="builder-out">
+            <div class="term preview-term" id="preview-term">
+              <div class="term-bar">
+                <span class="dots" aria-hidden="true"><i></i><i></i><i></i></span>
+                <bdi class="term-title tok" dir="rtl" aria-hidden="true">قضية.txt</bdi>
+              </div>
+              <figure class="preview term-body" id="preview-box">
+                <figcaption id="preview-cap">دي الرسالة اللي هتبعتوها. تقدروا تعدّلوها في واتساب قبل الإرسال.</figcaption>
+                <div class="bubble-wrap">
+                  <p class="bubble" id="preview" dir="rtl" aria-describedby="preview-cap">قضية
+اسم المشروع:
+مرحلته:
+أكبر حاجة واقفة:
+رشّحنا فريق (اختياري): </p>
+                  <span class="ready-stamp" id="ready-stamp" aria-hidden="true">البلاغ جاهز</span>
+                </div>
+              </figure>
+            </div>
+
+            <div class="checks-panel when-app" id="checks" aria-live="polite">
+              <p class="ck-neutral" id="ck-neutral">ناقص 3 حاجات: اسم المشروع، مرحلته، أكبر حاجة واقفة</p>
+              <ul class="ck-list" id="ck-list" hidden></ul>
+            </div>
+
+            <button class="btn copy when-app" type="button" id="copy-btn-2" data-status="idle" hidden>
+              <span class="ic" aria-hidden="true">
+                <svg class="i" data-for="idle"><use href="#i-copy"/></svg>
+                <svg class="i" data-for="copied"><use href="#i-check"/></svg>
+                <svg class="i" data-for="error"><use href="#i-x"/></svg>
+              </span>
+              <span class="lb" aria-hidden="true">
+                <span data-for="idle">انسخوا الرسالة دي</span>
+                <span data-for="copied">اتنسخت</span>
+                <span data-for="error">ما اتنسختش</span>
+              </span>
+              <span class="sr-only">انسخوا الرسالة دي</span>
+            </button>
+            <a class="btn when-app" id="wa-link-2" href="https://wa.me/201068530159?text=%D9%82%D8%B6%D9%8A%D8%A9%0A%D8%A7%D8%B3%D9%85%20%D8%A7%D9%84%D9%85%D8%B4%D8%B1%D9%88%D8%B9%3A%20%0A%D9%85%D8%B1%D8%AD%D9%84%D8%AA%D9%87%3A%20%0A%D8%A3%D9%83%D8%A8%D8%B1%20%D8%AD%D8%A7%D8%AC%D8%A9%20%D9%88%D8%A7%D9%82%D9%81%D8%A9%3A%20" data-wa target="_blank" rel="noopener"><svg class="i" aria-hidden="true" focusable="false"><use href="#i-chat"/></svg>ابعتوا الرسالة دي على واتساب<span class="sr-only">، بيفتح واتساب</span></a>
+
+            <p class="privacy"><svg class="i" aria-hidden="true"><use href="#i-lock"/></svg><span>اللي بتكتبوه هنا ما بيتبعتش لحد. الرسالة بتتبعت بس لما انتو تبعتوها بنفسكم.</span></p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+</main>
+
+<div class="mobile-bar when-app" id="mobile-bar">
+  <a class="btn" id="mobile-cta" href="https://wa.me/201068530159?text=%D9%82%D8%B6%D9%8A%D8%A9%0A%D8%A7%D8%B3%D9%85%20%D8%A7%D9%84%D9%85%D8%B4%D8%B1%D9%88%D8%B9%3A%20%0A%D9%85%D8%B1%D8%AD%D9%84%D8%AA%D9%87%3A%20%0A%D8%A3%D9%83%D8%A8%D8%B1%20%D8%AD%D8%A7%D8%AC%D8%A9%20%D9%88%D8%A7%D9%82%D9%81%D8%A9%3A%20" data-wa target="_blank" rel="noopener"><svg class="i" aria-hidden="true" focusable="false"><use href="#i-chat"/></svg>احجزوا التشخيص (350 جنيه)<span class="sr-only">، بيفتح واتساب</span></a>
+  <button class="motion-toggle" type="button">
+    <svg class="i mt-pause" aria-hidden="true" focusable="false"><use href="#i-pause"/></svg>
+    <svg class="i mt-play" aria-hidden="true" focusable="false"><use href="#i-play"/></svg>
+    <span class="mt-label">وقّفوا الحركة</span>
+  </button>
+</div>
+
+<footer class="foot">
+  <div class="wrap">
+    <img src="assets/img/beedak-logo-dark-nobg.svg" alt="بإيدك" width="900" height="525" loading="lazy">
+    <p>افهموه، وكمّلوه بإيدكم.</p>
+    <nav aria-label="روابط آخر الصفحة">
+      <ul>
+        <li><a href="terms.html">الشروط</a></li>
+        <li><a href="lab.html">المعمل</a></li>
+        <li><a href="#top">أول الصفحة</a></li>
+      </ul>
+    </nav>
+    <div class="foot-status">
+      <bdi class="tok exit" dir="ltr" aria-hidden="true"><i class="gdot"></i>exit 0</bdi>
+      <p class="foot-caption">الكود اللي بيتحرك في الخلفية زينة وأمثلة، مش من مشاريع حقيقية.</p>
+    </div>
+  </div>
+</footer>
+<!-- Decorative code background (aria-hidden). Without JS this static, blurred copy shows; app.js draws the interactive one on the canvas. -->
+<div class="bgfx" aria-hidden="true" data-nosnippet>
+  <div class="bgfx-static">
+<pre class="bs d2 r" style="--x:3%;--y:4%">if (!res.ok) throw new Error("500");</pre>
+<pre class="bs d1 v" style="--x:58%;--y:9%">while (!plan.owner) { await standup(); }</pre>
+<pre class="bs d3 g" style="--x:66%;--y:24%">digitalWrite(LED_PIN, HIGH);</pre>
+<pre class="bs d1 r" style="--x:8%;--y:30%">KeyError: 'owner'</pre>
+<pre class="bs d2 v" style="--x:40%;--y:41%">WiFi.begin(ssid, pass);</pre>
+<pre class="bs d3 r" style="--x:70%;--y:52%">Segmentation fault (core dumped)</pre>
+<pre class="bs d1 g" style="--x:4%;--y:60%">SELECT * FROM tasks WHERE owner IS NOT NULL;</pre>
+<pre class="bs d2 g" style="--x:52%;--y:70%">res.status(200).json(plan);</pre>
+<pre class="bs d1 v" style="--x:14%;--y:80%">git rebase --continue</pre>
+<pre class="bs d3 r" style="--x:62%;--y:86%">CONFLICT (content): merge conflict in main.c</pre>
+<pre class="bs d2 g" style="--x:6%;--y:92%">assert plan.next and plan.due</pre>
+<pre class="bs d1 r" style="--x:44%;--y:18%">NULL</pre>
+  </div>
+  <canvas class="bgfx-canvas"></canvas>
+</div>
+</body>
+</html>
