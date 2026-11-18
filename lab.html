@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>المعمل | بإيدك</title>
-<meta name="description" content="المعمل: لعبة صغيرة للتجربة من «بإيدك». لفّوا أجهزة ESP32 وArduino وحساس وبريدبورد، واكتبوا أوامر بسيطة للـESP32.">
+<meta name="description" content="المعمل من «بإيدك»: اعرفوا مكونات ESP32 وArduino والحساس والبريدبورد، وجرّبوا أوامر بسيطة على مكونات وهمية الأول، وبعدها على جهازكم بالـUSB.">
 <!-- Not published publicly yet: keep noindex until the launch decision exists. -->
 <meta name="robots" content="index, follow">
 <meta name="color-scheme" content="dark">
@@ -36,6 +36,7 @@
 })();
 </script>
 <link rel="stylesheet" href="assets/css/styles.css">
+<link rel="stylesheet" href="assets/css/lab-extra.css">
 <script src="assets/js/esp-behavior.js" defer></script>
 <script src="assets/js/app.js" defer></script>
 <script src="assets/js/lab.js" defer></script>
@@ -77,7 +78,7 @@
       <div class="head scrim">
         <p class="eyebrow"><bdi class="tok" dir="ltr" aria-hidden="true">// lab.ino</bdi> المعمل</p>
         <h1 id="lab-title" class="lab-h1">المعمل: جرّبوا بإيدكم</h1>
-        <p class="lede">لعبة صغيرة للتجربة، مش مشروع حقيقي: لفّوا الأجهزة وحرّكوها على الترابيزة، واكتبوا أوامر بسيطة للـ<bdi>ESP32</bdi> وشوفوه بيرد.</p>
+        <p class="lede">لفّوا الأجهزة واعرفوا كل جزء فيها بيعمل إيه. اكتبوا أوامر بسيطة، وهتشتغل على المكونات الوهمية الأول، ولو مفيهاش أخطاء تقدروا تبعتوها لجهازكم الحقيقي بالـ<bdi>USB</bdi>.</p>
       </div>
 
       <div class="lab-grid">
@@ -109,6 +110,16 @@
             <p class="lab-hint" id="lab-hint-touch" hidden>السحب يمين وشمال بيلف الجهاز، وطلوع ونزول بينزّل الصفحة عادي. علشان تلفّوه في أي اتجاه أو تنقلوه، دوسوا «تحكّم» الأول.</p>
             <p class="lab-hint lab-keys" id="lab-keys">بالكيبورد: اختاروا الجهاز من الزراير دي، والأسهم بتلفّه، و<kbd>Shift</kbd> مع الأسهم بتحرّكه، و<kbd>Enter</kbd> على <bdi>ESP32</bdi> بيشغّله.</p>
             <p class="sr-only" id="lab-sr" aria-live="polite"></p>
+
+            <section class="parts" id="parts" aria-labelledby="parts-title">
+              <h2 class="parts-h" id="parts-title">مكوّنات <bdi id="parts-dev">ESP32</bdi></h2>
+              <p class="parts-tip" id="parts-tip">دوسوا على أي جزء علشان يتعلّم عليه في الموديل وتعرفوا بيعمل إيه.</p>
+              <ul class="parts-list" id="parts-list" aria-describedby="parts-tip"></ul>
+              <div class="part-info" id="part-info" aria-live="polite" hidden>
+                <p class="part-name" id="part-name"></p>
+                <p class="part-text" id="part-text"></p>
+              </div>
+            </section>
           </div>
 
           <figure class="lab-static">
@@ -130,6 +141,33 @@
             <bdi class="term-title tok" dir="ltr" aria-hidden="true">sketch.ino</bdi>
           </div>
           <div class="ide-body">
+            <section class="hw" id="hw" aria-labelledby="hw-title">
+              <div class="hw-head">
+                <h2 class="hw-h" id="hw-title">جهازكم الحقيقي <span class="hw-opt">(اختياري)</span></h2>
+                <span class="hw-chip" id="hw-chip" data-s="off" role="status">مفيش جهاز متوصّل</span>
+              </div>
+              <p class="hw-note" id="hw-unsupported" hidden>المتصفح ده ما بيدعمش التوصيل بالـ<bdi>USB</bdi>. جرّبوا <bdi>Chrome</bdi> أو <bdi>Edge</bdi> على الكمبيوتر. المكونات الوهمية شغالة عادي.</p>
+              <div class="hw-row" id="hw-controls">
+                <button type="button" class="seg-btn hw-btn" id="hw-connect">وصّلوا جهازكم</button>
+                <label class="hw-baud" for="hw-baud">السرعة
+                  <select id="hw-baud" dir="ltr">
+                    <option value="9600">9600</option>
+                    <option value="57600">57600</option>
+                    <option value="115200" selected>115200</option>
+                  </select>
+                </label>
+              </div>
+              <details class="hw-how">
+                <summary>أول مرة؟ ارفعوا كود الجسر على الكارت</summary>
+                <ol>
+                  <li>المتصفح ما بيرفعش كود على الكارت. بيبعت أوامر نصية بس، فالكارت محتاج كود الجسر مرة واحدة.</li>
+                  <li><a class="hw-dl" href="assets/firmware/beedak-lab-bridge/beedak-lab-bridge.ino" download="beedak-lab-bridge.ino">نزّلوا <bdi dir="ltr">beedak-lab-bridge.ino</bdi></a> وافتحوه في <bdi>Arduino IDE</bdi>.</li>
+                  <li>اختاروا الكارت والبورت ودوسوا <bdi>Upload</bdi>. لو <bdi>ESP32</bdi>، لازم حزمة <bdi>esp32</bdi> تكون متسطّبة في <bdi>Arduino IDE</bdi>.</li>
+                  <li>اقفلوا الـ<bdi>Serial Monitor</bdi> بتاع <bdi>Arduino IDE</bdi> علشان البورت يفضى، وارجعوا هنا ودوسوا «وصّلوا جهازكم» على سرعة <bdi>115200</bdi>.</li>
+                </ol>
+              </details>
+            </section>
+
             <label class="ide-label" for="esp-code">اكتبوا أوامر للـ<bdi>ESP32</bdi>، وبعدها دوسوا «شغّلوا الكود»:</label>
             <div class="editor">
               <pre class="gutter" id="esp-gutter" aria-hidden="true">1</pre>
@@ -147,6 +185,19 @@ led(on)</textarea>
               <button type="button" class="seg-btn" id="esp-stop" disabled><svg class="i" aria-hidden="true" focusable="false"><use href="#i-x"/></svg>وقّفوا</button>
               <button type="button" class="seg-btn" id="esp-reset-code"><svg class="i" aria-hidden="true" focusable="false"><use href="#i-reset"/></svg>الكود الأصلي</button>
             </div>
+            <ol class="rsteps" id="rsteps" aria-label="مراحل التشغيل">
+              <li class="rstep" id="rstep-1" data-s="idle">
+                <span class="rstep-n" aria-hidden="true">1</span>
+                <div class="rstep-body"><b>على المكونات الوهمية</b><span class="rstep-t" id="rstep-1-t" role="status">لسه ما اتشغلش.</span></div>
+              </li>
+              <li class="rstep" id="rstep-2" data-s="locked">
+                <span class="rstep-n" aria-hidden="true">2</span>
+                <div class="rstep-body"><b>على جهازكم</b><span class="rstep-t" id="rstep-2-t" role="status">بيستنى الخطوة 1 تنجح من غير أخطاء.</span>
+                  <button type="button" class="run-btn run-real" id="run-real" hidden><svg class="i" aria-hidden="true" focusable="false"><use href="#i-play"/></svg>شغّلوه على جهازي</button>
+                </div>
+              </li>
+            </ol>
+            <label class="check-row" for="auto-real"><input type="checkbox" id="auto-real"> لو الخطوة 1 نجحت، كمّلوا على جهازي لوحده</label>
             <details class="cmds">
               <summary id="esp-cmds-sum">الأوامر المتاحة</summary>
               <ul dir="ltr">
@@ -159,6 +210,7 @@ led(on)</textarea>
                 <li><code>delay(500)</code></li>
                 <li><code>run(alarm)</code> <span dir="rtl">يشغّل حركة جاهزة</span></li>
               </ul>
+              <p class="cmds-note">على جهازكم الحقيقي بيتبعت: <bdi dir="ltr">led</bdi> و<bdi dir="ltr">blink</bdi> و<bdi dir="ltr">delay</bdi> و<bdi dir="ltr">say</bdi> و<bdi dir="ltr">color</bdi>. أما <bdi dir="ltr">wifi</bdi> و<bdi dir="ltr">rotate</bdi> فبيشتغلوا في المعمل بس.</p>
             </details>
             <div class="serial">
               <div class="serial-bar">
@@ -170,6 +222,21 @@ led(on)</textarea>
           </div>
         </div>
       </div>
+
+      <form class="term lab-more" id="lab-more" action="https://wa.me/201068530159" method="get" target="_blank" rel="noopener">
+        <div class="term-bar">
+          <span class="dots" aria-hidden="true"><i></i><i></i><i></i></span>
+          <bdi class="term-title tok" dir="ltr" aria-hidden="true">notes.txt</bdi>
+        </div>
+        <div class="more-body">
+          <label class="ide-label" for="more-text">تفاصيل تانية عن مشروعكم</label>
+          <p class="more-hint" id="more-hint">اختياري. اكتبوا أي حاجة عايزينا نعرفها: فكرة المشروع، القطع اللي عندكم، واللي جرّبتوه لحد دلوقتي.</p>
+          <textarea class="more-text" id="more-text" name="text" rows="5" maxlength="1500" aria-describedby="more-hint"></textarea>
+          <label class="check-row more-sum" for="more-sum" hidden><input type="checkbox" id="more-sum" checked> ضيفوا ملخص تجربة المعمل والكود للرسالة</label>
+          <div class="more-actions"><button type="submit" class="btn btn-sm more-send"><svg class="i" aria-hidden="true" focusable="false"><use href="#i-chat"/></svg>ابعتوها على واتساب<span class="sr-only">، بيفتح واتساب</span></button></div>
+        </div>
+      </form>
+
       <p class="back-row back-end"><a class="btn-ghost back-btn" href="index.html"><svg class="i" aria-hidden="true" focusable="false"><use href="#i-back"/></svg>ارجعوا للصفحة الرئيسية</a></p>
     </div>
   </section>

@@ -5,7 +5,11 @@
    The ESP32 reads everything from window.ESP_BEHAVIOR (assets/js/esp-behavior.js, owner-editable).
    Visitor code box: our own tiny parser for a fixed command list. No eval, no Function, no innerHTML with visitor text.
    Motion: idle spin, inertia and tweens only while html.motion-on and not prefers-reduced-motion; direct
-   manipulation and buttons always work. Without this file the static picture in .lab-static stays. */
+   manipulation and buttons always work. Without this file the static picture in .lab-static stays.
+   18 Nov 2026 (owner order): a components panel per device (highlights on the model), the visitor's own board over
+   Web Serial (Chrome / Edge desktop), and a two-stage run: stage 1 always on the virtual parts; stage 2 sends the
+   same commands as text lines to the board only after a clean stage 1. The board needs
+   assets/firmware/beedak-lab-bridge/beedak-lab-bridge.ino once (the browser never uploads firmware). */
 (function () {
   'use strict';
   var lab = document.getElementById('lab');
@@ -156,7 +160,9 @@
   var SVG_SR04 = '<svg viewBox="0 0 90 40" preserveAspectRatio="none" aria-hidden="true" focusable="false">' +
     '<rect x="0.5" y="0.5" width="89" height="39" rx="2" fill="#1C5BB8" stroke="#164A96"/>' +
     '<text x="45" y="35" class="sr-tx" text-anchor="middle">HC-SR04</text><text x="10" y="8" class="sr-tx">T</text><text x="77" y="8" class="sr-tx">R</text>' +
-    pins(4, 37, 3.5, 5.3, 0, 1.2, 'sr-pin') + '</svg>';
+    pins(4, 37, 3.5, 5.3, 0, 1.2, 'sr-pin') +
+    '<text x="37" y="9" class="sr-tx sr-pl" text-anchor="middle">VCC</text><text x="42.3" y="12" class="sr-tx sr-pl" text-anchor="middle">Trig</text>' +
+    '<text x="47.6" y="9" class="sr-tx sr-pl" text-anchor="middle">Echo</text><text x="52.9" y="12" class="sr-tx sr-pl" text-anchor="middle">GND</text></svg>';
 
   /* ---------- Devices ---------- */
   var st = CFG.start || {};
@@ -178,6 +184,7 @@
         box(r, 'hdr hdr-x', 78, 7, 9, 22, -47, 6.5);
         box(r, 'hdr hdr-x', 64, 7, 9, 28, 47, 6.5);
         box(r, 'ic-chip', 56, 13, 4, 28, 18, 4);
+        box(r, 'rst-btn', 7, 7, 4, -40, -44, 4);
       } },
     { id: 'bb', name: 'بريدبورد', w: 170, d: 110, h: 9, fx: 0.19, fy: 0.23, yaw: -6, pitch: 0,
       build: function (r) {
@@ -212,6 +219,78 @@
     d.build(d.root);
   });
   var esp = DEVICES[0];
+
+  /* ---------- Components of each device: list + highlight on the 3D model ----------
+     hl = one or more outlines on the model, in the device's own base px (x, y = centre, w × d, z = height, r = corner radius). */
+  var PARTS = {
+    esp: [
+      { id: 'module', name: 'ESP32-WROOM-32', hl: [{ x: 0, y: -14, w: 38, d: 40, z: 6.6, r: 2 }],
+        text: 'الموديول المعدني: جواه معالج ESP32 بنواتين لحد 240 ميجاهرتز، وذاكرة فلاش (غالبًا 4 ميجابايت). ده العقل اللي بينفّذ الكود بتاعكم.' },
+      { id: 'radio', name: 'Wi-Fi + Bluetooth', hl: [{ x: 0, y: -51, w: 40, d: 14, z: 2.6, r: 2 }],
+        text: 'واي فاي 2.4 جيجاهرتز وبلوتوث Classic وBLE. الهوائي هو الخط المتعرّج في طرف الموديول، فبلاش تحطوا عليه معدن أو أسلاك.' },
+      { id: 'led', name: 'LED (GPIO2)', hl: [{ x: 16, y: 25, w: 11, d: 11, z: 2.6, r: 5.5 }],
+        text: 'أغلب لوحات DevKit عليها لمبة متوصلة على GPIO2، وفيه لوحات ما عليهاش غير لمبة الباور. دي اللي أوامر led وblink بتشغّلها.' },
+      { id: 'buttons', name: 'EN + BOOT', hl: [{ x: -13, y: 35.5, w: 12, d: 9, z: 2.6, r: 1.5 }, { x: 13, y: 35.5, w: 12, d: 9, z: 2.6, r: 1.5 }],
+        text: 'EN بيعمل ريستارت للكارت. BOOT متوصل على GPIO0: لو دايسين عليه وانتو بتعملوا ريستارت، الكارت بيدخل وضع رفع الكود.' },
+      { id: 'uart', name: 'USB-UART (CP2102 / CH340)', hl: [{ x: 0, y: 23.5, w: 19, d: 12, z: 2.6, r: 1.5 }],
+        text: 'شريحة بتحوّل الـUSB لسيريال، علشان الكمبيوتر يرفع الكود ويقرا الـSerial. نوعها بيختلف حسب اللوحة، وبعض الأجهزة محتاجة درايفر ليها.' },
+      { id: 'usb', name: 'USB', hl: [{ x: 0, y: 56, w: 16, d: 12, z: 6.6, r: 1.5 }],
+        text: 'منه الكهربا (5 فولت) ورفع الكود والسيريال. لازم الكابل يكون بيوصّل داتا، مش شحن بس.' },
+      { id: 'gpio', name: 'GPIO', hl: [{ x: -25.5, y: 13, w: 9, d: 95, z: 9.6, r: 2 }, { x: 25.5, y: 13, w: 9, d: 95, z: 9.6, r: 2 }],
+        text: 'الأطراف اللي على الجنبين. شغالة على 3.3 فولت ومش بتستحمل 5 فولت مباشرة. فيها ADC وPWM وI2C وSPI وUART، وGPIO34 لـ39 دخل بس.' }
+    ],
+    uno: [
+      { id: 'mcu', name: 'ATmega328P', hl: [{ x: 28, y: 18, w: 60, d: 17, z: 6.6, r: 2 }],
+        text: 'المتحكم: 8 بت على 16 ميجاهرتز، فيه 32 كيلوبايت فلاش و2 كيلوبايت RAM. الكود بتاعكم بيتنفّذ هنا.' },
+      { id: 'l13', name: 'LED L (pin 13)', hl: [{ x: -31.5, y: -30.5, w: 12, d: 11, z: 2.6, r: 2 }],
+        text: 'لمبة متوصلة على الطرف 13، واسمها في الكود LED_BUILTIN. أسهل طريقة تتأكدوا بيها إن الكود اترفع: blink.' },
+      { id: 'txrx', name: 'TX / RX', hl: [{ x: -25, y: -22.5, w: 20, d: 7, z: 2.6, r: 2 }],
+        text: 'لمبتين بينوّروا لما فيه داتا رايحة أو جاية على السيريال، يعني وقت رفع الكود أو Serial.print.' },
+      { id: 'reset', name: 'RESET', hl: [{ x: -40, y: -44, w: 11, d: 11, z: 6.6, r: 2 }],
+        text: 'زرار بيعيد تشغيل الكود من الأول من غير ما يمسحه.' },
+      { id: 'usb', name: 'USB-B', hl: [{ x: -62, y: -26, w: 30, d: 26, z: 20.6, r: 2 }],
+        text: 'الكهربا ورفع الكود والسيريال. الكارت الأصلي فيه شريحة ATmega16U2 بتحوّل USB لسيريال، وكتير من النسخ التانية فيها CH340.' },
+      { id: 'jack', name: 'DC jack', hl: [{ x: -62, y: 32, w: 28, d: 20, z: 20.6, r: 2 }],
+        text: 'فيشة كهربا علشان الكارت يشتغل من غير كمبيوتر. المنصوح بيه من 7 لـ 12 فولت.' },
+      { id: 'digital', name: 'D0–D13', hl: [{ x: 22, y: -47, w: 82, d: 11, z: 11.6, r: 2 }],
+        text: '14 طرف دخل وخرج على 5 فولت، منهم 6 بيطلّعوا PWM (3 و5 و6 و9 و10 و11). D0 وD1 هما السيريال، فبلاش توصّلوا عليهم حاجة وانتو بترفعوا الكود.' },
+      { id: 'analog', name: 'A0–A5 + Power', hl: [{ x: 28, y: 47, w: 68, d: 11, z: 11.6, r: 2 }],
+        text: 'ستة مداخل أنالوج A0 لـ A5 (دقة 10 بت)، وجنبهم أطراف الكهربا: 5V و3.3V وGND وVIN.' }
+    ],
+    bb: [
+      { id: 'rails', name: '+ / −', hl: [{ x: 0, y: -45, w: 164, d: 13, z: 5.6, r: 2 }, { x: 0, y: 45, w: 164, d: 13, z: 5.6, r: 2 }],
+        text: 'خطوط الكهربا على الطرفين: الأحمر للموجب والأزرق للسالب، وكل صف متوصل بطوله. في بعض البريدبوردات الطويلة الصف بيبقى مقسوم نصين، فاتأكدوا بالملتيميتر.' },
+      { id: 'strips', name: 'a–e / f–j', hl: [{ x: 0, y: -18, w: 162, d: 32, z: 5.6, r: 2 }, { x: 0, y: 18, w: 162, d: 32, z: 5.6, r: 2 }],
+        text: 'كل عمود من 5 خروم، من a لـ e أو من f لـ j، متوصلين ببعض من جوه. القطعتين اللي في نفس العمود متوصلين، واللي في عمود جنبه لأ.' },
+      { id: 'gap', name: 'DIP gap', hl: [{ x: 0, y: 0, w: 166, d: 7, z: 5.6, r: 2 }],
+        text: 'المجرى اللي في النص بيفصل النصين عن بعض. الشرايح IC بتتحط فوقه علشان كل رجل تاخد عمود لوحدها.' },
+      { id: 'parts', name: 'R + LED', hl: [{ x: 4, y: -16, w: 56, d: 20, z: 8, r: 3 }],
+        text: 'دايرة مثال: مقاومة ولمبة وأسلاك. المقاومة بتحدّ التيار علشان اللمبة ما تتحرقش. دوسوا على البريدبورد نفسه علشان الدايرة تتقفل.' }
+    ],
+    sr: [
+      { id: 'vcc', name: 'VCC', hl: [{ x: -8, y: -16.5, w: 5, d: 5, z: 2, r: 1 }],
+        text: 'الكهربا: 5 فولت.' },
+      { id: 'trig', name: 'Trig', hl: [{ x: -2.7, y: -16.5, w: 5, d: 5, z: 2, r: 1 }],
+        text: 'دخل: نبضة HIGH مدتها 10 ميكروثانية بتخلّي الحساس يبعت 8 نبضات صوت على 40 كيلوهرتز.' },
+      { id: 'echo', name: 'Echo', hl: [{ x: 2.6, y: -16.5, w: 5, d: 5, z: 2, r: 1 }],
+        text: 'خرج: بيفضل HIGH طول ما الصوت رايح وراجع. المسافة بالسنتيمتر تقريبًا = المدة بالميكروثانية ÷ 58. خرجه 5 فولت، فمع ESP32 استخدموا مقسّم جهد.' },
+      { id: 'gnd', name: 'GND', hl: [{ x: 7.9, y: -16.5, w: 5, d: 5, z: 2, r: 1 }],
+        text: 'الأرضي، ولازم يكون مشترك مع أرضي الكارت.' },
+      { id: 'tr', name: 'T / R', hl: [{ x: -24, y: -1, w: 32, d: 32, z: 14.6, r: 16 }, { x: 24, y: -1, w: 32, d: 32, z: 14.6, r: 16 }],
+        text: 'T بتبعت موجة فوق صوتية، وR بتستقبل الصدى. المدى العملي تقريبًا من 2 لـ 400 سم.' },
+      { id: 'xtal', name: 'Crystal', hl: [{ x: 0, y: -11, w: 15, d: 8, z: 6, r: 2 }],
+        text: 'كريستالة بتدّي الدايرة اللي على الكارت توقيت ثابت.' }
+    ]
+  };
+  DEVICES.forEach(function (d) {
+    (PARTS[d.id] || []).forEach(function (p) {
+      p.els = p.hl.map(function (h) {
+        var sw = 2;
+        var svg = '<svg viewBox="0 0 ' + h.w + ' ' + h.d + '" preserveAspectRatio="none" aria-hidden="true" focusable="false"><rect class="hl-r" x="' + sw / 2 + '" y="' + sw / 2 + '" width="' + (h.w - sw) + '" height="' + (h.d - sw) + '" rx="' + Math.min(h.r || 0, (h.w - sw) / 2) + '"/></svg>';
+        return plane(d.root, 'hl', h.w, h.d, h.x, h.y, h.z, svg);
+      });
+    });
+  });
 
   /* ---------- Lighting: shade each face by its normal against one light (screen space) ---------- */
   var L = (function () { var v = [0.3, -0.75, 0.6], n = Math.hypot(v[0], v[1], v[2]); return [v[0] / n, v[1] / n, v[2] / n]; })();
@@ -323,9 +402,47 @@
   var sel = esp;
   function byId(id) { for (var i = 0; i < DEVICES.length; i++) if (DEVICES[i].id === id) return DEVICES[i]; return null; }
   function select(d) {
+    var changed = sel !== d || !partsShownFor;
     sel = d;
     DEVICES.forEach(function (o) { o.shadow.classList.toggle('is-sel', o === d); });
     Array.prototype.forEach.call(picks, function (b) { b.setAttribute('aria-pressed', b.getAttribute('data-dev') === d.id ? 'true' : 'false'); });
+    if (changed) renderParts(d);
+  }
+
+  /* ---------- Components panel ---------- */
+  var partsList = $('parts-list'), partsDev = $('parts-dev'), partInfo = $('part-info'), partName = $('part-name'), partText = $('part-text');
+  var partsShownFor = null, partOn = null;
+  function lightPart(p) {
+    DEVICES.forEach(function (d) { (PARTS[d.id] || []).forEach(function (q) { q.els.forEach(function (e) { e.classList.toggle('on', q === p); }); }); });
+  }
+  function showPart(d, p) {
+    partOn = p;
+    lightPart(p);
+    if (partsList) Array.prototype.forEach.call(partsList.querySelectorAll('.part-btn'), function (b) { b.setAttribute('aria-pressed', p && b.getAttribute('data-part') === p.id ? 'true' : 'false'); });
+    if (!partInfo) return;
+    partInfo.hidden = !p;
+    if (p) { partName.textContent = p.name; partText.textContent = p.text; }
+  }
+  function renderParts(d) {
+    partsShownFor = d;
+    if (!partsList) return;
+    if (partsDev) partsDev.textContent = d.name;
+    while (partsList.firstChild) partsList.removeChild(partsList.firstChild);
+    (PARTS[d.id] || []).forEach(function (p) {
+      var li = el('li', '', partsList);
+      var b = el('button', 'part-btn', li);
+      b.type = 'button';
+      b.setAttribute('data-part', p.id);
+      b.setAttribute('aria-pressed', 'false');
+      b.setAttribute('dir', 'ltr');
+      b.textContent = p.name;
+      b.addEventListener('click', function () {
+        touched = true;
+        showPart(d, partOn === p ? null : p);
+        kick();
+      });
+    });
+    showPart(d, null);
   }
   var srBox = $('lab-sr'), srTimer = null;
   function announce(t) {
@@ -497,7 +614,13 @@
   var MAX_STEPS = 120, MAX_TOTAL_MS = 20000;
   var runId = 0, timers = [];
   function later(fn, ms) { var id = window.setTimeout(fn, ms); timers.push(id); return id; }
-  function stopAll() { runId++; timers.forEach(window.clearTimeout); timers = []; }
+  var runCb = null, runFailed = false; // the visitor run waiting for its result (stage 1)
+  function stopAll() {
+    runId++; timers.forEach(window.clearTimeout); timers = [];
+    // fix: a run stopped while Wi-Fi was "connecting" left the label stuck on WL_IDLE…
+    if (wifiState === 'connecting') setWifi('disconnected');
+    if (runCb) { var cb = runCb; runCb = null; cb(false); }
+  }
   function fromSequence(name, depth, outList, errs) {
     var seq = (CFG.sequences || {})[name];
     if (!Array.isArray(seq)) { errs.push('مفيش sequence اسمه «' + str(name) + '» في esp-behavior.js'); return; }
@@ -520,17 +643,23 @@
     if (s.op === 'wifi' && s.arg === 'connect') return num(CFG.wifi.connectMs, 1600, 0, 10000);
     return 0;
   }
-  function run(list, label) {
+  function run(list, label, cb) {
     stopAll();
     var my = runId;
-    if (list.length > MAX_STEPS) { out('البرنامج أطول من ' + MAX_STEPS + ' خطوة. قصّروه شوية.', 'err'); return; }
+    if (list.length > MAX_STEPS) { out('البرنامج أطول من ' + MAX_STEPS + ' خطوة. قصّروه شوية.', 'err'); if (cb) cb(false); return; }
     var total = list.reduce(function (a, s) { return a + stepTime(s) + (s.ms || 0); }, 0);
-    if (total > MAX_TOTAL_MS) { out('البرنامج هياخد أكتر من ' + (MAX_TOTAL_MS / 1000) + ' ثانية. قلّلوا الـdelay أو عدد التغميز.', 'err'); return; }
+    if (total > MAX_TOTAL_MS) { out('البرنامج هياخد أكتر من ' + (MAX_TOTAL_MS / 1000) + ' ثانية. قلّلوا الـdelay أو عدد التغميز.', 'err'); if (cb) cb(false); return; }
     if (label) out(label, 'sys');
+    runCb = cb || null; runFailed = false;
     var i = 0;
     function next() {
       if (my !== runId) return;
-      if (i >= list.length) { if (label) out(msg('done'), 'ok'); setRunning(false); return; }
+      if (i >= list.length) {
+        if (label) out(msg('done'), 'ok');
+        setRunning(false);
+        var c = runCb; runCb = null; if (c) c(!runFailed);
+        return;
+      }
       var s = list[i++];
       exec(s, function () { if (my !== runId) return; later(next, s.ms || 0); }, my);
     }
@@ -547,7 +676,7 @@
       }
       case 'color':
         if (setColor(s.arg)) out(msg('color', { color: String(s.arg).toLowerCase() }));
-        else out('لون مش معروف: ' + str(s.arg), 'err');
+        else { out('لون مش معروف: ' + str(s.arg), 'err'); runFailed = true; }
         return done();
       case 'blink': {
         var n = s.arg, ms = s.arg2, c = 0;
@@ -628,6 +757,11 @@
     }
     return line;
   }
+  // the bridge keeps 200 bytes a line: "PRINT " + the text must fit (Arabic is 2 bytes a letter, symbols like ★ are 3)
+  var SAY_MAX_BYTES = 180;
+  function utf8Len(t) {
+    try { return new TextEncoder().encode(t).length; } catch (e) { return unescape(encodeURIComponent(t)).length; }
+  }
   function parse(src) {
     var lines = String(src).split(/\r?\n/), prog = [], errs = [];
     if (lines.length > 80) errs.push({ line: 81, text: 'الكود أطول من 80 سطر.' });
@@ -662,6 +796,7 @@
       else if ((m = /^say\s*\(\s*(?:"([^"]*)"|'([^']*)'|«([^»]*)»)\s*\)$/i.exec(s))) {
         var t = m[1] != null ? m[1] : m[2] != null ? m[2] : m[3];
         if (t.length > 80) errs.push({ line: n, text: 'say() لحد 80 حرف.' });
+        else if (utf8Len(t) > SAY_MAX_BYTES) errs.push({ line: n, text: 'النص ده طويل على الجهاز (بعض الرموز بتاخد مساحة أكبر من الحروف). قصّروه شوية.' });
         else prog.push({ op: 'say', arg: t, line: n });
       }
       else if (/^say\s*\(/i.test(s)) errs.push({ line: n, text: 'النص بين علامتين. مثال: say("أهلًا")' });
@@ -693,22 +828,380 @@
     codeEl.addEventListener('scroll', function () { if (gutter) gutter.scrollTop = codeEl.scrollTop; });
     syncGutter();
   }
+  /* ---------- Run flow: stage 1 on the virtual parts, stage 2 on the visitor's board (only after a clean stage 1) ---------- */
+  var step1 = $('rstep-1'), step1T = $('rstep-1-t'), step2 = $('rstep-2'), step2T = $('rstep-2-t'), runReal = $('run-real'), autoReal = $('auto-real');
+  var lastGood = null;   // { prog, src } of the last stage-1 run that finished with zero errors
+  var lastRun = { s1: 'idle', errs: 0, s2: 'none', sent: 0, skipped: 0 };
+  function setStep(li, tEl, s, text) {
+    if (li) li.setAttribute('data-s', s);
+    if (tEl) tEl.textContent = text;
+  }
+  function plural(n) { return n === 1 ? 'خطأ واحد' : n === 2 ? 'خطأين' : n + ' أخطاء'; }
+  function cmdsN(n) { return n === 1 ? 'أمر واحد' : n === 2 ? 'أمرين' : n >= 3 && n <= 10 ? n + ' أوامر' : n + ' أمر'; }
   if (runBtn && codeEl) runBtn.addEventListener('click', function () {
     touched = true;
     speak();
+    abortReal();
+    lastGood = null;
     var r = parse(codeEl.value);
     if (r.errs.length) {
       stopAll(); setRunning(false);
       r.errs.forEach(function (e2) { out('سطر ' + e2.line + ': ' + e2.text, 'err'); });
-      out('الكود فيه ' + (r.errs.length === 1 ? 'خطأ واحد' : r.errs.length === 2 ? 'خطأين' : r.errs.length + ' أخطاء') + '. صلّحوه وجرّبوا تاني.', 'err');
+      out('الكود فيه ' + plural(r.errs.length) + '. صلّحوه وجرّبوا تاني.', 'err');
+      lastRun = { s1: 'fail', errs: r.errs.length, s2: 'none', sent: 0, skipped: 0 };
+      setStep(step1, step1T, 'fail', 'فيه ' + plural(r.errs.length) + '. صلّحوه الأول.');
+      updateStep2();
       return;
     }
-    if (!r.prog.length) { out('مفيش أوامر. اكتبوا سطر زي led(on)', 'sys'); return; }
-    run(r.prog, '> upload sketch.ino');
+    if (!r.prog.length) {
+      out('مفيش أوامر. اكتبوا سطر زي led(on)', 'sys');
+      lastRun = { s1: 'idle', errs: 0, s2: 'none', sent: 0, skipped: 0 };
+      setStep(step1, step1T, 'idle', 'مفيش أوامر لسه.');
+      updateStep2();
+      return;
+    }
+    var src = codeEl.value;
+    lastRun = { s1: 'run', errs: 0, s2: 'none', sent: 0, skipped: 0 };
+    setStep(step1, step1T, 'run', 'شغال على المكونات الوهمية…');
+    updateStep2();
+    run(r.prog, '> upload sketch.ino', function (ok) {
+      if (ok && codeEl.value === src) {
+        lastGood = { prog: r.prog, src: src };
+        lastRun.s1 = 'pass';
+        setStep(step1, step1T, 'pass', 'نجح من غير أخطاء.');
+        updateStep2();
+        if (autoReal && autoReal.checked && hw.open) sendToBoard();
+      } else {
+        lastRun.s1 = ok ? 'idle' : 'stop';
+        setStep(step1, step1T, ok ? 'idle' : 'stop', ok ? 'الكود اتغيّر. شغّلوه تاني.' : 'اتوقف قبل ما يخلص.');
+        updateStep2();
+      }
+    });
   });
-  if (stopBtn) stopBtn.addEventListener('click', function () { stopAll(); setRunning(false); setLed(false); out('اتوقف.', 'sys'); });
-  if (resetCode && codeEl) resetCode.addEventListener('click', function () { codeEl.value = SAMPLE; syncGutter(); codeEl.focus(); });
+  if (stopBtn) stopBtn.addEventListener('click', function () {
+    var wasReal = real.busy;
+    stopAll(); abortReal(); setRunning(false); setLed(false); out('اتوقف.', 'sys');
+    if (wasReal) out('بطّلنا نبعت للجهاز. الأمر اللي كان شغال عليه هيكمّل لحد ما يخلص.', 'sys');
+  });
+  if (resetCode && codeEl) resetCode.addEventListener('click', function () { codeEl.value = SAMPLE; syncGutter(); codeChanged(); codeEl.focus(); });
+  function codeChanged() {
+    if (!lastGood && lastRun.s1 !== 'pass') return;
+    lastGood = null;
+    abortReal();
+    lastRun.s1 = 'idle';
+    setStep(step1, step1T, 'idle', 'الكود اتغيّر. شغّلوه على المكونات الوهمية الأول.');
+    updateStep2();
+  }
+  if (codeEl) codeEl.addEventListener('input', codeChanged);
   setRunning(false);
+
+  /* ---------- The visitor's real board over Web Serial (Chrome / Edge on a computer) ----------
+     The browser never uploads firmware: the board needs beedak-lab-bridge.ino once, then we send plain text lines
+     ("LED ON", "BLINK 400 3", ...) and wait for an "ok" / "err" line back for each. */
+  var serialApi = null;
+  try { if (window.isSecureContext !== false && navigator.serial && typeof navigator.serial.requestPort === 'function') serialApi = navigator.serial; } catch (e) { serialApi = null; }
+  var hwChip = $('hw-chip'), hwBtn = $('hw-connect'), hwBaud = $('hw-baud'), hwNote = $('hw-unsupported'), hwCtl = $('hw-controls');
+  var hw = { port: null, open: false, reader: null, name: '', ids: '', baud: 115200, known: null, closing: false };
+  var real = { busy: false, id: 0, waiters: [] };
+  var VENDORS = { 0x303A: 'Espressif (ESP32)', 0x10C4: 'Silicon Labs CP210x', 0x1A86: 'WCH CH340', 0x0403: 'FTDI', 0x2341: 'Arduino', 0x2A03: 'Arduino' };
+  var PRODUCTS = { '2341:0043': 'Arduino Uno R3', '2341:0001': 'Arduino Uno', '10C4:EA60': 'Silicon Labs CP2102 / CP2104', '1A86:7523': 'WCH CH340', '1A86:55D4': 'WCH CH9102', '0403:6001': 'FTDI FT232R' };
+  function hex4(n) { return ('0000' + Number(n).toString(16).toUpperCase()).slice(-4); }
+  function portName(port) {
+    var i = {};
+    try { i = port.getInfo() || {}; } catch (e) { i = {}; }
+    var v = i.usbVendorId, p = i.usbProductId;
+    if (v == null) return { name: 'جهاز سيريال', ids: '' };
+    var key = hex4(v) + ':' + (p != null ? hex4(p) : '----');
+    return { name: PRODUCTS[key] || VENDORS[v] || 'جهاز USB', ids: 'USB ' + key };
+  }
+  function chip(s, text) { if (hwChip) { hwChip.setAttribute('data-s', s); hwChip.textContent = text; } }
+  function hwButton() {
+    if (!hwBtn) return;
+    hwBtn.textContent = hw.open ? 'افصلوا الجهاز' : hw.known ? 'افتحوا الجهاز' : 'وصّلوا جهازكم';
+    hwBtn.setAttribute('aria-pressed', hw.open ? 'true' : 'false');
+  }
+  function lineIn(text) {
+    var t = String(text).replace(/\s+$/, '');
+    if (!t) return;
+    out('USB ‹ ' + t, 'dev');
+    // only "ok <VERB> ..." / "err <VERB> ..." for the command we are waiting on counts as its reply.
+    // PRINT text comes back as "> ...", and late replies to an older command (after stop or a timeout) are ignored.
+    var w = real.waiters[0];
+    if (!w) return;
+    var m = /^(ok|err)\s+(\S+)(?:\s+(\S+))?/i.exec(t);
+    if (!m) return;
+    var verb = m[2].toUpperCase();
+    var mine = verb === w.verb && (w.token == null || m[3] === w.token);
+    var generic = /^err$/i.test(m[1]) && (verb === 'UNKNOWN' || verb === 'TOOLONG');
+    if (!mine && !generic) return;
+    real.waiters.shift();
+    window.clearTimeout(w.timer);
+    w.resolve(t);
+  }
+  function readLoop(port) {
+    if (!port.readable) return;
+    var reader = port.readable.getReader();
+    hw.reader = reader;
+    var dec = new TextDecoder(), buf = '';
+    function pump() {
+      return reader.read().then(function (r) {
+        if (r.done) return null;
+        buf += dec.decode(r.value, { stream: true });
+        var parts = buf.split(/\r?\n/);
+        buf = parts.pop();
+        if (buf.length > 400) { parts.push(buf); buf = ''; }
+        parts.forEach(lineIn);
+        return pump();
+      });
+    }
+    pump().then(function () { return false; }, function () { return true; }).then(function (failed) {
+      if (hw.reader === reader) { try { reader.releaseLock(); } catch (e) { /* already released */ } hw.reader = null; }
+      if (hw.port !== port || !hw.open || hw.closing) return;
+      // a framing / break / overrun error only ends this stream: the port stays open with a new readable
+      if (failed && port.readable && (hw.readErrs = (hw.readErrs || 0) + 1) <= 5) { readLoop(port); return; }
+      lost(port);
+    });
+  }
+  function openPort(port) {
+    var baud = parseInt(hwBaud && hwBaud.value, 10) || 115200;
+    chip('busy', 'بيفتح البورت…');
+    if (hwBtn) hwBtn.disabled = true;
+    return port.open({ baudRate: baud }).then(function () {
+      var n = portName(port);
+      hw.port = port; hw.open = true; hw.known = port; hw.name = n.name; hw.ids = n.ids; hw.baud = baud; hw.readErrs = 0;
+      try { port.addEventListener('disconnect', function () { lost(port); }); } catch (e) { /* older API */ }
+      chip('on', n.name + (n.ids ? ' · ' + n.ids : '') + ' · ' + baud);
+      speak();
+      out('جهازكم اتوصل: ' + n.name + (n.ids ? ' (' + n.ids + ')' : '') + ' على ' + baud + '.', 'ok');
+      readLoop(port);
+    }).catch(function () {
+      if (hw.known === port) hw.known = null;
+      chip('err', 'البورت ما اتفتحش');
+      speak();
+      out('ما قدرناش نفتح البورت. لو Arduino IDE أو أي برنامج تاني فاتحه، اقفلوه وجرّبوا تاني.', 'err');
+    }).then(function () { if (hwBtn) hwBtn.disabled = false; hwButton(); updateStep2(); });
+  }
+  function closePort(quiet) {
+    var port = hw.port;
+    if (!port) return Promise.resolve();
+    hw.closing = true;
+    abortReal();
+    var reader = hw.reader;
+    var p = reader ? reader.cancel().catch(function () {}) : Promise.resolve();
+    return p.then(function () {
+      if (reader) { try { reader.releaseLock(); } catch (e) { /* released */ } if (hw.reader === reader) hw.reader = null; }
+      return port.close();
+    }).catch(function () { /* already gone */ }).then(function () {
+      hw.closing = false; hw.open = false; hw.port = null;
+      if (!quiet) hw.known = null; // the next click shows the browser's device picker again
+      chip('off', 'مفيش جهاز متوصّل');
+      if (!quiet) out('فصلنا الجهاز.', 'sys');
+      hwButton(); updateStep2();
+    });
+  }
+  function lost(port) {
+    if (hw.port !== port || !hw.open) return;
+    hw.open = false; hw.port = null; hw.reader = null;
+    if (hw.known === port) hw.known = null;
+    abortReal();
+    // close it too, so a later open() of the same port does not fail with "already open"
+    try { Promise.resolve(port.close()).catch(function () { /* already gone */ }); } catch (e) { /* already gone */ }
+    chip('err', 'الجهاز اتفصل');
+    speak();
+    out('الجهاز اتفصل من الـUSB.', 'err');
+    hwButton(); updateStep2();
+  }
+  function write(line) {
+    if (!hw.port || !hw.port.writable) return Promise.reject(new Error('closed'));
+    var w = hw.port.writable.getWriter();
+    out('USB › ' + line, 'tx');
+    return w.write(new TextEncoder().encode(line + '\n')).then(function () { w.releaseLock(); }, function (e) { try { w.releaseLock(); } catch (x) { /* released */ } throw e; });
+  }
+  function ask(line, ms, token) {
+    return new Promise(function (resolve, reject) {
+      var w = { resolve: resolve, reject: reject, timer: 0, verb: String(line).split(' ')[0].toUpperCase(), token: token == null ? null : String(token) };
+      w.timer = window.setTimeout(function () {
+        var i = real.waiters.indexOf(w);
+        if (i !== -1) real.waiters.splice(i, 1);
+        reject(new Error('timeout'));
+      }, ms);
+      real.waiters.push(w);
+      write(line).catch(function (e) {
+        var i = real.waiters.indexOf(w);
+        if (i !== -1) real.waiters.splice(i, 1);
+        window.clearTimeout(w.timer);
+        reject(e);
+      });
+    });
+  }
+  function abortReal() {
+    real.id++;
+    real.waiters.splice(0).forEach(function (w) { window.clearTimeout(w.timer); w.reject(new Error('aborted')); });
+    if (real.busy) { real.busy = false; lastRun.s2 = 'stop'; setRunning(false); updateStep2(); }
+  }
+  function toBridge(prog) {
+    var lines = [], skipped = [];
+    prog.forEach(function (s) {
+      if (s.op === 'led') lines.push({ cmd: 'LED ' + String(s.arg).toUpperCase(), ms: 0 });
+      else if (s.op === 'blink') lines.push({ cmd: 'BLINK ' + s.arg2 + ' ' + s.arg, ms: 2 * s.arg2 * s.arg });
+      else if (s.op === 'wait') lines.push({ cmd: 'DELAY ' + num(s.arg, 0, 0, 5000), ms: num(s.arg, 0, 0, 5000) });
+      else if (s.op === 'say') lines.push({ cmd: 'PRINT ' + str(s.arg).replace(/[\r\n]+/g, ' '), ms: 0 });
+      else if (s.op === 'color') lines.push({ cmd: 'COLOR ' + String(s.arg).toLowerCase(), ms: 0 });
+      else if (skipped.indexOf(s.op) === -1) skipped.push(s.op);
+      if (s.ms) lines.push({ cmd: 'DELAY ' + num(s.ms, 0, 0, 5000), ms: num(s.ms, 0, 0, 5000) });
+    });
+    return { lines: lines, skipped: skipped };
+  }
+  function sendToBoard() {
+    if (!lastGood || !hw.open || real.busy) return;
+    var t = toBridge(lastGood.prog);
+    var my = ++real.id;
+    real.busy = true;
+    setRunning(true); // the stop button works while sending to the board too
+    lastRun.s2 = 'run'; lastRun.sent = 0; lastRun.skipped = t.skipped.length;
+    setStep(step2, step2T, 'run', 'بيتبعت لـ ' + hw.name + '…');
+    if (runReal) runReal.hidden = true;
+    speak();
+    out('> الخطوة 2: على جهازكم (' + hw.name + ')', 'sys');
+    if (t.skipped.length) out('مش هيتبعت للجهاز: ' + t.skipped.map(function (o) { return o === 'wait' ? 'delay' : o; }).join('، ') + ' (في المعمل بس).', 'sys');
+    function alive() { return my === real.id; }
+    function ping(n) {
+      // the board often restarts when the port opens: give it a few tries.
+      // each PING carries a fresh token; replies before its "ok PING <token>" are leftovers and get skipped
+      var tok = 'b' + my + '-' + n;
+      return ask('PING ' + tok, 1500, tok).catch(function (e) {
+        if (!alive() || n <= 1 || (e && e.message !== 'timeout')) throw e;
+        return ping(n - 1);
+      });
+    }
+    var i = 0;
+    function next() {
+      if (!alive()) throw new Error('aborted');
+      if (i >= t.lines.length) return null;
+      var l = t.lines[i++];
+      return ask(l.cmd, l.ms + 2500).then(function (reply) {
+        if (/^err/i.test(reply)) { var e = new Error('board'); e.reply = reply; throw e; }
+        lastRun.sent++;
+        return next();
+      });
+    }
+    ping(3).then(function () { return next(); }).then(function () {
+      if (!alive()) return;
+      real.busy = false;
+      setRunning(false);
+      lastRun.s2 = 'pass';
+      setStep(step2, step2T, 'pass', 'الجهاز نفّذ ' + cmdsN(lastRun.sent) + ' من غير أخطاء.');
+      out('الجهاز خلّص.', 'ok');
+      updateStep2();
+    }).catch(function (e) {
+      if (!alive() || (e && e.message === 'aborted')) return;
+      real.busy = false;
+      setRunning(false);
+      lastRun.s2 = 'fail';
+      var why = e && e.message === 'timeout'
+        ? (lastRun.sent ? 'الجهاز بطّل يرد.' : 'الجهاز ما ردّش. اتأكدوا إن آخر نسخة من كود الجسر متحمّلة عليه وإن السرعة 115200.')
+        : e && e.message === 'board'
+          ? (/^err\s+TOOLONG/i.test(e.reply) ? 'السطر كان أطول من اللي الجهاز يستحمله. قصّروا النص وجرّبوا تاني.'
+            : /^err\s+UNKNOWN/i.test(e.reply) ? 'الجهاز ما فهمش الأمر. اتأكدوا إن آخر نسخة من كود الجسر متحمّلة عليه.'
+            : 'الجهاز رد بخطأ: ' + str(e.reply))
+          : 'ما قدرناش نبعت للجهاز.';
+      setStep(step2, step2T, 'fail', why);
+      out(why, 'err');
+      updateStep2();
+    });
+  }
+  function updateStep2() {
+    if (real.busy) return;
+    var ready = false, s = 'locked', text;
+    if (!serialApi) text = 'التوصيل مش متاح في المتصفح ده.';
+    else if (lastRun.s1 === 'fail') text = 'مش هيتبعت حاجة: الخطوة 1 فيها أخطاء.';
+    else if (lastRun.s1 === 'run') text = 'بيستنى الخطوة 1 تخلص.';
+    else if (!lastGood) text = 'بيستنى الخطوة 1 تنجح من غير أخطاء.';
+    else if (!hw.open) { s = 'wait'; text = 'الخطوة 1 نجحت. وصّلوا جهازكم علشان تكمّلوا.'; }
+    else if (lastRun.s2 === 'pass' || lastRun.s2 === 'fail') { s = lastRun.s2; ready = true; text = step2T ? step2T.textContent : ''; }
+    else { s = 'ready'; ready = true; text = 'جاهز يتبعت لـ ' + hw.name + '.'; }
+    setStep(step2, step2T, s, text);
+    if (runReal) {
+      runReal.hidden = !ready;
+      runReal.lastChild.textContent = lastRun.s2 === 'pass' || lastRun.s2 === 'fail' ? 'ابعتوه تاني لجهازي' : 'شغّلوه على جهازي';
+    }
+  }
+  if (runReal) runReal.addEventListener('click', function () { sendToBoard(); });
+
+  if (!serialApi) {
+    if (hwNote) hwNote.hidden = false;
+    if (hwCtl) hwCtl.hidden = true;
+    if (autoReal && autoReal.parentNode) autoReal.parentNode.hidden = true;
+    chip('off', 'مش متاح هنا');
+  } else {
+    if (hwBtn) hwBtn.addEventListener('click', function () {
+      if (hw.open) { closePort(false); return; }
+      if (hw.known) { openPort(hw.known); return; }
+      serialApi.requestPort().then(openPort, function () { /* picker closed without a choice */ });
+    });
+    if (hwBaud) hwBaud.addEventListener('change', function () {
+      if (!hw.open) return;
+      var port = hw.port;
+      closePort(true).then(function () { openPort(port); });
+    });
+    try {
+      serialApi.addEventListener('connect', function (e) {
+        if (hw.open || !e || !e.target || e.target === serialApi) return;
+        hw.known = e.target;
+        chip('seen', 'اتوصل: ' + portName(e.target).name + '. دوسوا «افتحوا الجهاز».');
+        hwButton();
+      });
+      serialApi.addEventListener('disconnect', function (e) {
+        if (!e || !e.target) return;
+        if (e.target === hw.port) lost(e.target);
+        else if (e.target === hw.known && !hw.open) { hw.known = null; chip('off', 'مفيش جهاز متوصّل'); hwButton(); }
+      });
+    } catch (e) { /* events not supported */ }
+    if (typeof serialApi.getPorts === 'function') serialApi.getPorts().then(function (ports) {
+      if (hw.open || !ports || !ports.length) return;
+      hw.known = ports[0];
+      chip('seen', 'فيه جهاز اتسمح له قبل كده: ' + portName(ports[0]).name);
+      hwButton();
+    }, function () { /* not allowed */ });
+    hwButton();
+  }
+  updateStep2();
+
+  /* ---------- "More details" note: sent with a summary of the lab run on WhatsApp ----------
+     Same number as BOOKING_NUMBER in app.js. Without JS the form itself opens wa.me with the note only. */
+  var WA_NUMBER = '201068530159';
+  var more = $('lab-more'), moreText = $('more-text'), moreSum = $('more-sum');
+  if (moreSum && moreSum.parentNode) moreSum.parentNode.hidden = false;
+  function labSummary() {
+    var s1 = { idle: 'لسه ما اتشغلش', run: 'كان لسه شغال', pass: 'نجح من غير أخطاء', fail: 'فيه ' + plural(lastRun.errs), stop: 'اتوقف قبل ما يخلص' }[lastRun.s1] || 'لسه ما اتشغلش';
+    var s2 = !hw.open && lastRun.s2 === 'none' ? 'مفيش جهاز متوصّل'
+      : { none: 'ما اتبعتش', run: 'كان لسه بيتبعت', pass: 'نفّذ ' + cmdsN(lastRun.sent), fail: 'وقف بعد ' + cmdsN(lastRun.sent), stop: 'اتوقف' }[lastRun.s2];
+    var code = codeEl ? codeEl.value.trim() : '';
+    if (code.length > 700) code = code.slice(0, 700) + '\n…';
+    return 'ملخص المعمل:\n' +
+      '- الجهاز اللي اخترناه: ' + sel.name + '\n' +
+      '- على المكونات الوهمية: ' + s1 + '\n' +
+      '- جهازنا: ' + (hw.open ? hw.name + (hw.ids ? ' (' + hw.ids + ')' : '') : 'مش متوصّل') + '\n' +
+      '- على جهازنا: ' + s2 +
+      (code ? '\n- الكود:\n' + code : '');
+  }
+  function moreMessage() {
+    var note = moreText ? moreText.value.trim() : '';
+    var msgText = 'من المعمل\nتفاصيل تانية: ' + (note || '-');
+    if (!moreSum || moreSum.checked) msgText += '\n\n' + labSummary();
+    return msgText;
+  }
+  if (more) more.addEventListener('submit', function (e) {
+    e.preventDefault();
+    var url = 'https://wa.me/' + WA_NUMBER + '?text=' + encodeURIComponent(moreMessage());
+    // a real link click (new tab, no opener) instead of window.open, which returns null with noopener
+    var a = document.createElement('a');
+    a.href = url; a.target = '_blank'; a.rel = 'noopener';
+    a.hidden = true;
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+  });
 
   /* ---------- Visibility, motion changes, resize ---------- */
   var booted = false;
@@ -740,6 +1233,8 @@
   // test handle (read-only numbers for tmp/ scripts)
   window.__lab = {
     get: function (id) { var d = byId(id); return d && { fx: +d.fx.toFixed(3), fy: +d.fy.toFixed(3), yaw: +d.yaw.toFixed(1), pitch: +d.pitch.toFixed(1) }; },
-    state: function () { return { wifi: wifiState, led: ledOn, color: ledColor, sel: sel.id, mode: moveMode ? 'move' : 'rotate', ctl: ctl }; }
+    state: function () { return { wifi: wifiState, led: ledOn, color: ledColor, sel: sel.id, mode: moveMode ? 'move' : 'rotate', ctl: ctl }; },
+    run: function () { return { s1: lastRun.s1, s2: lastRun.s2, sent: lastRun.sent, good: !!lastGood, hw: hw.open, busy: real.busy, part: partOn ? partOn.id : null }; },
+    message: function () { return moreMessage(); }
   };
 })();

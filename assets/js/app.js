@@ -1114,19 +1114,47 @@ var BOOKING_NUMBER = '201068530159';
   }
   function hasChoice(name) { return !!document.querySelector('#case-form input[name="' + name + '"]:checked'); }
 
+  function fieldText(id) {
+    var el = $(id);
+    return el ? el.value.replace(/\s+/g, ' ').trim() : '';
+  }
+  function fileList(id) {
+    var el = $(id);
+    return el && el.files ? Array.prototype.slice.call(el.files) : [];
+  }
+  function filesCount(n) {
+    if (n === 1) return 'ملف واحد';
+    if (n === 2) return 'ملفين';
+    if (n <= 10) return n + ' ملفات';
+    return n + ' ملف';
+  }
+  function membersValue() {
+    var v = fieldText('f-members');
+    var n = parseInt(v, 10);
+    return v && n >= 1 ? String(n) : '';
+  }
+  function isUrgent() { var u = $('f-urgent'); return !!(u && u.checked); }
+
+  // Same lines (and order) as the no-JS template in the static wa.me links in index.html / terms.html.
   function buildMessage() {
-    var input = $('f-project');
-    var project = input ? input.value.replace(/\s+/g, ' ').trim() : '';
+    var project = fieldText('f-project');
     // First Strong Isolate ... Pop Directional Isolate: keeps names like "C#" or "C++" from being mirrored in an RTL line.
     if (project) project = '⁨' + project + '⁩';
     var types = checkedValues('type');
-    var lines = ['قضية', 'اسم المشروع: ' + project];
+    var lines = [];
+    if (isUrgent()) lines.push('مستعجل (طوارئ)');
+    lines.push('قضية', 'موضوع المشروع: ' + project);
+    lines.push('عدد الأعضاء: ' + membersValue());
     if (types.length) lines.push('نوع المشروع: ' + types.join('، '));
     lines.push('مرحلته: ' + checkedValues('stage').join(''));
     lines.push('أكبر حاجة واقفة: ' + checkedValues('blocker').join(''));
+    var details = $('f-details') ? $('f-details').value.replace(/[ \t]+/g, ' ').replace(/\n{3,}/g, '\n\n').trim() : '';
+    lines.push('تفاصيل تانية: ' + (details ? '⁨' + details + '⁩' : ''));
+    var cvs = fileList('f-cvs').length;
+    lines.push(cvs ? 'الـCV: ' + filesCount(cvs) + ' هتتبعت في نفس الشات' : 'الـCV: هنبعت CV لكل عضو في نفس الشات');
+    if (fileList('f-shot').length) lines.push('صورة المشكلة: هتتبعت في نفس الشات');
     // Optional referral line: only when the team wrote who referred them.
-    var refInput = $('f-ref');
-    var ref = refInput ? refInput.value.replace(/\s+/g, ' ').trim() : '';
+    var ref = fieldText('f-ref');
     if (ref) lines.push('رشّحنا فريق: ⁨' + ref + '⁩');
     return lines.join('\n');
   }
@@ -1198,7 +1226,7 @@ var BOOKING_NUMBER = '201068530159';
 
   /* ---------- Share the page with the team group ---------- */
   function shareData() {
-    var text = 'لقيت جلسة تشخيص لمشروع التخرج: 45 دقيقة أونلاين، و350 جنيه للفريق كله (حوالي من 70 لـ90 جنيه للفرد لو احنا 4 أو 5). ولو ما طلعناش منها بخطة واضحة للخطوة الجاية، الفلوس ترجع لو طلبناها في خلال 24 ساعة.';
+    var text = 'لقيت جلسة تشخيص لأي مشروع، من الثانوي للجامعة: 45 دقيقة أونلاين، وأول 15 فريق مجانًا مقابل رأيهم بعد الجلسة. وبعدهم 350 جنيه للفريق كله (حوالي من 70 لـ90 جنيه للفرد لو احنا 4 أو 5).';
     var url = /^https?:/.test(window.location.protocol) ? window.location.origin + window.location.pathname : '';
     return { text: text, url: url };
   }
@@ -1236,7 +1264,7 @@ var BOOKING_NUMBER = '201068530159';
     var number = String(BOOKING_NUMBER || '').replace(/[^0-9]/g, '');
     var wasReady = false, touched = false;
     if (ckList && !ckList.children.length) {
-      [['project', 'اسم المشروع'], ['stage', 'مرحلته'], ['blocker', 'أكبر حاجة واقفة']].forEach(function (k) {
+      [['project', 'موضوع المشروع'], ['members', 'عدد الأعضاء'], ['stage', 'مرحلته'], ['blocker', 'أكبر حاجة واقفة']].forEach(function (k) {
         var li = document.createElement('li');
         li.setAttribute('data-k', k[0]);
         li.setAttribute('aria-atomic', 'true');
@@ -1246,9 +1274,9 @@ var BOOKING_NUMBER = '201068530159';
     }
 
     function have() {
-      var input = $('f-project');
       return {
-        project: !!(input && input.value.trim()),
+        project: !!fieldText('f-project'),
+        members: !!membersValue(),
         stage: hasChoice('stage'),
         blocker: checkedValues('blocker').length > 0 // "something else, we'll write it" leaves the line empty on purpose
       };
@@ -1275,12 +1303,45 @@ var BOOKING_NUMBER = '201068530159';
       if (number) links.forEach(function (a) { if (a) a.href = 'https://wa.me/' + number + '?text=' + encodeURIComponent(msg); });
       if (fromUser) touched = true;
       var h = have();
-      var ready = h.project && h.stage && h.blocker;
+      var ready = h.project && h.members && h.stage && h.blocker;
+      updateFiles();
       updateChecks(h);
       if (term) term.classList.toggle('is-ready', ready);
       if (ready && !wasReady && fromUser) { sparksAt(stamp, 12); buzz(12); say('البلاغ جاهز. انسخوا الرسالة أو ابعتوها.'); }
       wasReady = ready;
     }
+
+    /* Files (CVs, screenshot) never leave the browser from here: a wa.me link can only carry text.
+       Where the browser can share files (mostly phones), one button shares the message and the files together
+       through the system share sheet; otherwise the WhatsApp link opens with the text and a note says to attach them. */
+    var shareFilesBtn = $('share-files-btn');
+    var filesNote = $('files-note');
+    function pickedFiles() { return fileList('f-cvs').concat(fileList('f-shot')); }
+    function canShareFiles(files) {
+      if (!files.length || !navigator.share || !navigator.canShare) return false;
+      try { return navigator.canShare({ files: files, text: 'x' }); } catch (e) { return false; }
+    }
+    function updateFiles() {
+      var files = pickedFiles();
+      var can = canShareFiles(files);
+      if (shareFilesBtn) shareFilesBtn.hidden = !can;
+      if (!filesNote) return;
+      if (!files.length) { filesNote.hidden = true; filesNote.textContent = ''; return; }
+      filesNote.hidden = false;
+      filesNote.textContent = can
+        ? 'زرار «ابعتوا الرسالة والملفات مع بعض» بيفتح المشاركة: اختاروا واتساب، وابعتوها للرقم +20 106 853 0159. ولو فتحتوا لينك واتساب بدل كده، ابعتوا الملفات بإيدكم في نفس الشات بعد الرسالة على طول.'
+        : 'لينك واتساب بيبعت الكلام بس. بعد ما تبعتوا الرسالة، ابعتوا الـCVs' + (fileList('f-shot').length ? ' وصورة المشكلة' : '') + ' في نفس الشات على طول.';
+    }
+    if (shareFilesBtn) shareFilesBtn.addEventListener('click', function () {
+      var files = pickedFiles();
+      if (!canShareFiles(files)) { updateFiles(); return; }
+      navigator.share({ text: buildMessage(), files: files }).then(function () {
+        say('اتفتحت المشاركة. اتأكدوا إنكم بعتوها لرقم بإيدك على واتساب.');
+      }).catch(function (err) {
+        if (err && err.name === 'AbortError') return;
+        say('ما نفعتش المشاركة. ابعتوا الرسالة من زرار واتساب، وبعدها الملفات في نفس الشات.');
+      });
+    });
 
     links.forEach(function (a) { a.hidden = false; a.target = '_blank'; a.rel = 'noopener'; });
     form.addEventListener('input', function () { refresh(true); });

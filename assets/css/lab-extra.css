@@ -1,0 +1,89 @@
+/* بإيدك: extra styles for the lab (lab.html only), loaded after styles.css.
+   Components panel + highlights on the 3D model, the visitor's real board (Web Serial), the two run stages,
+   and the "more details" note. Colours follow v3: red = broken, violet = waiting / obstacle, green = solved. */
+
+/* ---------- 3D model additions ---------- */
+.rst-btn { --side: #6E7782; }
+.rst-btn .fc-t { background: #8E99A6 radial-gradient(circle, #B8323F 0 42%, #5A2026 46%, transparent 50%); }
+.sr-pl { font-size: 2.6px; font-weight: 600; }
+.hl { opacity: 0; transition: opacity .15s linear; }
+.hl.on { opacity: 1; }
+.hl-r { fill: rgba(61, 245, 140, .16); stroke: var(--green); stroke-width: 2; vector-effect: non-scaling-stroke; }
+.motion-on .hl.on .hl-r { animation: lab-hl 1.4s ease-in-out infinite; }
+@keyframes lab-hl { 0%, 100% { fill: rgba(61, 245, 140, .1); } 50% { fill: rgba(61, 245, 140, .32); } }
+@media (prefers-reduced-motion: reduce) { .hl.on .hl-r { animation: none !important; } }
+
+/* ---------- Components panel ---------- */
+.parts { margin: 0 12px 14px; padding: 12px; border: 1.5px solid var(--line); border-radius: var(--r-sm); background: var(--s2); display: grid; gap: 8px; }
+.parts-h { margin: 0; font: 700 1rem/1.5 var(--display); }
+.parts-tip { margin: 0; font-size: 0.875rem; color: var(--muted); }
+.parts-list { list-style: none; margin: 0; padding: 0; display: flex; flex-wrap: wrap; gap: 8px; }
+.part-btn {
+  display: inline-flex; align-items: center; min-height: 44px; padding: 6px 12px; max-width: 100%;
+  background: var(--bg); color: var(--text); border: 1.5px solid var(--line-ui); border-radius: var(--r-pill);
+  font: 600 0.875rem/1.3 var(--mono); cursor: pointer; overflow-wrap: anywhere; text-align: left;
+  -webkit-tap-highlight-color: transparent; touch-action: manipulation;
+}
+.part-btn:hover { border-color: var(--text); }
+.part-btn[aria-pressed="true"] { border-color: var(--green); color: var(--green); background: var(--green-wash); }
+.part-info { border-inline-start: 3px solid var(--green); padding: 4px 10px; }
+.part-name { margin: 0; font: 700 0.9375rem/1.5 var(--mono); color: var(--green); unicode-bidi: plaintext; text-align: right; }
+.part-text { margin: 2px 0 0; font-size: 0.9375rem; line-height: 1.75; }
+
+/* ---------- The visitor's real board ---------- */
+.hw { display: grid; gap: 10px; padding: 12px; border: 1.5px dashed var(--line-ui); border-radius: var(--r-sm); background: #0A0E14; }
+.hw-head { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 8px; }
+.hw-h { margin: 0; font: 700 1rem/1.5 var(--display); }
+.hw-opt { font: 400 0.875rem/1.5 var(--body); color: var(--muted); }
+.hw-chip { display: inline-block; max-width: 100%; padding: 2px 10px; border-radius: var(--r-pill); font: 700 0.8125rem/1.6 var(--display);
+  border: 1px solid var(--line-ui); color: var(--muted); overflow-wrap: anywhere; unicode-bidi: plaintext; }
+.hw-chip[data-s="on"] { color: var(--green); border-color: var(--green); background: var(--green-wash); }
+.hw-chip[data-s="busy"], .hw-chip[data-s="seen"] { color: var(--violet-hi); border-color: var(--violet); background: var(--violet-wash); }
+.hw-chip[data-s="err"] { color: var(--red); border-color: var(--red); background: var(--red-wash); }
+.hw-note { margin: 0; padding: 8px 10px; border-radius: 8px; background: var(--violet-wash); color: var(--text); font-size: 0.9375rem; }
+.hw-row { display: flex; flex-wrap: wrap; align-items: center; gap: 8px; }
+.hw-row[hidden] { display: none; }
+.hw-btn[aria-pressed="true"] { background: var(--s2); color: var(--text); box-shadow: none; }
+.hw-baud { display: inline-flex; align-items: center; gap: 8px; font: 700 0.875rem/1.4 var(--display); color: var(--muted); }
+.hw-baud select { min-height: 44px; padding: 4px 10px; border: 1.5px solid var(--line-ui); border-radius: 10px; background: var(--bg); color: var(--text); font: 400 0.9375rem/1.4 var(--mono); }
+.hw-how summary { display: flex; align-items: center; min-height: 44px; cursor: pointer; font: 700 0.9375rem/1.4 var(--display); color: var(--violet-hi); }
+.hw-how ol { margin: 0; padding-inline-start: 1.3em; display: grid; gap: 6px; font-size: 0.9375rem; color: var(--muted); }
+.hw-dl { color: var(--green); font-weight: 700; }
+
+/* ---------- Two run stages ---------- */
+.rsteps { list-style: none; margin: 0; padding: 0; display: grid; gap: 8px; }
+.rstep { display: grid; grid-template-columns: auto minmax(0, 1fr); gap: 10px; align-items: start; padding: 10px; border: 1.5px solid var(--line); border-radius: var(--r-sm); background: #0A0E14; }
+.rstep-n { display: inline-grid; place-items: center; width: 28px; height: 28px; border-radius: 50%; border: 1.5px solid var(--line-ui); font: 700 0.875rem/1 var(--mono); color: var(--muted); }
+.rstep-body { display: grid; gap: 4px; justify-items: start; min-width: 0; }
+.rstep-body b { font: 700 0.9375rem/1.5 var(--display); }
+.rstep-t { font-size: 0.9062rem; color: var(--muted); overflow-wrap: anywhere; }
+.rstep[data-s="run"], .rstep[data-s="wait"], .rstep[data-s="ready"] { border-color: var(--violet); }
+.rstep[data-s="run"] .rstep-n, .rstep[data-s="wait"] .rstep-n, .rstep[data-s="ready"] .rstep-n { border-color: var(--violet); color: var(--violet-hi); }
+.rstep[data-s="pass"] { border-color: var(--green); }
+.rstep[data-s="pass"] .rstep-n { border-color: var(--green); background: var(--green); color: var(--on-green); }
+.rstep[data-s="pass"] .rstep-t { color: var(--green); }
+.rstep[data-s="fail"] { border-color: var(--red); }
+.rstep[data-s="fail"] .rstep-n { border-color: var(--red); background: var(--red); color: var(--on-red); }
+.rstep[data-s="fail"] .rstep-t { color: var(--red); }
+.rstep[data-s="locked"] { opacity: .8; }
+.run-real { margin-top: 4px; }
+.run-real[hidden] { display: none; }
+.check-row { display: flex; align-items: center; gap: 10px; min-height: 44px; font-size: 0.9375rem; cursor: pointer; }
+.check-row[hidden] { display: none; }
+.check-row input { width: 22px; height: 22px; flex: none; accent-color: var(--green); margin: 0; }
+.cmds-note { margin: 0 0 6px; font-size: 0.875rem; color: var(--muted); }
+
+/* serial lines from / to the real board */
+.sl-dev { color: #E9EEF3; border-inline-start: 2px solid var(--violet); padding-inline-start: 6px; }
+.sl-tx { color: var(--violet-hi); }
+
+/* ---------- More details note ---------- */
+.lab-more { margin-top: 16px; }
+.more-body { display: grid; gap: 10px; padding: 12px; }
+.more-hint { margin: 0; font-size: 0.9375rem; color: var(--muted); }
+.more-text { width: 100%; min-height: 120px; padding: 10px 12px; border: 1.5px solid var(--line-ui); border-radius: 10px; background: var(--bg); color: var(--text);
+  font: 400 1rem/1.7 var(--body); resize: vertical; }
+.more-text:focus-visible { outline: 2px solid var(--green); outline-offset: 2px; }
+.more-actions { display: flex; flex-wrap: wrap; gap: 8px; }
+@media (max-width: 599px) { .more-text, .hw-baud select { font-size: 16px; } }
+@media (forced-colors: active) { .hl-r { stroke: Highlight; } .rstep { border-color: CanvasText; } }

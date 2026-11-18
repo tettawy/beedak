@@ -189,6 +189,11 @@ html.rm .motion-toggle { display: none !important; }
 .price { display: grid; gap: 2px; line-height: 1.6; }
 .price b { font-family: var(--display); font-size: 1.3125rem; font-weight: 900; color: var(--green); }
 .price span { font-size: 0.9375rem; color: var(--muted); }
+.free-first { display: grid; gap: 4px; max-width: 52ch; padding: 12px 14px; border: 1.5px solid var(--green); border-radius: var(--r-md); background: var(--green-wash); line-height: 1.6; }
+.free-first b { font-family: var(--display); font-size: 1.3125rem; font-weight: 900; color: var(--green); }
+.free-first span { font-size: 0.9375rem; color: var(--text); }
+.free-tag { font-size: 0.9375rem; color: var(--text); }
+.free-tag b { font-family: var(--display); color: var(--green); }
 .reassure { display: flex; gap: 8px; align-items: flex-start; font-size: 0.9375rem; color: var(--text); }
 .reassure .i { color: var(--green); margin-block-start: 3px; }
 
@@ -588,6 +593,14 @@ html:not(.app) .flip .face { grid-area: auto; min-height: 0; }
 .field .hint-text, .field-hint { font-size: 0.9062rem; color: var(--muted); font-weight: 400; }
 fieldset.field { border: 0; margin: 0; padding: 0; min-width: 0; }
 .input { min-height: 50px; width: 100%; padding: 10px 14px; border: 1.5px solid var(--line-ui); border-radius: 10px; background: var(--bg); color: var(--text); font: 400 1.0625rem/1.6 var(--body); }
+.textarea { min-height: 96px; resize: vertical; }
+.input-num { max-width: 9rem; text-align: start; }
+.file-input { width: 100%; max-width: 100%; min-height: 50px; padding: 8px; border: 1.5px dashed var(--line-ui); border-radius: 10px; background: var(--bg); color: var(--muted); font: 400 0.9375rem/1.6 var(--body); cursor: pointer; }
+.file-input::file-selector-button { min-height: 40px; margin-inline-end: 10px; padding: 6px 14px; border: 1.5px solid var(--line-ui); border-radius: var(--r-pill); background: var(--s2); color: var(--text); font: 700 0.9375rem/1.4 var(--display); cursor: pointer; }
+.file-input:hover::file-selector-button { border-color: var(--text); }
+.file-input:focus-visible { outline: 3px solid var(--green); outline-offset: 2px; border-color: var(--green); }
+.files-note { padding: 10px 14px; border: 1.5px solid var(--violet); border-radius: var(--r-md); background: var(--violet-wash); color: var(--text); font-size: 0.9375rem; }
+.files-note[hidden] { display: none; }
 .input::placeholder { color: var(--dim); opacity: 1; }
 .input:focus-visible { outline: 3px solid var(--green); outline-offset: 2px; border-color: var(--green); }
 .chips { display: flex; flex-wrap: wrap; gap: 8px; }
@@ -598,6 +611,9 @@ fieldset.field { border: 0; margin: 0; padding: 0; min-width: 0; }
 .chip input:checked + span { background: var(--green-wash); border-color: var(--green); font-weight: 700; }
 .chip input:checked + span::before { /* the check mark (colour is never the only signal); physical borders: a tick is not mirrored */
   content: ""; flex: none; width: 11px; height: 6px; margin-block-end: 3px; border-left: 2.5px solid var(--green); border-bottom: 2.5px solid var(--green); transform: rotate(-45deg); }
+/* urgent = attention (red), placed after the generic green checked rule and with higher specificity so it wins */
+.chip.chip-urgent input:checked + span { background: var(--red-wash); border-color: var(--red); }
+.chip.chip-urgent input:checked + span::before { border-left-color: var(--red); border-bottom-color: var(--red); }
 .chip input:focus-visible + span { outline: 3px solid var(--green); outline-offset: 3px; }
 .builder-out { display: grid; gap: 14px; align-content: start; }
 .preview-term { border: 2px dashed var(--red); transition: border-color .25s var(--ease); }
@@ -750,7 +766,7 @@ fieldset.field { border: 0; margin: 0; padding: 0; min-width: 0; }
   .builder { grid-template-columns: minmax(0, 1.25fr) minmax(0, 1fr); column-gap: 48px; padding: 32px; }
   .builder > .builder-title { grid-column: 1 / -1; }
   .builder > .field { grid-column: 1; }
-  .builder-out { grid-column: 2; grid-row: 2 / span 5; position: sticky; top: 24px; }
+  .builder-out { grid-column: 2; grid-row: 2 / span 10; position: sticky; top: 24px; }
   .about-body { grid-template-columns: minmax(0, .85fr) minmax(0, 1.15fr); column-gap: 48px; padding: 32px; }
   .foot .wrap { grid-template-columns: auto minmax(0, 1fr) auto; align-items: center; column-gap: 32px; }
   .foot-status { grid-column: 1 / -1; }
