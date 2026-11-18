@@ -1,4 +1,4 @@
-/* بإيدك v3: page behaviour for index.html and terms.html. Classic script (works from file://), no libraries.
+/* بإيدك v3: page behaviour for index.html, terms.html, results.html and feedback.html. Classic script (works from file://), no libraries.
    Both pages are fully readable without this file; everything here is an enhancement.
    When it runs it adds the class "app" to <html>; CSS shows the interactive parts only then.
    Motion: every animation lives under html.motion-on. The inline <head> script sets it before first paint;
@@ -1521,9 +1521,204 @@ var BOOKING_NUMBER = '201068530159';
     });
   }
 
+  /* =====================================================================
+     Proof (owner approval, 18 Nov 2026): real numbers only, read from assets/data/stats.json
+     (the free-spots counter on index.html and results.html), and the post-session survey (feedback.html).
+     The owner edits stats.json by hand (README "Real numbers"). Nothing here ever shows sample or invented numbers:
+     if the file can't be read, the static text stays (index) or an honest error shows (results).
+     ===================================================================== */
+  function int0(v) { var n = Number(v); return isFinite(n) && n >= 0 ? Math.floor(n) : 0; }
+  var statsPromise = null;
+  function loadStats() {
+    if (statsPromise) return statsPromise;
+    // Over file:// a fetch fails with a console error, so it isn't tried; the static text stays.
+    if (!/^https?:$/.test(location.protocol) || !window.fetch) statsPromise = Promise.reject(new Error('stats: http(s) only'));
+    else statsPromise = window.fetch('assets/data/stats.json', { cache: 'no-cache', credentials: 'same-origin' }).then(function (r) {
+      if (!r.ok) throw new Error('stats: HTTP ' + r.status);
+      return r.json();
+    }).then(function (s) {
+      if (!s || typeof s !== 'object') throw new Error('stats: not an object');
+      var total = int0(s.free_total) || 15;
+      return {
+        updated: String(s.updated || ''),
+        total: total,
+        booked: Math.min(int0(s.free_booked), total),
+        sessions: int0(s.sessions_done),
+        plan: int0(s.left_with_plan),
+        pay: int0(s.would_pay),
+        paid: int0(s.paid_teams),
+        quotes: Array.isArray(s.quotes) ? s.quotes : []
+      };
+    });
+    return statsPromise;
+  }
+
+  /* ---------- Home: «اتحجز X من 15», or the paid offer once the free spots are gone ---------- */
+  function initFreeCounter() {
+    var box = $('free-first'), count = $('free-count');
+    if (!box || !count) return;
+    loadStats().then(function (s) {
+      if (s.booked >= s.total) {
+        box.classList.add('is-full');
+        if ($('free-title')) $('free-title').textContent = 'الأماكن المجانية خلصت';
+        if ($('free-why')) $('free-why').textContent = 'أول ' + s.total + ' فريق حجزوا خلاص. جلسة التشخيص دلوقتي بـ350 جنيه للفريق كله.';
+        if ($('hero-price')) $('hero-price').textContent = '350 جنيه للفريق كله';
+        each(document.querySelectorAll('[data-free-only]'), function (el) { el.hidden = true; });
+        count.hidden = true;
+        return;
+      }
+      count.textContent = '';
+      var txt = document.createElement('span');
+      txt.className = 'fc-text';
+      txt.textContent = s.booked === 0 ? 'لسه مفيش فرق حجزت، كونوا أول فريق' : 'اتحجز ' + s.booked + ' من ' + s.total;
+      count.appendChild(txt);
+      if (s.booked > 0) {
+        var bar = document.createElement('span');
+        bar.className = 'fc-bar';
+        bar.setAttribute('aria-hidden', 'true');
+        var fill = document.createElement('i');
+        fill.style.width = Math.round(100 * s.booked / s.total) + '%';
+        bar.appendChild(fill);
+        count.appendChild(bar);
+      }
+      count.hidden = false;
+    }).catch(function () { /* no data: the static «أول 15 فريق مجانًا» text stays */ });
+  }
+
+  /* ---------- results.html ---------- */
+  var MONTHS = ['يناير', 'فبراير', 'مارس', 'أبريل', 'مايو', 'يونيو', 'يوليو', 'أغسطس', 'سبتمبر', 'أكتوبر', 'نوفمبر', 'ديسمبر'];
+  function arDate(iso) {
+    var m = /^(\d{4})-(\d{2})-(\d{2})$/.exec(iso);
+    if (!m || +m[2] < 1 || +m[2] > 12) return '';
+    return (+m[3]) + ' ' + MONTHS[+m[2] - 1] + ' ' + m[1];
+  }
+  function initResults() {
+    var stats = $('rs-stats');
+    if (!stats) return;
+    var loading = $('rs-loading');
+    function setText(id, t) { var el = $(id); if (el) el.textContent = t; }
+    loadStats().then(function (s) {
+      if (loading) loading.hidden = true;
+      var d = arDate(s.updated);
+      if (d) { setText('rs-updated', 'آخر تحديث: ' + d); $('rs-updated').hidden = false; }
+      var spots = s.booked >= s.total ? 'الـ' + s.total + ' مكان المجاني اتحجزوا كلهم.'
+        : s.booked > 0 ? 'الأماكن المجانية: اتحجز ' + s.booked + ' من ' + s.total + '.'
+        : 'لسه مفيش فرق حجزت.';
+      if (s.sessions === 0) {
+        // Honest empty state: no "0%" before there is a single session.
+        setText('rs-empty-booked', spots);
+        $('rs-empty').hidden = false;
+        return;
+      }
+      setText('st-sessions', String(s.sessions));
+      setText('st-sessions-sub', spots);
+      [['st-plan', s.plan], ['st-pay', s.pay]].forEach(function (p) {
+        if (p[1] > s.sessions) { // a typo in stats.json: show no percentage rather than a wrong one
+          setText(p[0], '—');
+          setText(p[0] + '-sub', 'الرقم ده بيتراجع.');
+          if (window.console) console.warn('بإيدك: stats.json has ' + p[0] + ' > sessions_done');
+          return;
+        }
+        setText(p[0], Math.round(100 * p[1] / s.sessions) + '%');
+        setText(p[0] + '-sub', p[1] + ' من ' + s.sessions + ' جاوبوا «أيوه».');
+      });
+      setText('st-paid', String(s.paid));
+      stats.hidden = false;
+
+      // Quotes: only entries the owner added with the team's explicit consent ("name" or "anonymous").
+      var list = $('rs-quote-list');
+      var shown = 0;
+      s.quotes.forEach(function (q) {
+        if (!q || typeof q.text !== 'string' || !q.text.trim()) return;
+        if (q.consent !== 'name' && q.consent !== 'anonymous') return;
+        var team = q.consent === 'name' && typeof q.team === 'string' ? q.team.trim() : '';
+        var fig = document.createElement('figure');
+        fig.className = 'quote';
+        var bq = document.createElement('blockquote');
+        bq.setAttribute('dir', 'auto');
+        bq.textContent = q.text.trim();
+        var cap = document.createElement('figcaption');
+        cap.textContent = team ? '— ' + team : '— فريق طلب ما نذكرش اسمه';
+        fig.appendChild(bq);
+        fig.appendChild(cap);
+        list.appendChild(fig);
+        shown++;
+      });
+      $('rs-quotes').hidden = shown === 0;
+    }).catch(function (e) {
+      if (loading) loading.hidden = true;
+      $('rs-error').hidden = false;
+      if (window.console) console.warn('بإيدك: ' + (e && e.message));
+    });
+  }
+
+  /* ---------- feedback.html: the survey builds a WhatsApp message to the booking number (same pattern as the booking) ---------- */
+  function initFeedback() {
+    var form = $('fb-form'), send = $('fb-send'), preview = $('fb-preview');
+    if (!form || !send) return;
+    var number = String(BOOKING_NUMBER || '').replace(/[^0-9]/g, '');
+    function choice(name) { var el = form.querySelector('input[name="' + name + '"]:checked'); return el ? el.value : ''; }
+    function iso(t) { return t ? '⁨' + t + '⁩' : ''; } // keeps "C++" etc. from being mirrored in an RTL line
+    function team() { return $('fb-team').value.replace(/\s+/g, ' ').trim(); }
+    function build() {
+      var comment = $('fb-comment').value.replace(/[ \t]+/g, ' ').replace(/\n{3,}/g, '\n\n').trim();
+      var r = choice('rating');
+      return [
+        'رأي بعد الجلسة',
+        'الفريق أو المشروع: ' + iso(team()),
+        'خطة واضحة للخطوة الجاية: ' + choice('plan'),
+        'التقييم: ' + (r ? r + ' من 5' : ''),
+        'هتدفعوا في «خطة ومتابعة» لو احتجتوها: ' + choice('pay'),
+        // Consent is never assumed: no choice means no.
+        'نحكي تجربتكم في الدعاية: ' + (choice('story') || 'لأ (ما اخترتوش)'),
+        'تعليق: ' + iso(comment)
+      ].join('\n');
+    }
+    function missing() {
+      var out = [];
+      if (!team()) out.push(['fb-q-team', 'اسم الفريق أو المشروع']);
+      if (!choice('plan')) out.push(['fb-q-plan', 'الخطة']);
+      if (!choice('rating')) out.push(['fb-q-rating', 'التقييم']);
+      if (!choice('pay')) out.push(['fb-q-pay', 'سؤال الدفع']);
+      return out;
+    }
+    function refresh() {
+      var msg = build();
+      if (preview) preview.textContent = msg;
+      if (number) send.href = 'https://wa.me/' + number + '?text=' + encodeURIComponent(msg);
+      each(form.querySelectorAll('.is-missing'), function (el) {
+        var id = el.id;
+        var ok = id === 'fb-q-team' ? !!team() : id === 'fb-q-plan' ? !!choice('plan') : id === 'fb-q-rating' ? !!choice('rating') : !!choice('pay');
+        if (ok) { el.classList.remove('is-missing'); if (id === 'fb-q-team') $('fb-team').removeAttribute('aria-invalid'); }
+      });
+    }
+    form.addEventListener('submit', function (e) { e.preventDefault(); });
+    form.addEventListener('input', refresh);
+    form.addEventListener('change', refresh);
+    send.addEventListener('click', function (e) {
+      refresh();
+      var miss = missing();
+      if (miss.length) {
+        e.preventDefault();
+        miss.forEach(function (m) {
+          $(m[0]).classList.add('is-missing');
+          if (m[0] === 'fb-q-team') $('fb-team').setAttribute('aria-invalid', 'true');
+        });
+        say('لسه ناقص: ' + miss.map(function (m) { return m[1]; }).join('، ') + '.');
+        var target = $(miss[0][0]).querySelector('input');
+        if (target) target.focus();
+        return;
+      }
+      sparksAt(send, 12);
+      say('اتفتح واتساب. دوسوا «إرسال» هناك عشان رأيكم يوصل.');
+    });
+    refresh();
+  }
+
   function start() {
     var parts = [initMotion, initPointer, initBgfx, initDuckPeek, initProps, initPointerFx, initScramble, initDecode, initHeroTerminal, initGlitch, initChapterStatus, initThread, initReport, initKnot, initPlan, initFlips,
-      initSplit, initSeason, initRevealOnce, initStickyCta, initBooking, initBookJump, initTermsOutline, initTermsFind, initSectionLinks];
+      initSplit, initSeason, initRevealOnce, initStickyCta, initBooking, initBookJump, initTermsOutline, initTermsFind, initSectionLinks,
+      initFreeCounter, initResults, initFeedback];
     parts.forEach(function (fn) {
       try { fn(); } catch (e) { if (window.console) console.warn('بإيدك: ' + (fn.name || 'part') + ' did not start', e); }
     });

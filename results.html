@@ -1,0 +1,156 @@
+<!doctype html>
+<html lang="ar-EG" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>النتايج | بإيدك</title>
+<meta name="description" content="نتايج بإيدك الحقيقية: عدد الجلسات، وكام فريق طلع بخطة، وكام فريق قال هيدفع، وكام فريق دفع فعلًا. من استبيان بعد كل جلسة، ومن غير تعديل.">
+<meta name="robots" content="index, follow">
+<meta name="color-scheme" content="dark">
+<meta name="theme-color" content="#07090D">
+<link rel="icon" href="assets/img/beedak-icon-circle.svg" type="image/svg+xml">
+<script>
+(function () {
+  var d = document.documentElement;
+  d.classList.add('js');
+  try {
+    var rm = window.matchMedia && matchMedia('(prefers-reduced-motion: reduce)').matches;
+    var saved = null;
+    try { saved = localStorage.getItem('beedak-motion'); } catch (e) { /* storage blocked */ }
+    var c = navigator.connection;
+    var light = (c && c.saveData === true) || (navigator.deviceMemory && navigator.deviceMemory <= 2);
+    if (rm) d.classList.add('rm');
+    if (!rm && saved !== 'off' && (saved === 'on' || !light)) d.classList.add('motion-on');
+  } catch (e) { /* motion stays off */ }
+  if (/^https?:/.test(location.protocol)) {
+    ['alexandria-var-500-900-arabic', 'plex-arabic-400-arabic'].forEach(function (f) {
+      var l = document.createElement('link');
+      l.rel = 'preload'; l.as = 'font'; l.type = 'font/woff2'; l.crossOrigin = 'anonymous';
+      l.href = 'assets/fonts/' + f + '.woff2';
+      document.head.appendChild(l);
+    });
+  }
+})();
+</script>
+<link rel="stylesheet" href="assets/css/styles.css">
+<script src="assets/js/app.js" defer></script>
+</head>
+<body data-page="results">
+<svg width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false">
+  <symbol id="i-check" viewBox="0 0 24 24"><path d="M20 6 9 17l-5-5"/></symbol>
+  <symbol id="i-x" viewBox="0 0 24 24"><path d="M18 6 6 18M6 6l12 12"/></symbol>
+  <symbol id="i-chat" viewBox="0 0 24 24"><path fill="currentColor" stroke="none" d="M12 2a10 10 0 0 0-8.6 15.1L2 22l5-1.3A10 10 0 1 0 12 2Zm5.3 14.1c-.2.6-1.3 1.2-1.8 1.2-.5.1-1 .2-3.3-.7-2.8-1.1-4.5-4-4.7-4.2-.1-.2-1.1-1.5-1.1-2.9s.7-2 1-2.3c.2-.3.5-.3.7-.3h.5c.2 0 .4 0 .6.5l.8 2c.1.2.1.4 0 .5l-.4.6-.4.4c-.1.2-.3.3-.1.6.2.3.8 1.3 1.7 2.1 1.2 1 2.1 1.3 2.4 1.5.3.1.5.1.6-.1l.9-1.1c.2-.3.4-.2.7-.1l1.9.9c.3.1.5.2.5.3.1.2.1.7-.1 1.3Z"/></symbol>
+  <symbol id="i-lock" viewBox="0 0 24 24"><rect x="4" y="11" width="16" height="10" rx="2"/><path d="M8 11V7a4 4 0 0 1 8 0v4"/></symbol>
+  <symbol id="i-shield" viewBox="0 0 24 24"><path d="M12 22s8-3.5 8-10V5l-8-3-8 3v7c0 6.5 8 10 8 10Z"/><path d="m9 12 2 2 4-4"/></symbol>
+  <symbol id="i-play" viewBox="0 0 24 24"><path fill="currentColor" d="M7 4.5v15l12-7.5z"/></symbol>
+  <symbol id="i-pause" viewBox="0 0 24 24"><path fill="currentColor" d="M6.5 4.5h4v15h-4zM13.5 4.5h4v15h-4z"/></symbol>
+  <symbol id="i-alert" viewBox="0 0 24 24"><path d="M10.3 3.9 1.8 18a2 2 0 0 0 1.7 3h17a2 2 0 0 0 1.7-3L13.7 3.9a2 2 0 0 0-3.4 0Z"/><path d="M12 9v4M12 17h.01"/></symbol>
+  <symbol id="i-link" viewBox="0 0 24 24"><path d="M10 13a5 5 0 0 0 7.5.5l3-3a5 5 0 0 0-7-7l-1.7 1.7"/><path d="M14 11a5 5 0 0 0-7.5-.5l-3 3a5 5 0 0 0 7 7l1.7-1.7"/></symbol>
+  <symbol id="i-up" viewBox="0 0 24 24"><path d="m6 15 6-6 6 6"/></symbol>
+  <symbol id="i-down" viewBox="0 0 24 24"><path d="m6 9 6 6 6-6"/></symbol>
+  <symbol id="i-search" viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"/><path d="m20 20-4-4"/></symbol>
+  <symbol id="i-terminal" viewBox="0 0 24 24"><path d="m4 17 6-6-6-6M12 19h8"/></symbol>
+  <symbol id="i-lab" viewBox="0 0 24 24"><path d="M9 3h6M10 3v6.5L4.6 18.6A1.6 1.6 0 0 0 6 21h12a1.6 1.6 0 0 0 1.4-2.4L14 9.5V3"/><path d="M7.2 15h9.6"/></symbol>
+  <symbol id="i-info" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4M12 8h.01"/></symbol>
+</svg>
+
+<a class="skip" href="#rs-main">انزلوا للنتايج على طول</a>
+
+<header class="topbar">
+  <div class="wrap top">
+    <a class="logo" href="index.html" aria-label="بإيدك، الصفحة الرئيسية">
+      <picture><source media="(min-width: 600px) and (min-height: 501px)" srcset="assets/img/beedak-logo-dark-nobg.svg" width="900" height="525"><img class="logo-img" src="assets/img/beedak-icon-circle.svg" alt="بإيدك" width="384" height="384"></picture>
+    </a>
+    <bdi class="crumb tok" dir="ltr" aria-hidden="true">beedak / RESULTS.json</bdi>
+    <div class="top-actions">
+      <a class="btn-ghost top-lab" href="lab.html"><svg class="i" aria-hidden="true" focusable="false"><use href="#i-lab"/></svg>المعمل</a>
+      <a class="btn btn-sm" href="https://wa.me/201068530159?text=%D9%82%D8%B6%D9%8A%D8%A9%0A%D9%85%D9%88%D8%B6%D9%88%D8%B9%20%D8%A7%D9%84%D9%85%D8%B4%D8%B1%D9%88%D8%B9%3A%20%0A%D8%B9%D8%AF%D8%AF%20%D8%A7%D9%84%D8%A3%D8%B9%D8%B6%D8%A7%D8%A1%3A%20%0A%D9%85%D8%B1%D8%AD%D9%84%D8%AA%D9%87%3A%20%0A%D8%A3%D9%83%D8%A8%D8%B1%20%D8%AD%D8%A7%D8%AC%D8%A9%20%D9%88%D8%A7%D9%82%D9%81%D8%A9%3A%20%0A%D8%AA%D9%81%D8%A7%D8%B5%D9%8A%D9%84%20%D8%AA%D8%A7%D9%86%D9%8A%D8%A9%3A%20%0A%D8%A7%D9%84%D9%80CV%3A%20%D9%87%D9%86%D8%A8%D8%B9%D8%AA%20CV%20%D9%84%D9%83%D9%84%20%D8%B9%D8%B6%D9%88%20%D9%81%D9%8A%20%D9%86%D9%81%D8%B3%20%D8%A7%D9%84%D8%B4%D8%A7%D8%AA" data-wa target="_blank" rel="noopener"><svg class="i" aria-hidden="true" focusable="false"><use href="#i-chat"/></svg>احجزوا التشخيص<span class="sr-only">، بيفتح واتساب</span></a>
+    </div>
+  </div>
+</header>
+
+<main id="top">
+  <div class="title-band">
+    <div class="wrap"><div class="band-in scrim">
+      <p class="band-cmd" dir="ltr" aria-hidden="true"><span class="prompt">$</span> cat RESULTS.json</p>
+      <h1>النتايج</h1>
+    </div></div>
+  </div>
+
+  <!-- Real numbers only (owner rule, 18 Nov 2026): everything below is read from assets/data/stats.json, which the owner edits by hand.
+       Nothing here is ever filled with sample or invented numbers. -->
+  <div class="wrap proof-layout" id="rs-main" tabindex="-1">
+    <div class="doc scrim">
+      <p class="lede">أرقام حقيقية من الجلسات اللي خلصت. بنحدّثها بإيدينا بعد كل جلسة.</p>
+      <p class="rs-method"><svg class="i" aria-hidden="true" focusable="false"><use href="#i-info"/></svg><span>الأرقام دي من استبيان بعد كل جلسة، ومن غير تعديل.</span></p>
+      <p class="rs-updated" id="rs-updated" hidden></p>
+
+      <p class="rs-state when-noapp">الأرقام بتظهر لما يكون JavaScript شغال في المتصفح.</p>
+      <p class="rs-state when-app" id="rs-loading">بنحمّل الأرقام…</p>
+      <p class="rs-state rs-error" id="rs-error" hidden>ما قدرناش نحمّل الأرقام دلوقتي. حدّثوا الصفحة وجرّبوا تاني.</p>
+
+      <div class="rs-empty" id="rs-empty" hidden>
+        <p class="rs-empty-title">لسه بنبدأ: أول نتايج هتظهر هنا بعد أول جلسة.</p>
+        <p class="rs-empty-sub" id="rs-empty-booked"></p>
+        <p><a class="btn" href="index.html#book"><svg class="i" aria-hidden="true" focusable="false"><use href="#i-chat"/></svg>احجزوا جلسة التشخيص</a></p>
+      </div>
+
+      <section class="rs-stats" id="rs-stats" aria-labelledby="rs-stats-title" hidden>
+        <h2 class="sr-only" id="rs-stats-title">الأرقام</h2>
+        <ul class="stat-tiles">
+          <li class="stat-tile"><span class="stat-label">جلسات تشخيص خلصت</span><b class="stat-value num" id="st-sessions"></b><span class="stat-sub" id="st-sessions-sub"></span></li>
+          <li class="stat-tile"><span class="stat-label">طلعوا بخطة واضحة للخطوة الجاية</span><b class="stat-value num" id="st-plan"></b><span class="stat-sub" id="st-plan-sub"></span></li>
+          <li class="stat-tile"><span class="stat-label">قالوا هيدفعوا في «خطة ومتابعة»</span><b class="stat-value num" id="st-pay"></b><span class="stat-sub" id="st-pay-sub"></span></li>
+          <li class="stat-tile tile-paid"><span class="stat-label">فرق دفعت فعلًا</span><b class="stat-value num" id="st-paid"></b><span class="stat-sub">فلوس اتحوّلت بجد، مش وعد.</span></li>
+        </ul>
+        <p class="fine">النسب محسوبة من كل الجلسات اللي خلصت. الفريق اللي ما ردّش على الاستبيان بيتحسب كأنه قال «لأ». و«جزئيًا» و«يمكن» مش محسوبين ضمن «أيوه».</p>
+      </section>
+
+      <section class="rs-quotes" id="rs-quotes" aria-labelledby="rs-quotes-title" hidden>
+        <h2 id="rs-quotes-title">قالوا إيه</h2>
+        <p class="fine">بننشر كلام الفريق بس لو وافق صراحةً، وبالشكل اللي اختاره: باسمه أو من غير اسم.</p>
+        <div class="quote-list" id="rs-quote-list"></div>
+      </section>
+    </div>
+  </div>
+</main>
+
+<div class="mobile-bar when-app" id="mobile-bar">
+  <button class="motion-toggle" type="button">
+    <svg class="i mt-pause" aria-hidden="true" focusable="false"><use href="#i-pause"/></svg>
+    <svg class="i mt-play" aria-hidden="true" focusable="false"><use href="#i-play"/></svg>
+    <span class="mt-label">وقّفوا الحركة</span>
+  </button>
+</div>
+
+<footer class="foot">
+  <div class="wrap">
+    <img src="assets/img/beedak-logo-dark-nobg.svg" alt="بإيدك" width="900" height="525" loading="lazy">
+    <p>افهموه، وكمّلوه بإيدكم.</p>
+    <nav aria-label="روابط آخر الصفحة"><ul><li><a href="index.html">الصفحة الرئيسية</a></li><li><a href="terms.html">الشروط</a></li><li><a href="lab.html">المعمل</a></li></ul></nav>
+    <div class="foot-status">
+      <bdi class="tok exit" dir="ltr" aria-hidden="true"><i class="gdot"></i>exit 0</bdi>
+      <p class="foot-caption">الكود اللي بيتحرك في الخلفية زينة وأمثلة، مش من مشاريع حقيقية.</p>
+    </div>
+  </div>
+</footer>
+<!-- Decorative code background (aria-hidden). Without JS this static, blurred copy shows; app.js draws the interactive one on the canvas. -->
+<div class="bgfx" aria-hidden="true" data-nosnippet>
+  <div class="bgfx-static">
+<pre class="bs d2 r" style="--x:3%;--y:4%">if (!res.ok) throw new Error("500");</pre>
+<pre class="bs d1 v" style="--x:58%;--y:9%">while (!plan.owner) { await standup(); }</pre>
+<pre class="bs d3 g" style="--x:66%;--y:24%">digitalWrite(LED_PIN, HIGH);</pre>
+<pre class="bs d1 r" style="--x:8%;--y:30%">KeyError: 'owner'</pre>
+<pre class="bs d2 v" style="--x:40%;--y:41%">WiFi.begin(ssid, pass);</pre>
+<pre class="bs d3 r" style="--x:70%;--y:52%">Segmentation fault (core dumped)</pre>
+<pre class="bs d1 g" style="--x:4%;--y:60%">SELECT * FROM tasks WHERE owner IS NOT NULL;</pre>
+<pre class="bs d2 g" style="--x:52%;--y:70%">res.status(200).json(plan);</pre>
+<pre class="bs d1 v" style="--x:14%;--y:80%">git rebase --continue</pre>
+<pre class="bs d3 r" style="--x:62%;--y:86%">CONFLICT (content): merge conflict in main.c</pre>
+<pre class="bs d2 g" style="--x:6%;--y:92%">assert plan.next and plan.due</pre>
+<pre class="bs d1 r" style="--x:44%;--y:18%">NULL</pre>
+  </div>
+  <canvas class="bgfx-canvas"></canvas>
+</div>
+</body>
+</html>

@@ -17,6 +17,8 @@
 | [الرئيسية](https://beedak.vercel.app) | العرض والأسعار والضمان، ومنشئ رسالة «قضية» اللي بتتبعت على واتساب |
 | [المعمل](https://beedak.vercel.app/lab) | محاكي Arduino وESP32: بتختاروا الكارت، وتزوّدوا القطع اللي محتاجينها بس من كتالوج، وتوصّلوها بأسلاك على طاولة 2D، وتكتبوا كود Arduino حقيقي يشتغل على المحاكي (دايرة كهربا محسوبة: لمبة بتتحرق من غير مقاومة، شورت، طرف عايم…). لو عدّى 3 ثواني من غير أخطاء ولا تحذيرات، تقدروا تشغّلوه على جهازكم بالـUSB (Web Serial + `assets/firmware/beedak-lab-bridge`، بروتوكول v2). فيه 10 أمثلة جاهزة، وحفظ وفتح ملف، وشكل 3D لبعض القطع |
 | [الشروط](https://beedak.vercel.app/terms) | الحجز والدفع والتأجيل والضمان والإحالة (مسودة لحد المراجعة القانونية) |
+| [النتايج](https://beedak.vercel.app/results) | الأرقام الحقيقية من استبيان بعد كل جلسة (من `assets/data/stats.json`). لو مفيش جلسات، بتظهر رسالة «لسه بنبدأ» بدل أصفار |
+| [رأيكم بعد الجلسة](https://beedak.vercel.app/feedback) | استبيان قصير بيتبعت على واتساب لرقم الحجز. مش متربط من الموقع (noindex): بيتبعت لينكه للفريق بعد الجلسة |
 
 ## اللي يميّز الموقع
 
@@ -33,7 +35,8 @@
 
 Plain static site — no framework, no build step required, no external requests at runtime.
 
-- `index.html`, `lab.html`, `terms.html`
+- `index.html`, `lab.html`, `terms.html`, `results.html`, `feedback.html`
+- `assets/data/stats.json` — the real numbers (free-spots counter on the home page + the results page). See "Real numbers" below
 - `assets/css/styles.css` — all styles (RTL, logical properties, reduced-motion fallbacks)
 - `assets/js/app.js` — interactions, code background, booking message builder
 - `assets/js/sim/` — the lab simulator (spec: `design-system/beedak/pages/lab-sim-spec.md`), classic ES2017 scripts, no eval:
@@ -50,6 +53,45 @@ Plain static site — no framework, no build step required, no external requests
 - Retired, kept in the repo but no longer loaded: `assets/js/lab.js` (old 3D bench + command language) and `assets/js/esp-behavior.js`.
 - `assets/fonts` — local Alexandria and IBM Plex Sans Arabic (woff2 subsets)
 - `vercel.json` — clean URLs, caching and security headers
+
+## Real numbers (`assets/data/stats.json`)
+
+Absolute rule: only real data goes in this file. Never sample, rounded-up or "expected" numbers.
+
+```json
+{
+  "updated": "2026-11-18",
+  "free_total": 15,
+  "free_booked": 0,
+  "sessions_done": 0,
+  "left_with_plan": 0,
+  "would_pay": 0,
+  "paid_teams": 0,
+  "quotes": []
+}
+```
+
+| Field | What to put |
+|---|---|
+| `updated` | The date you edited the file, `YYYY-MM-DD` (shown as «آخر تحديث») |
+| `free_total` | Number of free spots (15) |
+| `free_booked` | Teams that booked a free session so far. The home page shows «اتحجز X من 15»; at 0 it says «لسه مفيش فرق حجزت، كونوا أول فريق»; when it reaches `free_total`, the home page switches to the paid offer (350) and hides the "first 15 free" notes |
+| `sessions_done` | Diagnosis sessions that actually happened. While it is 0, /results shows the honest empty state instead of percentages |
+| `left_with_plan` | Survey answers «أيوه» to «طلعتوا بخطة واضحة للخطوة الجاية؟» («جزئيًا» does not count) |
+| `would_pay` | Survey answers «أيوه» to the «خطة ومتابعة» question («يمكن» does not count) |
+| `paid_teams` | Teams that actually transferred money (any paid stage), not promises |
+| `quotes` | Optional. Only quotes the team agreed to in the survey. Each entry: `{ "text": "…", "team": "…", "consent": "name" }` or `"consent": "anonymous"` (team name is never shown). Entries without one of those two consent values are not shown; an empty array hides the whole block |
+
+Percentages on /results are `left_with_plan / sessions_done` and `would_pay / sessions_done`, rounded; a team that didn't answer the survey counts as «لأ». The page also shows «X من N» next to each percentage.
+
+How to update after a session:
+
+1. Read the team's survey message on WhatsApp (sent from /feedback).
+2. Edit the numbers in `assets/data/stats.json` (and `updated`). Keep it valid JSON (commas, double quotes).
+3. Rebuild: `node tmp/build_production.cjs` (from `D:/المشروع`).
+4. Deploy the dist folder: `vercel deploy --prod`.
+
+`/assets/data/*` is served with `Cache-Control: max-age=0, must-revalidate`, so the new numbers show right after the deploy.
 
 ## Run locally
 

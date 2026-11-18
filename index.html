@@ -110,8 +110,8 @@
             <a class="btn btn-shine" href="https://wa.me/201068530159?text=%D9%82%D8%B6%D9%8A%D8%A9%0A%D9%85%D9%88%D8%B6%D9%88%D8%B9%20%D8%A7%D9%84%D9%85%D8%B4%D8%B1%D9%88%D8%B9%3A%20%0A%D8%B9%D8%AF%D8%AF%20%D8%A7%D9%84%D8%A3%D8%B9%D8%B6%D8%A7%D8%A1%3A%20%0A%D9%85%D8%B1%D8%AD%D9%84%D8%AA%D9%87%3A%20%0A%D8%A3%D9%83%D8%A8%D8%B1%20%D8%AD%D8%A7%D8%AC%D8%A9%20%D9%88%D8%A7%D9%82%D9%81%D8%A9%3A%20%0A%D8%AA%D9%81%D8%A7%D8%B5%D9%8A%D9%84%20%D8%AA%D8%A7%D9%86%D9%8A%D8%A9%3A%20%0A%D8%A7%D9%84%D9%80CV%3A%20%D9%87%D9%86%D8%A8%D8%B9%D8%AA%20CV%20%D9%84%D9%83%D9%84%20%D8%B9%D8%B6%D9%88%20%D9%81%D9%8A%20%D9%86%D9%81%D8%B3%20%D8%A7%D9%84%D8%B4%D8%A7%D8%AA" data-wa target="_blank" rel="noopener"><svg class="i" aria-hidden="true" focusable="false"><use href="#i-chat"/></svg>احجزوا جلسة التشخيص<span class="sr-only">، بيفتح واتساب</span></a>
             <span class="cta-ring" aria-hidden="true"></span>
           </div>
-          <p class="free-first"><b>أول 15 فريق مجانًا</b><span>ليه؟ لأننا لسه بنبدأ، وعايزين نسمع رأيكم بصراحة بعد الجلسة. ولو وافقتوا بنفسكم، ممكن نحكي تجربتكم في الدعاية بتاعتنا. بعد أول 15 فريق، الجلسة بـ350 جنيه للفريق كله.</span></p>
-          <p class="price"><b class="num">بعدهم: 350 جنيه للفريق كله</b><span>ولو ما طلعتوش بخطة واضحة للخطوة الجاية، الفلوس ترجع كاملة.</span></p>
+          <p class="free-first" id="free-first"><b id="free-title">أول 15 فريق مجانًا</b><span class="free-count when-app" id="free-count" hidden></span><span id="free-why">ليه؟ لأننا لسه بنبدأ، وعايزين نسمع رأيكم بصراحة بعد الجلسة. ولو وافقتوا بنفسكم، ممكن نحكي تجربتكم في الدعاية بتاعتنا. بعد أول 15 فريق، الجلسة بـ350 جنيه للفريق كله.</span></p>
+          <p class="price"><b class="num" id="hero-price">بعدهم: 350 جنيه للفريق كله</b><span>ولو ما طلعتوش بخطة واضحة للخطوة الجاية، الفلوس ترجع كاملة.</span></p>
         </div>
       </div>
 
@@ -404,14 +404,14 @@
         <h2 id="offers-title" class="sweepable">بكام؟ كل مرحلة لوحدها، والسعر للفريق كله</h2>
         <p class="lede">الدفع مقدمًا لكل مرحلة، عن طريق <bdi>InstaPay</bdi> أو محفظة موبايل، والإيصال بيوصلكم على واتساب.</p>
       </div>
-      <p class="hint free-hint"><svg class="i" aria-hidden="true" focusable="false"><use href="#i-info"/></svg><b>أول 15 فريق مجانًا</b><span>جلسة التشخيص مجانًا لأول 15 فريق. والسبب: لأننا لسه بنبدأ، وعايزين نسمع رأيكم بصراحة بعد الجلسة. ولو وافقتوا بنفسكم، ممكن نحكي تجربتكم في الدعاية بتاعتنا. بعد أول 15 فريق، الجلسة بـ350 جنيه للفريق كله.</span></p>
+      <p class="hint free-hint" data-free-only><svg class="i" aria-hidden="true" focusable="false"><use href="#i-info"/></svg><b>أول 15 فريق مجانًا</b><span>جلسة التشخيص مجانًا لأول 15 فريق. والسبب: لأننا لسه بنبدأ، وعايزين نسمع رأيكم بصراحة بعد الجلسة. ولو وافقتوا بنفسكم، ممكن نحكي تجربتكم في الدعاية بتاعتنا. بعد أول 15 فريق، الجلسة بـ350 جنيه للفريق كله.</span></p>
       <p class="hint"><svg class="i" aria-hidden="true" focusable="false"><use href="#i-info"/></svg><b>أول مرة؟</b><span>ابدأوا بجلسة التشخيص. في آخرها هتعرفوا محتاجين تكملوا مرحلة ولا لأ، ومش لازم تشتروا أي حاجة تانية.</span></p>
 
       <div class="offer-main">
         <article class="card main" aria-labelledby="o-diag">
           <bdi class="card-cmd tok" dir="ltr" aria-hidden="true"><span class="prompt">$</span> npm run diagnosis</bdi>
           <div class="row"><h3 id="o-diag">جلسة تشخيص</h3><span class="amount num">350 <small>جنيه</small></span></div>
-          <p class="free-tag"><b>مجانًا لأول 15 فريق</b> مقابل رأيكم بصراحة بعد الجلسة.</p>
+          <p class="free-tag" data-free-only><b>مجانًا لأول 15 فريق</b> مقابل رأيكم بصراحة بعد الجلسة.</p>
           <p class="when">45 دقيقة، أونلاين، والبداية من هنا</p>
           <p class="per">للفريق كله، والمنسق بيحوّلها مرة واحدة. يعني حوالي من 70 لـ90 جنيه للفرد في فريق من 4 أو 5.</p>
           <div class="split when-app" role="group" aria-labelledby="split-label">
@@ -640,7 +640,7 @@
           <rect class="pp-chip" x="58" y="26" width="30" height="40" rx="3"/><text class="pp-t" x="73" y="50">MCU</text>
         </svg></div>
         <h2 id="book-title">احجزوا جلسة التشخيص</h2>
-        <p class="lede">ابعتوا كلمة <span class="keyword">«قضية»</span> على واتساب، ومعاها الـCV بتاع كل عضو وموضوع المشروع. أول 15 فريق مجانًا.</p>
+        <p class="lede">ابعتوا كلمة <span class="keyword">«قضية»</span> على واتساب، ومعاها الـCV بتاع كل عضو وموضوع المشروع.<span data-free-only> أول 15 فريق مجانًا.</span></p>
       </div>
 
       <div class="book-grid">
@@ -829,6 +829,7 @@
       <ul>
         <li><a href="terms.html">الشروط</a></li>
         <li><a href="lab.html">المعمل</a></li>
+        <li><a href="results.html">النتايج</a></li>
         <li><a href="#top">أول الصفحة</a></li>
       </ul>
     </nav>
