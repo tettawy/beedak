@@ -704,6 +704,9 @@
       rootEl.setAttribute('data-tab', t);
       for (var k in tabBtns) tabBtns[k].setAttribute('aria-pressed', k === t ? 'true' : 'false');
       if (t === 'bench' && app.benchShown) app.benchShown();
+      // review fix (lab-1-03): show the new panel from its top instead of the old scroll position
+      var r = rootEl.getBoundingClientRect();
+      if (r.top < 0) { try { root.scrollTo({ top: root.pageYOffset + r.top, behavior: 'instant' }); } catch (e) { root.scrollTo(0, root.pageYOffset + r.top); } }
     };
     // hide the tab bar while the on-screen keyboard is open (§10.3)
     if (root.visualViewport) {

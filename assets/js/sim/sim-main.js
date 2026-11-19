@@ -16,7 +16,8 @@
     compileOk: 'الكود اتعمله compile من غير أخطاء.',
     uploading: 'بيرفع الكود على الكارت الوهمي…',
     boardOff: 'الكارت فصل. {reason}',
-    slow: 'الكود مفيهوش delay، فالمحاكي أبطأ من الكارت الحقيقي دلوقتي ({x}×). ده طبيعي.',
+    slow: 'الـloop بتلف من غير ما تستنى، فالمحاكي أبطأ من الكارت الحقيقي دلوقتي ({x}×). ده طبيعي.',
+    portBusy: 'الجهاز ما اتفتحش. اقفلوا أي برنامج تاني فاتح البورت (زي Serial Monitor في Arduino IDE)، وجرّبوا تاني.',
     realRunning: 'شغال على جهازكم. كل قراية بتاخد كام مللي ثانية لأنها رايحة جاية على الـUSB.',
     confirmTitle: 'قبل ما نبعت لجهازكم',
     confirmBody: 'اتأكدوا إن التوصيل على جهازكم زي اللي على الطاولة بالظبط. الكود هيستخدم الأطراف دي:',
@@ -43,7 +44,7 @@
     techMsg: 'عايزين نحجز جلسة فنية (450 جنيه). الدايرة مش شغالة.',
     sumProbs: '- آخر المشاكل: ', sumNoProbs: 'مفيش',
     sumLen: '- عدد سطور الكود: {lines}، وعدد الحروف: {chars}',
-    techToast: 'الدايرة مش شغالة؟ نقدر نراجعها معاكم في جلسة فنية (450 جنيه).',
+    techToast: 'مش عارفين تصلّحوها؟ نقدر نراجعها معاكم في جلسة فنية (450 جنيه).',
     techToastBtn: 'احجزوا على واتساب'
   };
   function fill(t, v) { return String(t).replace(/\{(\w+)\}/g, function (m, k) { return v && v[k] != null ? String(v[k]) : m; }); }
@@ -347,7 +348,7 @@
     var f = S.io.frame(S.now);
     S.gate.tick(S.now, { powered: S.io.powered(), conds: f.conds });
     applyFrame(f);
-    slowCheck(ts, S.now - before > 0 ? S.now : S.now);
+    if (S.now > before) slowCheck(ts, S.now); else S.slow.t0 = 0; // review fix (lab-1-06): a halted sketch is not 'slow'
     flushSerial();
     var gs = S.gate.state();
     if (ts - S.uiT > 200 || gs !== S.lastGate) { S.uiT = ts; S.lastGate = gs; updateStages(); if (S.sel && S.sel.kind === 'part' && S.ui.isInspecting(S.sel.id)) { /* live values are on the bench */ } }
@@ -502,7 +503,9 @@
     if (S.real.conn) { disconnect(); return; }
     var nav = root.navigator;
     S.real.busy = true; hwState({ state: 'busy', text: AR.checking });
+    var gotPort = false; // review fix (lab-1-04): a picked port that fails to open must not fail silently
     Promise.resolve().then(function () { return nav.serial.requestPort(); }).then(function (port) {
+      gotPort = true;
       return NS.IO.Real.openPort(port, { baud: S.ui.hwBaud() });
     }).then(function (conn) {
       S.real.conn = conn;
@@ -517,10 +520,10 @@
       updateStages();
     }, function (e) {
       S.real.busy = false;
-      var picked = !!S.real.conn;
+      var picked = gotPort || !!S.real.conn;
       if (S.real.conn) { try { S.real.conn.close(); } catch (x) { /* gone */ } }
       S.real.conn = null; S.real.info = null;
-      hwState(picked ? { state: 'err', text: (e && e.detail) || NS.IO.Real.AR.noReply } : null);
+      hwState(picked ? { state: 'err', text: (e && e.detail) || (S.real.conn ? NS.IO.Real.AR.noReply : AR.portBusy) } : null);
       updateStages();
     });
   }
@@ -583,7 +586,11 @@
   /* =====================================================================
      toolbar actions
      ===================================================================== */
-  function pickBoard(type) { loadProject(newProject(type)); }
+  function pickBoard(type) {
+    loadProject(newProject(type));
+    var f = root.document.querySelector('.sim-run'); // review fix (lab-1-07): keep keyboard focus inside the workspace
+    if (f && f.focus) { try { f.focus({ preventScroll: true }); } catch (e) { f.focus(); } }
+  }
   function changeBoard() {
     if (S.run === 'real') return;
     S.ui.pickBoardDialog().then(function (type) {
@@ -630,23 +637,27 @@
   function importFile(file) {
     if (file.size > 500 * 1024) { S.ui.toast(AR.bigFile); return; }
     var rd = new root.FileReader();
-    rd.onload = function () {
+    rd.onload = function () { try { onLoaded(); } catch (e) { S.ui.toast(AR.badFile); } }; // review fix (lab-1-08)
+    function onLoaded() {
       var o = null;
       try { o = JSON.parse(String(rd.result)); } catch (e) { o = null; }
       if (!o || typeof o !== 'object' || o.format !== 'beedak-lab' || !Array.isArray(o.parts) || !Array.isArray(o.wires)) { S.ui.toast(AR.badFile); return; }
       for (var i = 0; i < o.parts.length; i++) { var t = o.parts[i] && o.parts[i].type; if (!P().get(t)) { S.ui.toast(fill(AR.unknownPart, { type: String(t).slice(0, 40) })); return; } }
       if (o.parts.length > 120 || o.wires.length > 400) { S.ui.toast(AR.badFile); return; }
+      var isObj = function (x) { return x && typeof x === 'object' && !Array.isArray(x); };
+      if (!o.parts.every(isObj) || !o.wires.every(isObj)) { S.ui.toast(AR.badFile); return; }
+      var BAUDS = [9600, 19200, 38400, 57600, 115200]; // same list as the monitor select
       var clean = { format: 'beedak-lab', version: 1, board: String(o.board || ''),
         parts: o.parts.map(function (q) { var r = { id: q.id, type: q.type, rot: +q.rot || 0, props: q.props && typeof q.props === 'object' ? q.props : {} }; if (q.on) r.on = q.on; else { r.x = +q.x || 0; r.y = +q.y || 0; } return r; }),
         wires: o.wires.map(function (w) { var r = { id: w.id, a: w.a, b: w.b, color: w.color }; if (Array.isArray(w.pts)) r.pts = w.pts.slice(0, 50); return r; }),
         controls: o.controls && typeof o.controls === 'object' ? o.controls : {},
         code: typeof o.code === 'string' ? o.code.slice(0, 50000) : EMPTY_CODE,
-        serial: { baud: +(o.serial && o.serial.baud) || 9600, lineEnding: (o.serial && o.serial.lineEnding) || 'nl' } };
+        serial: { baud: BAUDS.indexOf(+(o.serial && o.serial.baud)) >= 0 ? +o.serial.baud : 9600, lineEnding: ['none', 'nl', 'cr', 'both'].indexOf(o.serial && o.serial.lineEnding) >= 0 ? o.serial.lineEnding : 'nl' } };
       var v = validProject(clean);
       if (!v.ok) { S.ui.toast((v.errors && v.errors[0]) || AR.badFile); return; }
       var b = boardOf(clean.parts); clean.board = b ? b.type : clean.board;
       loadProject(clean);
-    };
+    }
     rd.onerror = function () { S.ui.toast(AR.badFile); };
     rd.readAsText(file);
   }

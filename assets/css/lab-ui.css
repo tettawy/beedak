@@ -201,7 +201,7 @@
 
 /* ---------- ≥ 1100 px: three columns (§10.2) ---------- */
 @media (min-width: 1100px) {
-  .sim-work { grid-template-columns: minmax(230px, 280px) minmax(0, 1fr) minmax(340px, 440px); grid-template-columns: clamp(250px, 20vw, 290px) minmax(0, 1fr) clamp(330px, 27vw, 440px); align-items: start; }
+  .sim-work { grid-template-columns: minmax(230px, 280px) minmax(0, 1fr) minmax(380px, 480px); grid-template-columns: clamp(240px, 18vw, 280px) minmax(0, 1fr) clamp(380px, 32vw, 520px); align-items: start; } /* review fix: wider code column */
   .sim-exnote { grid-column: 1 / -1; }
   .sim-side { position: sticky; top: 8px; max-height: calc(100vh - 16px); overflow: auto; }
   .sim-right { max-height: none; }
@@ -240,3 +240,6 @@
   .sim-serial-out { height: 50vh; }
 }
 @media (forced-colors: active) { .sim-prob, .sim-chip, .sim-tab { border: 1px solid CanvasText; } .sim-gl.is-error, .sim-gl.is-warn { forced-color-adjust: none; } }
+/* review fix (lab-2-floating-toggle-covers-tools): on the lab the motion toggle only drives the decorative background,
+   so it sits in the page flow instead of floating over the simulator's controls and code */
+body[data-page="lab"].app .mobile-bar, body[data-page="lab"] .mobile-bar { position: static; inset: auto; padding: 12px 16px; justify-content: flex-start; }
