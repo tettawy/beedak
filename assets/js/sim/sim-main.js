@@ -413,14 +413,25 @@
     if (!serialBuf.length) return;
     var q = serialBuf; serialBuf = [];
     var mismatch = null;
+    // review fix (lab-1-02): one DOM write per kind-run per frame instead of one per print(), capped to the last ~1000 lines
+    var pend = '', pendK = null;
+    function done() {
+      if (pendK === null) return;
+      var NL = String.fromCharCode(10), cut = pend.length, n = 0;
+      while (n < 1001 && cut > 0) { cut = pend.lastIndexOf(NL, cut - 1); if (cut < 0) break; n++; }
+      if (n >= 1001 && cut > 0) pend = pend.slice(cut + 1); // the monitor keeps 1000 lines anyway
+      S.ui.serialWrite(pend, pendK); pend = ''; pendK = null;
+    }
+    function put(s, k) { if (pendK !== null && pendK !== k) done(); pendK = k; pend += s; }
     q.forEach(function (c) {
       if (c.b && c.b !== S.monitorBaud) {
         mismatch = c.b;
         var bytes = utf8(c.t), s = '';
         for (var i = 0; i < bytes.length; i++) s += String.fromCharCode(0xA0 + ((bytes[i] * 37 + 11) & 0x5F));
-        S.ui.serialWrite(s, 'garble');
-      } else S.ui.serialWrite(c.t, S.run === 'real' ? 'code' : '');
+        put(s, 'garble');
+      } else put(c.t, S.run === 'real' ? 'code' : '');
     });
+    done();
     if (mismatch) S.ui.baudHint(fill(AR.baudHint, { m: S.monitorBaud, b: mismatch }));
   }
   function utf8(s) {

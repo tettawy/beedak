@@ -69,6 +69,8 @@
     H_DELAY_IN_ISR: ['hint', 'delay() جوّه الـinterrupt ما بيشتغلش، وmillis() بيقف.'],
     H_SERIAL_IN_ISR: ['hint', 'الطباعة جوّه الـinterrupt ممكن توقّف الكارت. الأحسن تغيّروا متغير volatile وتطبعوا في loop().'],
     H_AVR_PRINTF_FLOAT: ['hint', 'sprintf على الـUno ما بتطبعش float (بتطلّع ‎?‎). استخدموا dtostrf أو Serial.print(x, 2).'],
+    // NEW COPY: a String that outgrew the free heap (the real board leaves it unchanged)
+    W_STR_MEM: ['warn', 'الذاكرة مش كفاية للـString ده: مش هيكبر عن حوالي {n} حرف، والإضافة الجديدة ما اتحطّتش.'],
     H_RAM_LOW: ['hint', 'الذاكرة قربت تخلص ({p}٪). الكارت ممكن يهنّج.'],
     // NEW COPY (spec §7.9 marks it NEW COPY)
     H_TONE_BUSY: ['hint', 'الـUno بيطلّع نغمة واحدة بس في نفس الوقت، وأقل تردد 31 هرتز. وقّفوا الأولى بـnoTone() قبل التانية.']

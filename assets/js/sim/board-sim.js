@@ -338,7 +338,7 @@
         var t = now(), n = c.netOfGpio(g);
         sensorsOnNet('hcsr04', 'Echo', n).forEach(function (inst) {
           var st = c.state(inst.id);
-          if (st.powered && t - st.lastTrigUs > 1000 && t >= st.busyUntilUs) emitOnce('sr04', 'H_SR04_TRIG', {}, [inst.id]);
+          if (st.powered && t - st.lastTrigUs > 60000 && t >= st.busyUntilUs) emitOnce('sr04', 'H_SR04_TRIG', {}, [inst.id]);
         });
         return readLevelAt(g, t, false);
       },

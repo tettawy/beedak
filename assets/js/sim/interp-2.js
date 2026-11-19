@@ -277,6 +277,14 @@
       R.once.add(k);
       R.msg(code, vars, site);
     };
+    /* String heap (sim realism): a String that would outgrow the board's free heap stays as it was, like a failed
+       realloc on the real board (Uno/Nano: about 1.5 KB free; ESP32: about 110 KB in one block). */
+    R.strMax = P.sramBytes > 0 ? Math.max(256, P.sramBytes - 548) : 110000;
+    R.strFit = function (old, nu, site) {
+      if (nu.length <= R.strMax || nu.length <= old.length) return nu;
+      R.hintOnce('W_STR_MEM', 'mem', { n: R.strMax }, site);
+      return old;
+    };
     R.err = function (code, vars, site) { site = R.site(site); return new I._RtErr(code, vars, site.line, site.col); };
     /** io result may be a thenable on the real board: suspend until it settles. */
     R.aw = function (v, k) { if (isThen(v)) return new Susp({ t: 'await', promise: v }, k); return k(v); };
@@ -817,6 +825,7 @@
           if (b.t.ch) val = map1(b, function (c) { return String.fromCharCode(c & 255); }, T.String, n);
           else fail('E_TYPE', { from: b.t.n, to: 'String' }, n);
         } else val = cvt(b, t, n);
+        if (t.k === 's') { var sst0 = site(n); return assignE(lv, val, function (old, y) { return R.strFit(old || '', y, sst0); }, n); }
         return assignE(lv, val, null, n);
       }
       var bop = op.slice(0, -1);
@@ -824,7 +833,8 @@
         if (bop !== '+') fail('E_TYPE', { from: 'String', to: op }, n);
         var tb = b.t;
         if (!isNum(tb) && !isStrish(tb) && tb.k !== 'ip') fail('E_TYPE', { from: tb.n, to: 'String' }, n);
-        return assignE(lv, b, function (old, y) { return (old || '') + strOf(tb, y, R); }, n);
+        var sst = site(n);
+        return assignE(lv, b, function (old, y) { var o = old || ''; return R.strFit(o, o + strOf(tb, y, R), sst); }, n);
       }
       needNum(b, n);
       if (!isNum(t)) fail('E_TYPE', { from: b.t.n, to: t.n }, n);
@@ -2331,7 +2341,7 @@
         for (var i = 0; i < Math.min(x.length, y.length); i++) if (x.charCodeAt(i) !== y.charCodeAt(i)) return x.charCodeAt(i) - y.charCodeAt(i);
         return x.length === y.length ? 0 : x.length > y.length ? x.charCodeAt(y.length) : -y.charCodeAt(x.length);
       }, [1, 1], 'int', { s: 's' }),
-      concat: strM(function (R, v, t, s, x) { R.mstr = x + strOf(t[0], v[0], R); return 1; }, [1, 1], 'bool', { s: 'p', mut: true }),
+      concat: strM(function (R, v, t, s, x) { var add = strOf(t[0], v[0], R); R.mstr = R.strFit(x, x + add, s); return R.mstr.length === x.length + add.length ? 1 : 0; }, [1, 1], 'bool', { s: 'p', mut: true }),
       replace: strM(function (R, v, t, s, x) { var a = bytesOf(v[0], t[0]), b = bytesOf(v[1], t[1]); if (a.length) R.mstr = x.split(a).join(b); }, [2, 2], 'void', { s: 'pp', mut: true }),
       remove: strM(function (R, v, t, s, x) { var i = v[0] >>> 0, n = v.length > 1 ? v[1] >>> 0 : x.length; if (i < x.length) R.mstr = x.slice(0, i) + x.slice(Math.min(x.length, i + n)); }, [1, 2], 'void', { mut: true }),
       toInt: strM(function (R, v, t, s, x) { return atol(x); }, [0, 0], 'long'),

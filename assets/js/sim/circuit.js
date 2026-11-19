@@ -26,17 +26,17 @@
     E_ESP_5V: { sev: 'error', ar: 'الطرف {pin} في الـESP32 عليه {v} فولت، وهو بيستحمل 3.3 بس. استخدموا مقسّم جهد (مقاومتين) أو level shifter.' },
     E_OVERVOLT: { sev: 'error', ar: 'الطرف {pin} عليه {v} فولت، وده أكتر من اللي الكارت يستحمله.' },
     E_LED_BURNT: { sev: 'error', ar: 'اللمبة {part} اتحرقت: عدّى فيها {mA} مللي أمبير والمفروض 20 بالكتير. حطّوا مقاومة 220 أوم أو أكتر قبلها.' },
-    E_REVERSED_POWER: { sev: 'error', ar: '{part} متوصّل بالعكس: الـVCC والـGND مقلوبين.' },
+    E_REVERSED_POWER: { sev: 'error', ar: '{part}: الـVCC والـGND متوصلين بالعكس.' },
     W_PIN_CURRENT: { sev: 'warn', ar: 'الطرف {pin} عليه {mA} مللي أمبير. أكتر من 20 مش آمن على المدى الطويل.' },
     W_USB_BUDGET: { sev: 'warn', ar: 'الدايرة بتسحب حوالي {mA} مللي أمبير من الـUSB، والـUSB بيدّي 500 بالكتير. استخدموا مصدر كهربا خارجي.' },
     W_3V3_BUDGET: { sev: 'warn', ar: 'طرف 3.3V في {board} بيدّي 50 مللي أمبير بس، والدايرة عايزة {mA}.' },
-    H_ESP_5V_WEAK: { sev: 'hint', ar: 'الطرف {pin} في الـESP32 واصله {v} فولت من مقاومة pull-up على 5V. غالبًا هيشتغل، بس الأأمن تشغّلوا {part} على 3.3V أو تستخدموا level shifter.' },
+    H_ESP_5V_WEAK: { sev: 'hint', ar: 'الطرف {pin} في الـESP32 واصله {v} فولت من مقاومة pull-up على 5V. غالبًا هيشتغل، بس الأحسن تشغّلوا {part} على 3.3V أو تستخدموا level shifter.' },
     E_SUPPLY_FIGHT: { sev: 'error', ar: 'طرف {a} وطرف {b} متوصلين ببعض، وكل واحد فيهم فولته مختلف. ده شورت بين مصدرين كهربا. شيلوا السلك ده.' }, // NEW COPY
-    W_NO_COMMON_GND: { sev: 'warn', ar: '{part} واخد كهربا من مصدر تاني، والـGND بتاعه مش متوصل بالـGND بتاع الكارت. وصّلوا الـGND ببعض علشان الإشارة تتقري صح.' }, // NEW COPY
-    H_PART_SHORTED: { sev: 'hint', ar: 'رجلين {part} في نفس الصف من البريدبورد (أو متوصلين ببعض)، فالتيار بيلف حواليها ومش بيعدّي فيها. حطّوا كل رجل في عمود مختلف.' }, // NEW COPY
+    W_NO_COMMON_GND: { sev: 'warn', ar: 'الكهربا واصلة لـ{part} من مصدر تاني، والـGND بتاع المصدر ده مش متوصل بالـGND بتاع الكارت. وصّلوا الـGND ببعض علشان الإشارة تتقري صح.' }, // NEW COPY
+    H_PART_SHORTED: { sev: 'hint', ar: 'رجلين {part} في نفس الصف من البريدبورد (أو متوصلين ببعض)، فالتيار بيلف من برّه القطعة ومش بيعدّي فيها. حطّوا كل رجل في عمود مختلف.' }, // NEW COPY
     W_RES_HOT: { sev: 'warn', ar: 'المقاومة {part} بتسخن: عليها {w} وات والمقاومة دي 0.25 وات بس.' },
-    W_NO_POWER: { sev: 'warn', ar: '{part} مش واخد كهربا. وصّلوا {vcc} وGND.' },
-    W_LOW_VCC: { sev: 'warn', ar: '{part} محتاج {need} فولت على الأقل، وواخد {v} بس.' },
+    W_NO_POWER: { sev: 'warn', ar: 'مفيش كهربا واصلة لـ{part}. وصّلوا {vcc} وGND.' },
+    W_LOW_VCC: { sev: 'warn', ar: 'الفولت الواصل لـ{part} {v} بس، والمطلوب {need} فولت على الأقل.' },
     W_FLOATING: { sev: 'warn', ar: 'الطرف {pin} مش متوصل بحاجة ثابتة (عايم)، فالقراية عشوائية. استخدموا INPUT_PULLUP أو مقاومة 10k لـGND.' },
     W_ADC2_WIFI: { sev: 'warn', ar: 'الطرف {pin} على ADC2، وده ما بيقراش والواي فاي شغال. استخدموا 32 أو 33 أو 34 أو 35 أو 36 أو 39.' },
     W_STRAP12: { sev: 'warn', ar: 'الطرف 12 في الـESP32 عليه HIGH وقت التشغيل، وده ممكن يمنع الكارت الحقيقي إنه يبدأ.' },
@@ -652,7 +652,16 @@
       if (dirty) version++;
       return { visuals: visuals, conds: conds };
     }
-    function toMsgs(list) { return list.map(function (c) { return makeMsg(c.code, c.vars, c.refs); }); }
+    // messages that start from the part itself show its catalog name with the id, e.g. «موديول ريليه 5V (rly1)»
+    var NAMED = { E_REVERSED_POWER: 1, W_NO_POWER: 1, W_LOW_VCC: 1, W_NO_COMMON_GND: 1, H_PART_SHORTED: 1, H_ESP_5V_WEAK: 1 };
+    function nameVars(c) {
+      var v = c.vars, d = v && NAMED[c.code] && typeof v.part === 'string' && byId[v.part] ? defs[v.part] : null;
+      if (!d || !d.name_ar) return v;
+      var o = {}; for (var k in v) o[k] = v[k];
+      o.part = d.name_ar + ' (' + v.part + ')';
+      return o;
+    }
+    function toMsgs(list) { return list.map(function (c) { return makeMsg(c.code, nameVars(c), c.refs); }); }
     function remember(list) { list.forEach(function (m) { seen[msgKey(m)] = m; }); }
 
     C.solve = function (drive, nowUs) {
