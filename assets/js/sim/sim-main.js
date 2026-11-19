@@ -17,6 +17,7 @@
     uploading: 'بيرفع الكود على الكارت الوهمي…',
     boardOff: 'الكارت فصل. {reason}',
     slow: 'الـloop بتلف من غير ما تستنى، فالمحاكي أبطأ من الكارت الحقيقي دلوقتي ({x}×). ده طبيعي.',
+    tooMany: 'الطاولة فيها 120 قطعة، ودي أقصى حاجة. شيلوا قطعة الأول.',
     portBusy: 'الجهاز ما اتفتحش. اقفلوا أي برنامج تاني فاتح البورت (زي Serial Monitor في Arduino IDE)، وجرّبوا تاني.',
     realRunning: 'شغال على جهازكم. كل قراية بتاخد كام مللي ثانية لأنها رايحة جاية على الـUSB.',
     confirmTitle: 'قبل ما نبعت لجهازكم',
@@ -100,7 +101,10 @@
     if (raw) { try { saved = JSON.parse(raw); } catch (e) { saved = null; } }
     var ok = saved && saved.format === 'beedak-lab' && validProject(saved).ok;
     if (ok) {
-      loadProject(saved);
+      // review fix (lab-1-11): keep the example note and «الكود الأصلي» after a reload
+      var ex0 = saved.exampleId && NS.Examples ? NS.Examples.filter(function (e) { return e.id === saved.exampleId; })[0] : null;
+      loadProject(saved, ex0 ? { exampleId: ex0.id } : null);
+      if (ex0) { S.exampleCode = ex0.project.code; S.ui.showRestore(saved.code !== ex0.project.code); }
       S.ui.toast(AR.restored, { label: S.ui.AR.startOver, fn: function () { store(null, null); stopAll(); S.ui.showPicker(true); } });
     } else S.ui.showPicker(true);
     if (!testStore()) { S.storeOk = false; S.ui.toast(AR.noStore); }
@@ -168,7 +172,7 @@
       }
     });
     return { format: 'beedak-lab', version: 1, board: S.board, parts: c.parts, wires: c.wires, controls: controls,
-      code: S.ui.getCode(), serial: { baud: S.monitorBaud, lineEnding: S.ui.lineEnding() }, savedAt: new Date().toISOString() };
+      code: S.ui.getCode(), serial: { baud: S.monitorBaud, lineEnding: S.ui.lineEnding() }, exampleId: S.exampleId || undefined, savedAt: new Date().toISOString() };
   }
   function scheduleSave() {
     clearTimeout(S.saveT);
@@ -593,7 +597,7 @@
   }
   function changeBoard() {
     if (S.run === 'real') return;
-    S.ui.pickBoardDialog().then(function (type) {
+    S.ui.pickBoardDialog(S.board).then(function (type) {
       if (!type || type === S.board) return;
       S.ui.confirm({ body: S.ui.AR.changeBoard, ok: S.ui.AR.changeOk, cancel: S.ui.AR.no }).then(function (yes) {
         if (!yes) return;
@@ -781,6 +785,7 @@
     exportFile: exportFile, importFile: importFile, clearBench: clearBench,
     addPart: function (type) {
       if (S.run === 'real') return;
+      if (S.wb.getCircuit().parts.length >= 120) { S.ui.toast(AR.tooMany); return; } // review fix (lab-1-09): same cap as import
       S.adding = true;                                   // stay in the catalog: visitors often add several parts in a row
       var id; try { id = S.wb.addPart(type); } finally { S.adding = false; }
       if (id && isMobile()) S.ui.setTab('bench');

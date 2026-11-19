@@ -14,6 +14,7 @@
     boardNames: { uno: 'Arduino Uno', esp32: 'ESP32 DevKit V1', nano: 'Arduino Nano' },
     boardSub: { uno: '5 فولت · 14 طرف ديجيتال · 6 أنالوج', esp32: '3.3 فولت · واي فاي · ADC 12 بت', nano: 'زي الـUno بس صغير وبيتركب في البريدبورد' }, // NEW COPY
     changeBoard: 'تغيّروا الكارت؟ الأسلاك اللي على أطراف الكارت القديم هتتشال، والقطع التانية هتفضل.', changeOk: 'غيّروه', no: 'لأ',
+    changeTitle: 'غيّروا الكارت', changeSub: 'الأسلاك اللي على أطراف الكارت الحالي هتتشال، والقطع التانية هتفضل.',
     run: 'شغّلوا', stop: 'وقّفوا', reset: 'من الأول', speed: 'السرعة', sound: 'الصوت', examples: 'الأمثلة',
     save: 'احفظوا ملف', open: 'افتحوا ملف', clear: 'امسحوا الطاولة', more: 'المزيد',
     speeds: [{ v: 0.25, t: '0.25×', l: 'بالبطيء' }, { v: 1, t: '1×', l: 'زي الحقيقة' }, { v: 4, t: '4×', l: 'أسرع' }],
@@ -734,14 +735,16 @@
         ok.focus();
       });
     };
-    ui.pickBoardDialog = function () {
+    ui.pickBoardDialog = function (curB) {
       return new Promise(function (resolve) {
         var d = h('dialog', { 'class': 'sim-dialog sim-pick-dlg', 'aria-labelledby': 'sim-pd-h' }, doc.body);
         var prev = doc.activeElement, done = false;
         function fin(v) { if (done) return; done = true; try { d.close(); } catch (e) { /* ignore */ } if (d.parentNode) d.parentNode.removeChild(d); if (prev && prev.focus) { try { prev.focus(); } catch (e) { /* gone */ } } resolve(v); }
         pickerCards(d, function (t) { fin(t); });
-        var h2 = d.querySelector('.sim-pick-h'); if (h2) h2.id = 'sim-pd-h';
-        btn('seg-btn', AR.no, h('div', { 'class': 'sim-acts' }, d)).addEventListener('click', function () { fin(null); });
+        var h2 = d.querySelector('.sim-pick-h'); if (h2) { h2.id = 'sim-pd-h'; h2.textContent = AR.changeTitle; } // review fix: change-mode wording
+        var sub = d.querySelector('.sim-pick-sub'); if (sub) sub.textContent = AR.changeSub;
+        Array.prototype.forEach.call(d.querySelectorAll('.sim-pick-card'), function (c) { c.setAttribute('aria-pressed', c.getAttribute('data-board') === curB ? 'true' : 'false'); });
+        btn('seg-btn', AR.close, h('div', { 'class': 'sim-acts' }, d)).addEventListener('click', function () { fin(null); });
         d.addEventListener('cancel', function (e) { e.preventDefault(); fin(null); });
         if (d.showModal) d.showModal(); else d.setAttribute('open', '');
         var f = d.querySelector('.sim-pick-card'); if (f) f.focus();
