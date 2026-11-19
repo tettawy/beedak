@@ -1354,3 +1354,30 @@ kbd { font: 400 0.8125rem/1.4 var(--mono); border: 1px solid var(--line-ui); bor
 .quote blockquote { margin: 0; font-size: 1.0625rem; line-height: 1.8; }
 .quote figcaption { font: 700 0.9062rem/1.5 var(--display); color: var(--muted); }
 @media (min-width: 520px) { .stat-tiles { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+
+/* ---------- Batch 3 (19 Nov 2026): "what you leave with" (example plan + 45-minute agenda), and the booking <select> ---------- */
+.outcome-grid { display: grid; gap: 16px; }
+.plan-ex { border-color: var(--violet); }
+.plan-ex-body { margin: 0; }
+.plan-ex-label { font: 700 0.875rem/1.6 var(--display); color: var(--violet-hi); }
+.plan-ex-case { margin: 0; font-size: 1rem; }
+.plan-ex-case > span { color: var(--muted); }
+.plan-ex-list { margin: 0; display: grid; gap: 10px; }
+.plan-ex-list > div { display: grid; gap: 2px; padding: 10px 12px; background: var(--s2); border: 1px solid var(--line); border-radius: var(--r-sm); min-width: 0; }
+.plan-ex-list dt { font: 700 0.875rem/1.6 var(--display); color: var(--green); }
+.plan-ex-list dd { margin: 0; overflow-wrap: anywhere; }
+.plan-ex-note { margin: 0; font-size: 0.875rem; color: var(--muted); }
+.agenda-title { font-size: 1.125rem; }
+.agenda-list { list-style: none; margin: 0; padding: 0; display: grid; gap: 10px; }
+.agenda-list li { display: grid; grid-template-columns: 5.5rem minmax(0, 1fr); gap: 10px; align-items: baseline; padding-block-end: 10px; border-bottom: 1px solid var(--line); }
+.agenda-list li:last-child { border-bottom: 0; padding-block-end: 0; }
+.agenda-min { font: 700 0.875rem/1.6 var(--display); color: var(--green); }
+.agenda-list b { font-family: var(--display); }
+.input.select { appearance: none; -webkit-appearance: none; cursor: pointer; padding-inline-end: 40px;
+  background-image: linear-gradient(45deg, transparent 50%, var(--muted) 50%), linear-gradient(135deg, var(--muted) 50%, transparent 50%);
+  background-position: left 14px center, left 20px center; background-size: 6px 6px, 6px 6px; background-repeat: no-repeat; }
+.input.select option { background: var(--s1); color: var(--text); }
+@media (min-width: 900px) {
+  .outcome-grid { grid-template-columns: minmax(0, 1.15fr) minmax(0, 1fr); align-items: start; gap: 24px; }
+  .builder-out { grid-row: 2 / span 12; }
+}

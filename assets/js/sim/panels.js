@@ -47,7 +47,7 @@
     stage1: 'على المحاكي', stage2: 'على جهازكم',                                    // NEW COPY (stage names)
     stageIdle: 'لسه ما اتشغلش.',
     runReal: 'شغّلوه على جهازي', stopReal: 'وقّفوه على جهازي',                    // second: NEW COPY
-    hwTitle: 'جهازكم الحقيقي', hwOpt: '(اختياري)',
+    hwTitle: 'جهازكم الحقيقي', hwOpt: '(اختياري، تجريبي)',
     serialTitle: 'شاشة السيريال', serialPh: 'اكتبوا هنا وابعتوا للكارت', send: 'ابعتوا', clearSerial: 'امسحوا الشاشة',
     autoscroll: 'انزلوا لآخر سطر لوحدها', readLast: 'اقروا آخر سطر', baud: 'السرعة',
     lineEndings: [{ v: 'none', t: 'من غير نهاية سطر' }, { v: 'nl', t: 'سطر جديد (NL)' }, { v: 'cr', t: 'رجوع لأول السطر (CR)' }, { v: 'both', t: 'الاتنين (NL & CR)' }],

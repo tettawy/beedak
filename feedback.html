@@ -32,6 +32,21 @@
   }
 })();
 </script>
+<script>
+/* Cookie-free visit counts: Vercel Web Analytics (no cookies, no personal data). window.va queues calls until the script loads.
+   The same-origin script exists only on the deployed site (enable "Web Analytics" once in the Vercel dashboard), so it is not
+   requested from localhost or a local file: no 404 in the console. If it is blocked, window.va just keeps queueing. */
+window.va = window.va || function () { (window.vaq = window.vaq || []).push(arguments); };
+(function () {
+  try {
+    var h = location.hostname;
+    if (!/^https?:$/.test(location.protocol) || !h || h === 'localhost' || h === '127.0.0.1' || h === '[::1]' || /\.localhost$/.test(h)) return;
+    var s = document.createElement('script');
+    s.defer = true; s.src = '/_vercel/insights/script.js';
+    document.head.appendChild(s);
+  } catch (e) { /* analytics is optional */ }
+})();
+</script>
 <link rel="stylesheet" href="assets/css/styles.css">
 <script src="assets/js/app.js" defer></script>
 </head>
@@ -64,7 +79,7 @@
     <bdi class="crumb tok" dir="ltr" aria-hidden="true">beedak / docs / FEEDBACK.md</bdi>
     <div class="top-actions">
       <a class="btn-ghost top-lab" href="lab.html"><svg class="i" aria-hidden="true" focusable="false"><use href="#i-lab"/></svg>المعمل</a>
-      <a class="btn btn-sm" href="https://wa.me/201068530159?text=%D9%82%D8%B6%D9%8A%D8%A9%0A%D9%85%D9%88%D8%B6%D9%88%D8%B9%20%D8%A7%D9%84%D9%85%D8%B4%D8%B1%D9%88%D8%B9%3A%20%0A%D8%B9%D8%AF%D8%AF%20%D8%A7%D9%84%D8%A3%D8%B9%D8%B6%D8%A7%D8%A1%3A%20%0A%D9%85%D8%B1%D8%AD%D9%84%D8%AA%D9%87%3A%20%0A%D8%A3%D9%83%D8%A8%D8%B1%20%D8%AD%D8%A7%D8%AC%D8%A9%20%D9%88%D8%A7%D9%82%D9%81%D8%A9%3A%20%0A%D8%AA%D9%81%D8%A7%D8%B5%D9%8A%D9%84%20%D8%AA%D8%A7%D9%86%D9%8A%D8%A9%3A%20%0A%D8%A7%D9%84%D9%80CV%3A%20%D9%87%D9%86%D8%A8%D8%B9%D8%AA%20CV%20%D9%84%D9%83%D9%84%20%D8%B9%D8%B6%D9%88%20%D9%81%D9%8A%20%D9%86%D9%81%D8%B3%20%D8%A7%D9%84%D8%B4%D8%A7%D8%AA" data-wa target="_blank" rel="noopener"><svg class="i" aria-hidden="true" focusable="false"><use href="#i-chat"/></svg>احجزوا التشخيص<span class="sr-only">، بيفتح واتساب</span></a>
+      <a class="btn btn-sm" href="https://wa.me/201068530159?text=%D9%82%D8%B6%D9%8A%D8%A9%0A%D9%85%D9%88%D8%B6%D9%88%D8%B9%20%D8%A7%D9%84%D9%85%D8%B4%D8%B1%D9%88%D8%B9%3A%20%0A%D8%B9%D8%AF%D8%AF%20%D8%A7%D9%84%D8%A3%D8%B9%D8%B6%D8%A7%D8%A1%3A%20%0A%D9%85%D8%B1%D8%AD%D9%84%D8%AA%D9%87%3A%20%0A%D8%A3%D9%83%D8%A8%D8%B1%20%D8%AD%D8%A7%D8%AC%D8%A9%20%D9%88%D8%A7%D9%82%D9%81%D8%A9%3A%20%0A%D8%AA%D9%81%D8%A7%D8%B5%D9%8A%D9%84%20%D8%AA%D8%A7%D9%86%D9%8A%D8%A9%3A%20%0A%D9%85%D9%8A%D9%86%20%D8%A8%D9%8A%D8%B9%D8%B1%D9%81%20%D8%A5%D9%8A%D9%87%20(%D8%B3%D8%B7%D8%B1%20%D9%84%D9%83%D9%84%20%D8%B9%D8%B6%D9%88)%3A%20%0A%D8%B9%D8%B1%D9%81%D8%AA%D9%88%D9%86%D8%A7%20%D9%85%D9%86%D9%8A%D9%86%3A%20" data-wa target="_blank" rel="noopener"><svg class="i" aria-hidden="true" focusable="false"><use href="#i-chat"/></svg>احجزوا التشخيص<span class="sr-only">، بيفتح واتساب</span></a>
     </div>
   </div>
 </header>

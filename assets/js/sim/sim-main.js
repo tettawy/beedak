@@ -280,6 +280,11 @@
      ===================================================================== */
   function run() {
     if (S.run === 'real' || !S.project) return;
+    // cookie-free analytics (batch 3): one event per example per visit; beedakTrack comes from app.js and never throws
+    if (S.exampleId && !(S.exTracked = S.exTracked || {})[S.exampleId]) {
+      S.exTracked[S.exampleId] = 1;
+      try { if (typeof root.beedakTrack === 'function') root.beedakTrack('lab_example_run', { example: S.exampleId }); } catch (e) { /* ignore */ }
+    }
     audioInit();
     stopSim(true);
     var code = S.ui.getCode(); S.project.code = code;

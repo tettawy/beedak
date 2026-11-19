@@ -1134,6 +1134,11 @@ var BOOKING_NUMBER = '201068530159';
     return v && n >= 1 ? String(n) : '';
   }
   function isUrgent() { var u = $('f-urgent'); return !!(u && u.checked); }
+  function skillLines() {
+    var el = $('f-skills');
+    if (!el) return [];
+    return el.value.split('\n').map(function (s) { return s.replace(/\s+/g, ' ').trim(); }).filter(Boolean).slice(0, 12);
+  }
 
   // Same lines (and order) as the no-JS template in the static wa.me links in index.html / terms.html.
   function buildMessage() {
@@ -1150,9 +1155,14 @@ var BOOKING_NUMBER = '201068530159';
     lines.push('أكبر حاجة واقفة: ' + checkedValues('blocker').join(''));
     var details = $('f-details') ? $('f-details').value.replace(/[ \t]+/g, ' ').replace(/\n{3,}/g, '\n\n').trim() : '';
     lines.push('تفاصيل تانية: ' + (details ? '⁨' + details + '⁩' : ''));
+    // "Who knows what" (batch 3: replaces the required CV): one line per member, each isolated so mixed Arabic/Latin stays in order.
+    var skills = skillLines();
+    lines.push('مين بيعرف إيه (سطر لكل عضو):' + (skills.length ? '\n' + skills.map(function (s) { return '⁨' + s + '⁩'; }).join('\n') : ' '));
+    // CVs are optional now: the line shows up only when files were picked.
     var cvs = fileList('f-cvs').length;
-    lines.push(cvs ? 'الـCV: ' + filesCount(cvs) + ' هتتبعت في نفس الشات' : 'الـCV: هنبعت CV لكل عضو في نفس الشات');
+    if (cvs) lines.push('الـCV: ' + filesCount(cvs) + ' هتتبعت في نفس الشات');
     if (fileList('f-shot').length) lines.push('صورة المشكلة: هتتبعت في نفس الشات');
+    lines.push('عرفتونا منين: ' + fieldText('f-source'));
     // Optional referral line: only when the team wrote who referred them.
     var ref = fieldText('f-ref');
     if (ref) lines.push('رشّحنا فريق: ⁨' + ref + '⁩');
@@ -1330,7 +1340,7 @@ var BOOKING_NUMBER = '201068530159';
       filesNote.hidden = false;
       filesNote.textContent = can
         ? 'زرار «ابعتوا الرسالة والملفات مع بعض» بيفتح المشاركة: اختاروا واتساب، وابعتوها للرقم +20 106 853 0159. ولو فتحتوا لينك واتساب بدل كده، ابعتوا الملفات بإيدكم في نفس الشات بعد الرسالة على طول.'
-        : 'لينك واتساب بيبعت الكلام بس. بعد ما تبعتوا الرسالة، ابعتوا الـCVs' + (fileList('f-shot').length ? ' وصورة المشكلة' : '') + ' في نفس الشات على طول.';
+        : 'لينك واتساب بيبعت الكلام بس. بعد ما تبعتوا الرسالة، ابعتوا ' + [fileList('f-cvs').length ? 'الـCVs' : '', fileList('f-shot').length ? 'صورة المشكلة' : ''].filter(Boolean).join(' و') + ' في نفس الشات على طول.';
     }
     if (shareFilesBtn) shareFilesBtn.addEventListener('click', function () {
       var files = pickedFiles();
@@ -1715,8 +1725,30 @@ var BOOKING_NUMBER = '201068530159';
     refresh();
   }
 
+  /* ---------- Cookie-free visit counts (Vercel Web Analytics, batch 3, 19 Nov 2026) ----------
+     The <head> snippet defines window.va (a queue) and loads /_vercel/insights/script.js only on the real site.
+     Here: 3 custom events, with no personal data (no message text, no names): a booking WhatsApp click,
+     the lab's technical-session button, and (from sim-main.js) running a lab example. Never throws. */
+  function track(name, data) {
+    try { if (typeof window.va === 'function') window.va('event', data ? { name: name, data: data } : { name: name }); } catch (e) { /* analytics blocked: nothing to do */ }
+  }
+  window.beedakTrack = track;
+  function initTrack() {
+    document.addEventListener('click', function (e) {
+      var a = e.target && e.target.closest ? e.target.closest('a[href^="https://wa.me/"], a[data-act="book-tech"]') : null;
+      if (!a) return;
+      var page0 = document.body ? (document.body.getAttribute('data-page') || '') : '';
+      if (a.getAttribute('data-act') === 'book-tech') { track('lab_tech_session_click', { page: page0 }); return; }
+      var text = '';
+      try { text = decodeURIComponent((a.href.split('?text=')[1] || '').replace(/\+/g, ' ')); } catch (err) { text = ''; }
+      var page = page0;
+      if (/^(مستعجل \(طوارئ\)\n)?قضية/.test(text)) track('booking_whatsapp_click', { page: page, from: a.id || (a.closest('section[id]') || {}).id || 'link' });
+      else if (text.indexOf('عايزين نحجز جلسة فنية') === 0) track('lab_tech_session_click', { page: page });
+    }, true);
+  }
+
   function start() {
-    var parts = [initMotion, initPointer, initBgfx, initDuckPeek, initProps, initPointerFx, initScramble, initDecode, initHeroTerminal, initGlitch, initChapterStatus, initThread, initReport, initKnot, initPlan, initFlips,
+    var parts = [initTrack, initMotion, initPointer, initBgfx, initDuckPeek, initProps, initPointerFx, initScramble, initDecode, initHeroTerminal, initGlitch, initChapterStatus, initThread, initReport, initKnot, initPlan, initFlips,
       initSplit, initSeason, initRevealOnce, initStickyCta, initBooking, initBookJump, initTermsOutline, initTermsFind, initSectionLinks,
       initFreeCounter, initResults, initFeedback];
     parts.forEach(function (fn) {

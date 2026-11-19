@@ -15,7 +15,7 @@
 | الصفحة | فيها إيه |
 |---|---|
 | [الرئيسية](https://beedak.vercel.app) | العرض والأسعار والضمان، ومنشئ رسالة «قضية» اللي بتتبعت على واتساب |
-| [المعمل](https://beedak.vercel.app/lab) | محاكي Arduino وESP32: بتختاروا الكارت، وتزوّدوا القطع اللي محتاجينها بس من كتالوج، وتوصّلوها بأسلاك على طاولة 2D، وتكتبوا كود Arduino حقيقي يشتغل على المحاكي (دايرة كهربا محسوبة: لمبة بتتحرق من غير مقاومة، شورت، طرف عايم…). لو عدّى 3 ثواني من غير أخطاء ولا تحذيرات، تقدروا تشغّلوه على جهازكم بالـUSB (Web Serial + `assets/firmware/beedak-lab-bridge`، بروتوكول v2). فيه 10 أمثلة جاهزة، وحفظ وفتح ملف، وشكل 3D لبعض القطع |
+| [المعمل](https://beedak.vercel.app/lab) | محاكي Arduino وESP32: بتختاروا الكارت، وتزوّدوا القطع اللي محتاجينها بس من كتالوج، وتوصّلوها بأسلاك على طاولة 2D، وتكتبوا كود Arduino يشتغل على المحاكي، وهو بيدعم جزء كبير من Arduino مش كله (دايرة كهربا محسوبة: لمبة بتتحرق من غير مقاومة، شورت، طرف عايم…). لو عدّى 3 ثواني من غير أخطاء ولا تحذيرات، تقدروا تشغّلوه على جهازكم بالـUSB، والخطوة دي لسه تجريبية (Web Serial + `assets/firmware/beedak-lab-bridge`، بروتوكول v2). فيه 10 أمثلة جاهزة، وحفظ وفتح ملف، وشكل 3D لبعض القطع |
 | [الشروط](https://beedak.vercel.app/terms) | الحجز والدفع والتأجيل والضمان والإحالة (مسودة لحد المراجعة القانونية) |
 | [النتايج](https://beedak.vercel.app/results) | الأرقام الحقيقية من استبيان بعد كل جلسة (من `assets/data/stats.json`). لو مفيش جلسات، بتظهر رسالة «لسه بنبدأ» بدل أصفار |
 | [رأيكم بعد الجلسة](https://beedak.vercel.app/feedback) | استبيان قصير بيتبعت على واتساب لرقم الحجز. مش متربط من الموقع (noindex): بيتبعت لينكه للفريق بعد الجلسة |
@@ -33,7 +33,7 @@
 
 ## Tech
 
-Plain static site — no framework, no build step required, no external requests at runtime.
+Plain static site — no framework, no build step required, no external requests at runtime (the only extra request is the same-origin analytics script below, on the deployed site only).
 
 - `index.html`, `lab.html`, `terms.html`, `results.html`, `feedback.html`
 - `assets/data/stats.json` — the real numbers (free-spots counter on the home page + the results page). See "Real numbers" below
@@ -92,6 +92,24 @@ How to update after a session:
 4. Deploy the dist folder: `vercel deploy --prod`.
 
 `/assets/data/*` is served with `Cache-Control: max-age=0, must-revalidate`, so the new numbers show right after the deploy.
+
+## Analytics (cookie-free, added 19 Nov 2026)
+
+Every page loads Vercel Web Analytics from the same origin: an inline `<head>` snippet defines the `window.va` queue and adds `/_vercel/insights/script.js` (defer). It is skipped on `localhost`, `127.0.0.1`, `*.localhost` and `file://`, so local runs have no 404 and no console error; if the script is blocked, nothing breaks. No cookies, no personal data, no message text.
+
+**One-time step for the owner (cannot be done from code):** in the Vercel dashboard, open the project → **Analytics** → **Enable** (Web Analytics), then redeploy. Until it is enabled, `/_vercel/insights/script.js` does not exist on the site and no visits are counted.
+
+Custom events sent through `window.va('event', { name, data })` (helper `window.beedakTrack` in `app.js`):
+
+| Event | When | Data |
+|---|---|---|
+| `booking_whatsapp_click` | Any booking WhatsApp link («قضية» message) is clicked | `page`, `from` (link id or section id) |
+| `lab_tech_session_click` | The lab's technical-session button or toast link | `page` |
+| `lab_example_run` | A ready lab example is run (once per example per visit) | `example` (example id) |
+
+Note: Vercel may count custom events only on some plans (check the Analytics page of the project); page views work either way.
+
+The privacy line about it is in `terms.html` (section «الخصوصية»).
 
 ## Run locally
 
