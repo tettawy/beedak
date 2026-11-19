@@ -39,6 +39,9 @@
     editorHint: 'Tab بيعمل مسافة. علشان تخرجوا من الكود بالكيبورد: Esc وبعدين Tab.',
     restoreEx: 'رجّعوا كود المثال',
     probTitle: 'المشاكل', probEmpty: 'مفيش مشاكل.',
+    helpCta: 'الدايرة مش شغالة؟ احجزوا جلسة فنية (450 جنيه)',                    // NEW COPY (batch 1, problem 2)
+    helpNote: 'الرسالة بتتكتب لوحدها بملخص الدايرة وآخر المشاكل، وتقدروا تعدّلوها قبل ما تبعتوها. الجلسة الفنية مدفوعة (450 جنيه).', // NEW COPY
+    waOpens: '، بيفتح واتساب',
     sev: { error: 'خطأ', warn: 'تحذير', hint: 'ملحوظة' },
     line: 'سطر {n}',                                                               // NEW COPY
     stage1: 'على المحاكي', stage2: 'على جهازكم',                                    // NEW COPY (stage names)
@@ -576,6 +579,16 @@
         b.addEventListener('click', function () { app.problemClick(m); });
       });
     };
+    /* paid technical session (problem 2): a quiet link under the problems; stronger after a failed run (data-s="fail").
+       The href is rebuilt right before every use, so the WhatsApp message carries the circuit as it is now. */
+    var help = h('div', { 'class': 'sim-help', 'data-s': 'idle' }, prob);
+    var helpA = h('a', { 'class': 'sim-help-a', href: '#', target: '_blank', rel: 'noopener', 'data-act': 'book-tech' }, help);
+    helpA.innerHTML = '<svg class="i" aria-hidden="true" focusable="false"><use href="#i-chat"/></svg>';   // static icon markup only
+    h('span', null, helpA, AR.helpCta);
+    h('span', { 'class': 'sr-only' }, helpA, AR.waOpens);
+    h('p', { 'class': 'sim-muted sim-help-note' }, help, AR.helpNote);
+    ui.refreshHelp = function () { try { helpA.href = app.techHref(); } catch (e) { /* keeps the last link */ } };
+    ['pointerdown', 'focus', 'click', 'auxclick', 'contextmenu'].forEach(function (ev) { helpA.addEventListener(ev, ui.refreshHelp); });
 
     /* ---------- stages + real board ---------- */
     var steps = h('ol', { 'class': 'rsteps sim-stages', 'aria-label': AR.stage1 + ' / ' + AR.stage2 }, codeBox);
@@ -592,7 +605,10 @@
     var realStop = btn('seg-btn', AR.stopReal, st2.body, 'stop', { hidden: true, 'data-act': 'stop-real' });
     realB.addEventListener('click', function () { app.runReal(); });
     realStop.addEventListener('click', function () { app.stopReal(); });
-    ui.setStage = function (n, s, text) { var x = n === 1 ? st1 : st2; x.li.setAttribute('data-s', s); if (x.t.textContent !== text) x.t.textContent = text; };
+    ui.setStage = function (n, s, text) {
+      var x = n === 1 ? st1 : st2; x.li.setAttribute('data-s', s); if (x.t.textContent !== text) x.t.textContent = text;
+      if (n === 1 && help.getAttribute('data-s') !== s) help.setAttribute('data-s', s);
+    };
     ui.setRealButtons = function (canRun, running) { realB.hidden = !canRun || running; realStop.hidden = !running; };
 
     var hw = h('section', { 'class': 'hw sim-hw', 'aria-labelledby': 'sim-hw-h' }, codeBox);

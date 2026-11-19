@@ -1226,7 +1226,7 @@ var BOOKING_NUMBER = '201068530159';
 
   /* ---------- Share the page with the team group ---------- */
   function shareData() {
-    var text = 'لقيت جلسة تشخيص لأي مشروع، من الثانوي للجامعة: 45 دقيقة أونلاين، وأول 15 فريق مجانًا مقابل رأيهم بعد الجلسة. وبعدهم 350 جنيه للفريق كله (حوالي من 70 لـ90 جنيه للفرد لو احنا 4 أو 5).';
+    var text = 'لقيت جلسة تشخيص لأي مشروع، من الثانوي للجامعة: 45 دقيقة أونلاين، والتشخيص مجاني لأول 15 فريق مقابل رأيهم بعد الجلسة. وبعدهم 350 جنيه للفريق كله (حوالي من 70 لـ90 جنيه للفرد لو احنا 4 أو 5).';
     var url = /^https?:/.test(window.location.protocol) ? window.location.origin + window.location.pathname : '';
     return { text: text, url: url };
   }
@@ -1582,7 +1582,7 @@ var BOOKING_NUMBER = '201068530159';
         count.appendChild(bar);
       }
       count.hidden = false;
-    }).catch(function () { /* no data: the static «أول 15 فريق مجانًا» text stays */ });
+    }).catch(function () { /* no data: the static «التشخيص مجاني لأول 15 فريق» text stays */ });
   }
 
   /* ---------- results.html ---------- */
@@ -1668,7 +1668,7 @@ var BOOKING_NUMBER = '201068530159';
         'الفريق أو المشروع: ' + iso(team()),
         'خطة واضحة للخطوة الجاية: ' + choice('plan'),
         'التقييم: ' + (r ? r + ' من 5' : ''),
-        'هتدفعوا في «خطة ومتابعة» لو احتجتوها: ' + choice('pay'),
+        'هتدفعوا في «خطة ومتابعة» (4 أسابيع، بـ1,800 جنيه للفريق كله) لو احتجتوها: ' + choice('pay'),
         // Consent is never assumed: no choice means no.
         'نحكي تجربتكم في الدعاية: ' + (choice('story') || 'لأ (ما اخترتوش)'),
         'تعليق: ' + iso(comment)

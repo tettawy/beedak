@@ -151,6 +151,18 @@
 .sim-prob[data-sev="error"] .sim-sev { color: var(--red); }
 .sim-prob[data-sev="warn"] .sim-sev { color: var(--violet-hi); }
 .sim-prob-t { overflow-wrap: anywhere; }
+/* paid technical session link under the problems (batch 1): quiet by default, green border after a failed run */
+.sim-help { display: grid; gap: 4px; margin-top: 4px; }
+.sim-help-a {
+  display: inline-flex; align-items: center; gap: 8px; justify-self: start; max-width: 100%; min-height: 44px; padding: 8px 14px;
+  background: transparent; color: var(--text); border: 1.5px dashed var(--line-ui); border-radius: var(--r-pill);
+  font: 700 .875rem/1.4 var(--display); text-decoration: none; overflow-wrap: anywhere; -webkit-tap-highlight-color: transparent; touch-action: manipulation;
+}
+.sim-help-a .i { flex: none; width: 18px; height: 18px; }
+.sim-help-a:hover { color: var(--green); border-color: var(--green); }
+.sim-help-a:focus-visible { outline: 2px solid var(--green); outline-offset: 2px; }
+.sim-help[data-s="fail"] .sim-help-a { border-style: solid; border-color: var(--green); color: var(--green); background: var(--green-wash); }
+.sim-help-note { font-size: .8125rem; }
 .sim-stages .rstep-t { font-size: .9062rem; }
 .sim-hw { padding: 10px; }
 

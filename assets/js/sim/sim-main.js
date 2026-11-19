@@ -38,7 +38,13 @@
     noSerialBrowser: 'التوصيل مش متاح في المتصفح ده.',
     sumTitle: 'ملخص المعمل:', sumBoard: '- الكارت: ', sumParts: '- القطع: ', sumS1: '- على المحاكي: ', sumHw: '- جهازنا: ', sumCode: '- الكود:',
     sumNone: 'الكارت بس', sumNotConn: 'مش متوصّل',          // NEW COPY (summary words)
-    s1: { idle: 'لسه ما اتشغلش', running: 'كان لسه شغال', pass: 'نجح من غير أخطاء', fail: 'فيه مشاكل' } // NEW COPY (summary)
+    s1: { idle: 'لسه ما اتشغلش', running: 'كان لسه شغال', pass: 'نجح من غير أخطاء', fail: 'فيه مشاكل' }, // NEW COPY (summary)
+    // paid technical session from the lab (batch 1, problem 2) — NEW COPY
+    techMsg: 'عايزين نحجز جلسة فنية (450 جنيه). الدايرة مش شغالة.',
+    sumProbs: '- آخر المشاكل: ', sumNoProbs: 'مفيش',
+    sumLen: '- عدد سطور الكود: {lines}، وعدد الحروف: {chars}',
+    techToast: 'الدايرة مش شغالة؟ نقدر نراجعها معاكم في جلسة فنية (450 جنيه).',
+    techToastBtn: 'احجزوا على واتساب'
   };
   function fill(t, v) { return String(t).replace(/\{(\w+)\}/g, function (m, k) { return v && v[k] != null ? String(v[k]) : m; }); }
   function store(get, val) {
@@ -145,6 +151,7 @@
     S.ui.setMarks([]);
     refreshStopped();
     updateStages();
+    if (S.ui.refreshHelp) S.ui.refreshHelp();
     scheduleSave();
   }
   function projectNow() {
@@ -441,6 +448,7 @@
     else if (S.boardOff && S.run !== 'sim') ui.setStage(1, 'fail', fill(AR.boardOff, { reason: S.boardOff }));
     else if (s1 === 'idle') ui.setStage(1, 'idle', S.ui.AR.stageIdle);
     else ui.setStage(1, s1 === 'running' ? 'run' : s1 === 'changed' ? 'wait' : s1, st.msg_ar);
+    offerTechOnce(S.run !== 'uploading' && (S.compileFailN > 0 || (!!S.boardOff && S.run !== 'sim') || s1 === 'fail'));
     // remember the pins of the passing run (§10.4 item 5)
     if (s1 === 'pass' && S.program && S.runner && !S.passPins) S.passPins = (S.program.pinsUsed || []).concat(S.runner.pinsTouched ? S.runner.pinsTouched() : []);
     if (s1 !== 'pass' && S.run !== 'real') S.passPins = null;
@@ -551,6 +559,7 @@
     S.ui.setRunning('stopped');
     S.ui.serialLine(failed || S.real.fail ? AR.realFailed : AR.realStopped, failed || S.real.fail ? 'err' : 'sys');
     updateProblems(); updateStages();
+    offerTechOnce(!!(failed || S.real.fail));
   }
 
   /* =====================================================================
@@ -687,6 +696,34 @@
     return AR.sumTitle + '\n' + AR.sumBoard + (S.board ? (S.ui.AR.boardNames[S.board] || S.board) : '-') + '\n' + AR.sumParts + parts + '\n' +
       AR.sumS1 + s1 + '\n' + AR.sumHw + hw + (code ? '\n' + AR.sumCode + '\n' + code : '');
   }
+  /* paid technical session (batch 1, problem 2): board, parts, stage-1 result, latest error/warning codes and the code length.
+     The code itself stays out of this message (the notes form below can carry it). */
+  function waNumber() { return String(root.BOOKING_NUMBER || WA_NUMBER).replace(/[^0-9]/g, '') || WA_NUMBER; }
+  function techMsg() {
+    var c = S.wb ? S.wb.getCircuit() : { parts: [] }, counts = {}, order = [];
+    c.parts.forEach(function (q) { var d = P().get(q.type); if (!d || d.kind === 'board') return; var n = d.name_ar; if (!counts[n]) { counts[n] = 0; order.push(n); } counts[n]++; });
+    var parts = order.map(function (n) { return counts[n] > 1 ? n + ' ×' + counts[n] : n; }).join('، ') || AR.sumNone;
+    var s1 = stage1State(); s1 = AR.s1[s1 === 'changed' ? 'idle' : s1] || AR.s1.idle;
+    var seen = {}, codes = [];
+    problems().forEach(function (m) { if ((m.sev === 'error' || m.sev === 'warn') && !seen[m.code] && codes.length < 6) { seen[m.code] = 1; codes.push(m.code); } });
+    var code = S.ui ? S.ui.getCode() : '', lines = code.trim() ? code.replace(/\s+$/, '').split('\n').length : 0;
+    return AR.techMsg + '\n\n' + AR.sumTitle + '\n' + AR.sumBoard + (S.board ? (S.ui.AR.boardNames[S.board] || S.board) : '-') + '\n' +
+      AR.sumParts + parts + '\n' + AR.sumS1 + s1 + '\n' +
+      AR.sumProbs + (codes.length ? '⁦' + codes.join('، ') + '⁩' : AR.sumNoProbs) + '\n' +
+      fill(AR.sumLen, { lines: lines, chars: code.trim().length });
+  }
+  function techHref() { return 'https://wa.me/' + waNumber() + '?text=' + encodeURIComponent(techMsg()); }
+  function openTech() {
+    var doc = root.document, a = doc.createElement('a');
+    a.href = techHref(); a.target = '_blank'; a.rel = 'noopener'; a.hidden = true;
+    doc.body.appendChild(a); a.click(); doc.body.removeChild(a);
+  }
+  /* once per visit, right after the first failed run: a toast that offers the session (it goes away by itself) */
+  function offerTechOnce(failed) {
+    if (!failed || S.techOffered || !S.ui) return;
+    S.techOffered = true;
+    S.ui.toast(AR.techToast, { label: AR.techToastBtn, fn: openTech });
+  }
   function initForm() {
     var doc = root.document, more = doc.getElementById('lab-more'), text = doc.getElementById('more-text'), sum = doc.getElementById('more-sum');
     root.__labSummary = labSummary;
@@ -750,6 +787,7 @@
     setLineEnding: function () { scheduleSave(); },
     serialSend: serialSend,
     connect: connect, runReal: runReal, stopReal: function () { stopReal(false); },
+    techHref: techHref,
     benchShown: function () { if (S.wb) setTimeout(function () { S.wb.fit(); }, 0); }
   };
 
