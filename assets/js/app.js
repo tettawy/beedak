@@ -1129,14 +1129,17 @@ var BOOKING_NUMBER = '201068530159';
     return n + ' ملف';
   }
   function membersValue() {
+    // Whole numbers 1–50 only (matches max on the input): «1e3», «2.5» or «99999999» stay empty, so the check shows «ناقص».
     var v = fieldText('f-members');
+    if (!/^\d+$/.test(v)) return '';
     var n = parseInt(v, 10);
-    return v && n >= 1 ? String(n) : '';
+    return n >= 1 && n <= 50 ? String(n) : '';
   }
   function skillLines() {
     var el = $('f-skills');
     if (!el) return [];
-    return el.value.split('\n').map(function (s) { return s.replace(/\s+/g, ' ').trim(); }).filter(Boolean).slice(0, 12);
+    // No line cap: maxlength on the textarea already bounds the size, and nothing typed is dropped silently.
+    return el.value.split('\n').map(function (s) { return s.replace(/\s+/g, ' ').trim(); }).filter(Boolean);
   }
 
   // Same lines (and order) as the no-JS template in the static wa.me links in index.html / terms.html.
@@ -1158,7 +1161,7 @@ var BOOKING_NUMBER = '201068530159';
     lines.push('مين بيعرف إيه (سطر لكل عضو):' + (skills.length ? '\n' + skills.map(function (s) { return '⁨' + s + '⁩'; }).join('\n') : ' '));
     // CVs are optional now: the line shows up only when files were picked.
     var cvs = fileList('f-cvs').length;
-    if (cvs) lines.push('الـCV: ' + filesCount(cvs) + ' هتتبعت في نفس الشات');
+    if (cvs) lines.push('الـCV: ' + filesCount(cvs) + (cvs === 1 ? ' هيتبعت' : ' هيتبعتوا') + ' في نفس الشات');
     if (fileList('f-shot').length) lines.push('صورة المشكلة: هتتبعت في نفس الشات');
     lines.push('عرفتونا منين: ' + fieldText('f-source'));
     // Optional referral line: only when the team wrote who referred them.
@@ -1233,8 +1236,11 @@ var BOOKING_NUMBER = '201068530159';
   }
 
   /* ---------- Share the page with the team group ---------- */
+  var freeFull = false; // set by initFreeCounter once stats.json says the free spots are gone
   function shareData() {
-    var text = 'لقيت جلسة تشخيص لأي مشروع، من الثانوي للجامعة: 45 دقيقة أونلاين، والتشخيص مجاني لأول 15 فريق مقابل رأيهم بعد الجلسة. وبعدهم 350 جنيه للفريق كله (حوالي من 70 لـ90 جنيه للفرد لو احنا 4 أو 5).';
+    var text = freeFull
+      ? 'لقيت جلسة تشخيص لأي مشروع، من الثانوي للجامعة: 45 دقيقة أونلاين، بـ350 جنيه للفريق كله (حوالي من 70 لـ90 جنيه للفرد لو احنا 4 أو 5).'
+      : 'لقيت جلسة تشخيص لأي مشروع، من الثانوي للجامعة: 45 دقيقة أونلاين، والتشخيص مجاني لأول 15 فريق مقابل رأيهم بعد الجلسة. وبعدهم 350 جنيه للفريق كله (حوالي من 70 لـ90 جنيه للفرد لو احنا 4 أو 5).';
     var url = /^https?:/.test(window.location.protocol) ? window.location.origin + window.location.pathname : '';
     return { text: text, url: url };
   }
@@ -1286,7 +1292,7 @@ var BOOKING_NUMBER = '201068530159';
         project: !!fieldText('f-project'),
         members: !!membersValue(),
         stage: hasChoice('stage'),
-        blocker: checkedValues('blocker').length > 0 // "something else, we'll write it" leaves the line empty on purpose
+        blocker: hasChoice('blocker') // «حاجة تانية» counts too: its value points the reader to «تفاصيل تانية»
       };
     }
     function updateChecks(h) {
@@ -1355,6 +1361,12 @@ var BOOKING_NUMBER = '201068530159';
     form.addEventListener('input', function () { refresh(true); });
     form.addEventListener('change', function () { refresh(true); });
     refresh(false);
+    // Back/forward without bfcache: the browser restores checked chips after this script ran, without input events.
+    // pageshow fires after that restore (and on bfcache restores), so the preview, links and checks follow the chips.
+    window.addEventListener('pageshow', function () {
+      if (form.querySelector('input:checked')) touched = true;
+      refresh(false);
+    });
     initCopy($('copy-btn'), number);
     initCopy($('copy-btn-2'), number);
     initShare($('share-btn'));
@@ -1407,6 +1419,9 @@ var BOOKING_NUMBER = '201068530159';
     if (ch === 'أ' || ch === 'إ' || ch === 'آ' || ch === 'ٱ') return 'ا';
     if (ch === 'ة') return 'ه';
     if (ch === 'ى') return 'ي';
+    if (c >= 0x0660 && c <= 0x0669) return String(c - 0x0660); // Arabic-Indic digits → 0-9
+    if (c >= 0x06F0 && c <= 0x06F9) return String(c - 0x06F0); // Eastern Arabic-Indic digits → 0-9
+    if (ch === ',' || ch === '٬') return ''; // thousands separators: «1,800» matches «1800»
     if (/\s/.test(ch)) return ' ';
     return ch.toLowerCase();
   }
@@ -1443,9 +1458,10 @@ var BOOKING_NUMBER = '201068530159';
     if (!input) return;
     var countEl = $('find-count');
     var prev = $('find-prev'), next = $('find-next');
-    var items = Array.prototype.map.call(document.querySelectorAll('.doc .tsec li'), indexItem);
+    // Section headings are searched too, so a topic named in a heading («الخصوصية») is found.
+    var items = Array.prototype.map.call(document.querySelectorAll('.doc .tsec h2, .doc .tsec li'), indexItem);
     var canHighlight = !!(window.CSS && CSS.highlights && window.Highlight);
-    var hits = [], cur = -1, timer = 0, curEl = null;
+    var hits = [], cur = -1, timer = 0, curEl = null, lastQ = null;
 
     function clearMarks() {
       if (canHighlight) { CSS.highlights.delete('terms-hit'); CSS.highlights.delete('terms-cur'); }
@@ -1461,6 +1477,7 @@ var BOOKING_NUMBER = '201068530159';
       clearMarks();
       hits = []; cur = -1;
       var q = normalize(input.value);
+      lastQ = q;
       if (q.length >= 2) {
         items.forEach(function (it) {
           var from = 0, at;
@@ -1483,7 +1500,7 @@ var BOOKING_NUMBER = '201068530159';
     }
     function go(step) {
       if (!hits.length) return;
-      cur = (cur + step + hits.length) % hits.length;
+      cur = cur < 0 ? (step > 0 ? 0 : hits.length - 1) : (cur + step + hits.length) % hits.length;
       var h = hits[cur];
       if (curEl) curEl.classList.remove('is-cur');
       curEl = h.el;
@@ -1491,7 +1508,9 @@ var BOOKING_NUMBER = '201068530159';
       if (canHighlight) CSS.highlights.set('terms-cur', new Highlight(h.range));
       curEl.scrollIntoView({ block: 'center', behavior: motionOn() ? 'smooth' : 'auto' });
       if (countEl) {
-        var txt = curEl.textContent.replace(/\s+/g, ' ').trim();
+        var vis = curEl.cloneNode(true); // without the aria-hidden «##» of a heading
+        each(vis.querySelectorAll('[aria-hidden="true"]'), function (x) { x.parentNode.removeChild(x); });
+        var txt = vis.textContent.replace(/\s+/g, ' ').trim();
         countEl.textContent = 'النتيجة ' + (cur + 1) + ' من ' + hits.length + ': ' + (txt.length > 90 ? txt.slice(0, 90) + '…' : txt);
       }
     }
@@ -1500,11 +1519,14 @@ var BOOKING_NUMBER = '201068530159';
       timer = window.setTimeout(search, 120);
     });
     input.addEventListener('keydown', function (e) {
-      if (e.key === 'Enter' || e.key === 'ArrowDown') { e.preventDefault(); window.clearTimeout(timer); if (cur === -1 && !hits.length) search(); go(e.shiftKey && e.key === 'Enter' ? -1 : 1); }
-      else if (e.key === 'ArrowUp') { e.preventDefault(); go(-1); }
+      if (e.key === 'Enter' || e.key === 'ArrowDown' || e.key === 'ArrowUp') {
+        e.preventDefault();
+        flushGo((e.key === 'ArrowUp' || (e.shiftKey && e.key === 'Enter')) ? -1 : 1);
+      }
     });
-    if (prev) prev.addEventListener('click', function () { go(-1); });
-    if (next) next.addEventListener('click', function () { go(1); });
+    function flushGo(dir) { window.clearTimeout(timer); if (normalize(input.value) !== lastQ) search(); go(dir); }
+    if (prev) prev.addEventListener('click', function () { flushGo(-1); });
+    if (next) next.addEventListener('click', function () { flushGo(1); });
   }
 
   /* ---------- Copy a link to one section of the terms (only over http(s): a file:// link is useless to share) ---------- */
@@ -1571,6 +1593,8 @@ var BOOKING_NUMBER = '201068530159';
         if ($('free-title')) $('free-title').textContent = 'الأماكن المجانية خلصت';
         if ($('free-why')) $('free-why').textContent = 'أول ' + s.total + (s.total >= 3 && s.total <= 10 ? ' فرق' : ' فريق') + ' حجزوا خلاص. جلسة التشخيص دلوقتي بـ350 جنيه للفريق كله.';
         if ($('hero-price')) $('hero-price').textContent = '350 جنيه للفريق كله';
+        if ($('pay-step-title')) $('pay-step-title').textContent = '350 جنيه للفريق كله';
+        freeFull = true; // the share-to-group text drops the free sentence
         each(document.querySelectorAll('[data-free-only]'), function (el) { el.hidden = true; });
         count.hidden = true;
         return;
@@ -1609,10 +1633,13 @@ var BOOKING_NUMBER = '201068530159';
       if (loading) loading.hidden = true;
       var d = arDate(s.updated);
       if (d) { setText('rs-updated', 'آخر تحديث: ' + d); $('rs-updated').hidden = false; }
-      var spots = s.booked >= s.total ? 'الـ' + s.total + (s.total >= 3 && s.total <= 10 ? ' أماكن المجانية' : ' مكان المجاني') + ' اتحجزوا كلهم.'
+      var spots = s.booked >= s.total ? 'الأماكن المجانية (' + s.total + ') اتحجزت كلها.'
         : s.booked > 0 ? 'الأماكن المجانية: اتحجز ' + s.booked + ' من ' + s.total + '.'
-        : 'لسه مفيش فرق حجزت.';
-      if (s.sessions === 0) {
+        : 'لسه مفيش فرق حجزت التشخيص المجاني.';
+      var quotes = s.quotes.filter(function (q) {
+        return q && typeof q.text === 'string' && q.text.trim() && (q.consent === 'name' || q.consent === 'anonymous');
+      });
+      if (s.sessions === 0 && s.paid === 0 && !quotes.length) {
         // Honest empty state: no "0%" before there is a single session.
         setText('rs-empty-booked', spots);
         $('rs-empty').hidden = false;
@@ -1620,7 +1647,14 @@ var BOOKING_NUMBER = '201068530159';
       }
       setText('st-sessions', String(s.sessions));
       setText('st-sessions-sub', spots);
-      [['st-plan', s.plan], ['st-pay', s.pay]].forEach(function (p) {
+      // A paid technical session (bookable alone, 19 Nov) can come before any diagnosis session:
+      // then the paid count and quotes show, but the two percentages don't (no "0%" out of 0 sessions).
+      var noPct = s.sessions === 0;
+      each(stats.querySelectorAll('#st-plan, #st-pay, .fine'), function (el) {
+        var box = el.closest('li') || el;
+        box.hidden = noPct;
+      });
+      if (!noPct) [['st-plan', s.plan], ['st-pay', s.pay]].forEach(function (p) {
         if (p[1] > s.sessions) { // a typo in stats.json: show no percentage rather than a wrong one
           setText(p[0], '—');
           setText(p[0] + '-sub', 'الرقم ده بيتراجع.');
@@ -1636,9 +1670,7 @@ var BOOKING_NUMBER = '201068530159';
       // Quotes: only entries the owner added with the team's explicit consent ("name" or "anonymous").
       var list = $('rs-quote-list');
       var shown = 0;
-      s.quotes.forEach(function (q) {
-        if (!q || typeof q.text !== 'string' || !q.text.trim()) return;
-        if (q.consent !== 'name' && q.consent !== 'anonymous') return;
+      quotes.forEach(function (q) {
         var team = q.consent === 'name' && typeof q.team === 'string' ? q.team.trim() : '';
         var fig = document.createElement('figure');
         fig.className = 'quote';
@@ -1690,10 +1722,15 @@ var BOOKING_NUMBER = '201068530159';
       if (!choice('pay')) out.push(['fb-q-pay', 'سؤال الدفع']);
       return out;
     }
+    var toast = $('toast');
     function refresh() {
       var msg = build();
       if (preview) preview.textContent = msg;
-      if (number) send.href = 'https://wa.me/' + number + '?text=' + encodeURIComponent(msg);
+      // While answers are missing the link points at the form, so a middle-click / «open in new tab»
+      // can't send a half-empty survey; the WhatsApp link comes back once everything is answered.
+      var complete = !missing().length;
+      if (number) send.href = complete ? 'https://wa.me/' + number + '?text=' + encodeURIComponent(msg) : '#fb-form';
+      if (complete && toast && toast.classList.contains('is-error')) { toast.classList.remove('is-error'); toast.textContent = ''; }
       each(form.querySelectorAll('.is-missing'), function (el) {
         var id = el.id;
         var ok = id === 'fb-q-team' ? !!team() : id === 'fb-q-plan' ? !!choice('plan') : id === 'fb-q-rating' ? !!choice('rating') : !!choice('pay');
@@ -1712,12 +1749,14 @@ var BOOKING_NUMBER = '201068530159';
           $(m[0]).classList.add('is-missing');
           if (m[0] === 'fb-q-team') $('fb-team').setAttribute('aria-invalid', 'true');
         });
+        if (toast) toast.classList.add('is-error');
         say('لسه ناقص: ' + miss.map(function (m) { return m[1]; }).join('، ') + '.');
         var target = $(miss[0][0]).querySelector('input');
         if (target) target.focus();
         return;
       }
       sparksAt(send, 12);
+      if (toast) toast.classList.remove('is-error');
       say('اتفتح واتساب. دوسوا «إرسال» هناك عشان رأيكم يوصل.');
     });
     refresh();

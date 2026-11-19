@@ -192,6 +192,8 @@ html.rm .motion-toggle { display: none !important; }
 .free-first { display: grid; gap: 4px; max-width: 52ch; padding: 12px 14px; border: 1.5px solid var(--green); border-radius: var(--r-md); background: var(--green-wash); line-height: 1.6; }
 .free-first b { font-family: var(--display); font-size: 1.3125rem; font-weight: 900; color: var(--green); }
 .free-first span { font-size: 0.9375rem; color: var(--text); }
+/* Phones: the floating pause button (bottom-left, the page's only one) lands on the hero's first screen; keep the hero text out from under it. */
+@media (max-width: 759px) { .hero-actions .free-first { padding-inline-end: 52px; } .hero-actions .price { padding-inline-end: 56px; } }
 .free-tag { font-size: 0.9375rem; color: var(--text); }
 .free-tag b { font-family: var(--display); color: var(--green); }
 .reassure { display: flex; gap: 8px; align-items: flex-start; font-size: 0.9375rem; color: var(--text); }
@@ -344,6 +346,7 @@ html:not(.motion-on) .replay { display: none; }
 .xt-1 { top: 0; left: 4%; }
 .xt-2 { top: 0; right: 6%; }
 .xt-3 { bottom: 0; left: 38%; }
+@media (max-width: 479px) { .xt-2 { top: auto; bottom: 0; right: 4%; } .xt-3 { left: 4%; } } /* narrow stage: the two top tags overlapped */
 .untangle.t1 .xt-1, .untangle.t2 .xt-2, .untangle.t3 .xt-3 { opacity: 0; }
 .untangle-ctl { display: grid; gap: 4px; }
 .untangle-ctl label { font: 700 0.9375rem/1.6 var(--display); }
@@ -587,7 +590,8 @@ html:not(.app) .flip .face { grid-area: auto; min-height: 0; }
 .steps span { color: var(--muted); font-size: 0.9688rem; }
 .builder { background: var(--s1); border: 1.5px solid var(--line); border-radius: var(--r-lg); padding: 20px 16px; display: grid; gap: 20px; }
 .builder-title { font: 900 1.25rem/1.5 var(--display); }
-.builder-title small { display: block; font: 400 0.9375rem/1.7 var(--body); color: var(--muted); }
+.builder-title small, .builder-help small { display: block; font: 400 0.9375rem/1.7 var(--body); color: var(--muted); }
+.builder-help { margin-block-start: -16px; } /* help text sits under the heading, outside it (a heading must stay short for screen readers) */
 .field { display: grid; gap: 8px; }
 .field label, .field legend { font: 700 1rem/1.6 var(--display); padding: 0; }
 .field .hint-text, .field-hint { font-size: 0.9062rem; color: var(--muted); font-weight: 400; }
@@ -602,6 +606,8 @@ fieldset.field { border: 0; margin: 0; padding: 0; min-width: 0; }
 .files-note { padding: 10px 14px; border: 1.5px solid var(--violet); border-radius: var(--r-md); background: var(--violet-wash); color: var(--text); font-size: 0.9375rem; }
 .files-note[hidden] { display: none; }
 .input::placeholder { color: var(--dim); opacity: 1; }
+/* dir="auto" fields are LTR while empty, which cuts and reorders the Arabic placeholders: right-to-left until the visitor types. */
+.input[dir="auto"]:placeholder-shown { direction: rtl; text-align: right; }
 .input:focus-visible { outline: 3px solid var(--green); outline-offset: 2px; border-color: var(--green); }
 .chips { display: flex; flex-wrap: wrap; gap: 8px; }
 .chip { position: relative; display: inline-flex; }
@@ -701,7 +707,7 @@ fieldset.field { border: 0; margin: 0; padding: 0; min-width: 0; }
 .tsec li { counter-increment: ln; position: relative; padding: 6px 8px; padding-inline-start: 42px; border-radius: 6px; border-inline-start: 3px solid transparent; transition: background-color .15s var(--ease); }
 .tsec li::before { content: counter(ln); content: counter(ln) / ""; position: absolute; inset-inline-start: 4px; top: 6px; width: 26px; text-align: center; font: 400 0.8125rem/2.1 var(--mono); color: var(--dim); }
 .tsec li:hover { background: var(--s2); }
-.tsec li.is-cur { outline: 2px solid var(--green); outline-offset: 2px; }
+.tsec li.is-cur, .tsec h2.is-cur { outline: 2px solid var(--green); outline-offset: 2px; border-radius: 6px; }
 .tsec .criterion { border-inline-start-color: var(--green); background: var(--green-wash); }
 .t-guarantee .term-body { padding-top: 0; }
 .t-guarantee .h2row { margin-block-start: 14px; }
@@ -761,9 +767,9 @@ fieldset.field { border: 0; margin: 0; padding: 0; min-width: 0; }
   .action { grid-template-columns: minmax(0, 1fr) minmax(0, 1.2fr); align-items: center; padding: 24px 32px; }
   .action .toast { grid-column: 1 / -1; }
   .builder { grid-template-columns: minmax(0, 1.25fr) minmax(0, 1fr); column-gap: 48px; padding: 32px; }
-  .builder > .builder-title { grid-column: 1 / -1; }
+  .builder > .builder-title, .builder > .builder-help { grid-column: 1 / -1; }
   .builder > .field { grid-column: 1; }
-  .builder-out { grid-column: 2; grid-row: 2 / span 10; position: sticky; top: 24px; }
+  .builder-out { grid-column: 2; grid-row: 3 / span 10; position: sticky; top: 24px; }
   .about-body { grid-template-columns: minmax(0, .85fr) minmax(0, 1.15fr); column-gap: 48px; padding: 32px; }
   .foot .wrap { grid-template-columns: auto minmax(0, 1fr) auto; align-items: center; column-gap: 32px; }
   .foot-status { grid-column: 1 / -1; }
@@ -1087,6 +1093,7 @@ html.motion-on { scroll-behavior: smooth; }
 .motion-on h2.dec-run { animation: decode .6s steps(16, end) both; }
 @keyframes decode { from { clip-path: inset(0 0 0 100%); } to { clip-path: inset(0 0 0 0); } }
 @media (prefers-reduced-motion: reduce) { h2.dec-pre { clip-path: none !important; } }
+@media print { h2.dec-pre, h2.dec-run { clip-path: none !important; animation: none !important; } } /* printing the terms must not drop unscrolled headings */
 
 /* ---------- Pause control: exactly one, the floating one (header and footer copies removed, 15 Nov 2026) ---------- */
 @media (min-width: 900px) {
@@ -1100,7 +1107,7 @@ html.motion-on { scroll-behavior: smooth; }
 .slot.is-set .miss-pill { background: var(--green); color: var(--on-green); }
 .slot-code .s { color: var(--green); }
 .wa-num { font-family: var(--display); font-weight: 700; color: var(--green); white-space: nowrap; user-select: all; -webkit-user-select: all; }
-.when-noapp .wa-num, .builder-title .wa-num { font-size: 1em; }
+.when-noapp .wa-num, .builder-title .wa-num, .builder-help .wa-num { font-size: 1em; }
 .wa-inline { display: inline-flex; align-items: center; gap: 6px; }
 .wa-inline .i { width: 18px; height: 18px; }
 
@@ -1327,6 +1334,8 @@ kbd { font: 400 0.8125rem/1.4 var(--mono); border: 1px solid var(--line-ui); bor
 .fb-form .is-missing > label, .fb-form .is-missing > legend { color: var(--red); }
 .fb-form .is-missing .input { border-color: var(--red); }
 .fb-form .is-missing .chip span { border-color: var(--red); border-style: dashed; }
+.fb-form .chip span { min-width: 44px; justify-content: center; } /* «لأ» was 41px wide: under the 44px touch target */
+#toast.is-error { color: var(--red); } /* feedback: «لسه ناقص» is an error, not a success */
 .fb-preview { display: grid; gap: 6px; }
 .fb-send { margin-block-start: 4px; }
 .rs-method { display: flex; gap: 8px; align-items: flex-start; padding: 10px 14px; border: 1.5px solid var(--line-ui); border-radius: var(--r-md); background: var(--s1); }
@@ -1376,5 +1385,5 @@ kbd { font: 400 0.8125rem/1.4 var(--mono); border: 1px solid var(--line-ui); bor
 .input.select option { background: var(--s1); color: var(--text); }
 @media (min-width: 900px) {
   .outcome-grid { grid-template-columns: minmax(0, 1.15fr) minmax(0, 1fr); align-items: start; gap: 24px; }
-  .builder-out { grid-row: 2 / span 12; }
+  .builder-out { grid-row: 3 / span 12; } /* row 1: heading, row 2: help text */
 }
