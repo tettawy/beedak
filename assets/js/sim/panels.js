@@ -174,7 +174,7 @@
     var spL = h('label', { 'class': 'sim-speed' }, more);
     h('span', null, spL, AR.speed);
     var spSel = h('select', { 'class': 'sim-select', 'data-act': 'speed' }, spL);
-    AR.speeds.forEach(function (s) { var o = h('option', { value: String(s.v) }, spSel, '‎' + s.t + '‎ (' + s.l + ')'); if (s.v === 1) o.selected = true; });
+    AR.speeds.forEach(function (s) { var o = h('option', { value: String(s.v) }, spSel, s.l + ' (⁦' + s.t + '⁩)'); /* review fix: Arabic first, number isolated (LRI…PDI) */ if (s.v === 1) o.selected = true; });
     spSel.addEventListener('change', function () { app.setSpeed(+spSel.value); });
     var soundB = btn('seg-btn sim-sound', AR.sound, more, 'sound', { 'aria-pressed': 'true', 'aria-label': AR.soundOn });
     soundB.addEventListener('click', function () { app.setSound(soundB.getAttribute('aria-pressed') !== 'true'); });
