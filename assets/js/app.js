@@ -1133,7 +1133,6 @@ var BOOKING_NUMBER = '201068530159';
     var n = parseInt(v, 10);
     return v && n >= 1 ? String(n) : '';
   }
-  function isUrgent() { var u = $('f-urgent'); return !!(u && u.checked); }
   function skillLines() {
     var el = $('f-skills');
     if (!el) return [];
@@ -1147,7 +1146,6 @@ var BOOKING_NUMBER = '201068530159';
     if (project) project = '⁨' + project + '⁩';
     var types = checkedValues('type');
     var lines = [];
-    if (isUrgent()) lines.push('مستعجل (طوارئ)');
     lines.push('قضية', 'موضوع المشروع: ' + project);
     lines.push('عدد الأعضاء: ' + membersValue());
     if (types.length) lines.push('نوع المشروع: ' + types.join('، '));
@@ -1571,7 +1569,7 @@ var BOOKING_NUMBER = '201068530159';
       if (s.booked >= s.total) {
         box.classList.add('is-full');
         if ($('free-title')) $('free-title').textContent = 'الأماكن المجانية خلصت';
-        if ($('free-why')) $('free-why').textContent = 'أول ' + s.total + ' فريق حجزوا خلاص. جلسة التشخيص دلوقتي بـ350 جنيه للفريق كله.';
+        if ($('free-why')) $('free-why').textContent = 'أول ' + s.total + (s.total >= 3 && s.total <= 10 ? ' فرق' : ' فريق') + ' حجزوا خلاص. جلسة التشخيص دلوقتي بـ350 جنيه للفريق كله.';
         if ($('hero-price')) $('hero-price').textContent = '350 جنيه للفريق كله';
         each(document.querySelectorAll('[data-free-only]'), function (el) { el.hidden = true; });
         count.hidden = true;
@@ -1611,7 +1609,7 @@ var BOOKING_NUMBER = '201068530159';
       if (loading) loading.hidden = true;
       var d = arDate(s.updated);
       if (d) { setText('rs-updated', 'آخر تحديث: ' + d); $('rs-updated').hidden = false; }
-      var spots = s.booked >= s.total ? 'الـ' + s.total + ' مكان المجاني اتحجزوا كلهم.'
+      var spots = s.booked >= s.total ? 'الـ' + s.total + (s.total >= 3 && s.total <= 10 ? ' أماكن المجانية' : ' مكان المجاني') + ' اتحجزوا كلهم.'
         : s.booked > 0 ? 'الأماكن المجانية: اتحجز ' + s.booked + ' من ' + s.total + '.'
         : 'لسه مفيش فرق حجزت.';
       if (s.sessions === 0) {
@@ -1742,7 +1740,7 @@ var BOOKING_NUMBER = '201068530159';
       var text = '';
       try { text = decodeURIComponent((a.href.split('?text=')[1] || '').replace(/\+/g, ' ')); } catch (err) { text = ''; }
       var page = page0;
-      if (/^(مستعجل \(طوارئ\)\n)?قضية/.test(text)) track('booking_whatsapp_click', { page: page, from: a.id || (a.closest('section[id]') || {}).id || 'link' });
+      if (/^قضية/.test(text)) track('booking_whatsapp_click', { page: page, from: a.id || (a.closest('section[id]') || {}).id || 'link' });
       else if (text.indexOf('عايزين نحجز جلسة فنية') === 0) track('lab_tech_session_click', { page: page });
     }, true);
   }

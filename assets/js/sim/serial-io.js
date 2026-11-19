@@ -39,9 +39,9 @@
     feat: { servo: 'السيرفو', lcd: 'الشاشة LCD', i2c: 'الشاشة LCD', dht: 'حساس DHT', wifi: 'الواي فاي', interrupt: 'الـinterrupt',
       dac: 'dacWrite', ledc: 'ledc' },                          // dac / ledc names: NEW COPY (identifiers only)
     // NEW COPY: stage-1 gate status lines are spec §10.4 verbatim; the rest below is new
-    gateRunning: 'شغال على المحاكي… لازم يكمّل {n} ثواني من غير مشاكل.',
-    gatePass: 'نجح: {n} ثواني من غير أخطاء ولا تحذيرات.',
-    gateFail: 'فيه {n} مشاكل. صلّحوها وشغّلوا تاني.',
+    gateRunning: 'شغال على المحاكي… لازم يكمّل {secs} من غير مشاكل.',   // {secs}/{probs}: secsAr/probsAr, batch 4
+    gatePass: 'نجح: {secs} من غير أخطاء ولا تحذيرات.',
+    gateFail: '{probs}. صلّحوها وشغّلوا تاني.',
     gateChanged: 'الكود أو التوصيل اتغيّر. شغّلوا تاني على المحاكي.',
     // NEW COPY: board error details (filled into {detail} of E_REAL_IO)
     errTimeout: 'الجهاز بطّل يرد (عدّت ثانيتين). اتأكدوا إن كود الجسر v2 متحمّل عليه وإن السرعة 115200.',
@@ -65,6 +65,9 @@
   function fill(t, vars) {
     return String(t).replace(/\{(\w+)\}/g, function (m, k) { return vars && vars[k] != null ? String(vars[k]) : m; });
   }
+  // Arabic count agreement (batch 4): 0 → «مفيش», 1 → singular, 2 → dual, 3–10 → plural, 11+ → singular.
+  function secsAr(n) { return n === 1 ? 'ثانية واحدة' : n === 2 ? 'ثانيتين' : n >= 3 && n <= 10 ? n + ' ثواني' : n + ' ثانية'; }
+  function probsAr(n) { return n === 0 ? 'مفيش مشاكل' : n === 1 ? 'فيه مشكلة واحدة' : n === 2 ? 'فيه مشكلتين' : n <= 10 ? 'فيه ' + n + ' مشاكل' : 'فيه ' + n + ' مشكلة'; }
   function range(a, b) { var r = []; for (var i = a; i <= b; i++) r.push(i); return r; }
 
   /* ------------------------------------------------------------- board tables -------------------------------------------------------------- */
@@ -640,9 +643,9 @@
         state: function () { return st; },
         status: function () {
           var n = Math.round(windowUs / 1e6);
-          var msg = st === 'running' ? fill(AR.gateRunning, { n: n })
-            : st === 'pass' ? fill(AR.gatePass, { n: n })
-            : st === 'fail' ? fill(AR.gateFail, { n: problems.length })
+          var msg = st === 'running' ? fill(AR.gateRunning, { secs: secsAr(n) })
+            : st === 'pass' ? fill(AR.gatePass, { secs: secsAr(n) })
+            : st === 'fail' ? fill(AR.gateFail, { probs: probsAr(problems.length) })
             : st === 'changed' ? AR.gateChanged : '';
           return { state: st, msg_ar: msg, problems: problems.slice(),
             remainS: st === 'running' ? Math.max(0, (windowUs - (last - from)) / 1e6) : 0 };

@@ -836,7 +836,7 @@
     if (li) li.setAttribute('data-s', s);
     if (tEl) tEl.textContent = text;
   }
-  function plural(n) { return n === 1 ? 'خطأ واحد' : n === 2 ? 'خطأين' : n + ' أخطاء'; }
+  function plural(n) { return n === 1 ? 'خطأ واحد' : n === 2 ? 'خطأين' : n >= 3 && n <= 10 ? n + ' أخطاء' : n + ' خطأ'; }
   function cmdsN(n) { return n === 1 ? 'أمر واحد' : n === 2 ? 'أمرين' : n >= 3 && n <= 10 ? n + ' أوامر' : n + ' أمر'; }
   if (runBtn && codeEl) runBtn.addEventListener('click', function () {
     touched = true;

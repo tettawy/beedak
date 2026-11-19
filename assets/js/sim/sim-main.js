@@ -12,7 +12,7 @@
   var EMPTY_CODE = 'void setup() {\n  // الكود اللي هنا بيشتغل مرة واحدة أول ما الكارت يشتغل\n\n}\n\nvoid loop() {\n  // الكود اللي هنا بيتكرر على طول\n\n}\n';
   var BOOT_ESP = 'ets Jun  8 2016 00:22:57\n\nrst:0x1 (POWERON_RESET),boot:0x13 (SPI_FAST_FLASH_BOOT)\n';
   var AR = {
-    compileFail: 'فيه {n} مشاكل في الكود. صلّحوها الأول.',
+    compileFail: '{probs} في الكود. صلّحوها الأول.',          // {probs}: probsAr(n), batch 4
     compileOk: 'الكود اتعمله compile من غير أخطاء.',
     uploading: 'بيرفع الكود على الكارت الوهمي…',
     boardOff: 'الكارت فصل. {reason}',
@@ -47,6 +47,8 @@
     techToastBtn: 'احجزوا على واتساب'
   };
   function fill(t, v) { return String(t).replace(/\{(\w+)\}/g, function (m, k) { return v && v[k] != null ? String(v[k]) : m; }); }
+  // Arabic count agreement (batch 4): 0 → «مفيش», 1 → singular, 2 → dual, 3–10 → plural, 11+ → singular.
+  function probsAr(n) { return n === 0 ? 'مفيش مشاكل' : n === 1 ? 'فيه مشكلة واحدة' : n === 2 ? 'فيه مشكلتين' : n <= 10 ? 'فيه ' + n + ' مشاكل' : 'فيه ' + n + ' مشكلة'; }
   function store(get, val) {
     try {
       if (get) return root.localStorage.getItem(get);
@@ -297,7 +299,7 @@
       S.program = null;
       updateProblems(); updateStages();
       var first = S.compileMsgs.filter(function (m) { return m.sev === 'error' && m.line; })[0];
-      if (first) S.ui.say(fill(AR.compileFail, { n: S.compileFailN }));
+      if (first) S.ui.say(fill(AR.compileFail, { probs: probsAr(S.compileFailN) }));
       return;
     }
     S.compileFailN = 0;
@@ -449,7 +451,7 @@
   function updateStages() {
     var ui = S.ui, s1 = stage1State(), st = S.gate.status();
     if (S.run === 'uploading') { /* keep the upload line */ }
-    else if (S.compileFailN) ui.setStage(1, 'fail', fill(AR.compileFail, { n: S.compileFailN }));
+    else if (S.compileFailN) ui.setStage(1, 'fail', fill(AR.compileFail, { probs: probsAr(S.compileFailN) }));
     else if (S.boardOff && S.run !== 'sim') ui.setStage(1, 'fail', fill(AR.boardOff, { reason: S.boardOff }));
     else if (s1 === 'idle') ui.setStage(1, 'idle', S.ui.AR.stageIdle);
     else ui.setStage(1, s1 === 'running' ? 'run' : s1 === 'changed' ? 'wait' : s1, st.msg_ar);

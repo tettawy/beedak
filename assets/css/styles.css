@@ -611,9 +611,6 @@ fieldset.field { border: 0; margin: 0; padding: 0; min-width: 0; }
 .chip input:checked + span { background: var(--green-wash); border-color: var(--green); font-weight: 700; }
 .chip input:checked + span::before { /* the check mark (colour is never the only signal); physical borders: a tick is not mirrored */
   content: ""; flex: none; width: 11px; height: 6px; margin-block-end: 3px; border-left: 2.5px solid var(--green); border-bottom: 2.5px solid var(--green); transform: rotate(-45deg); }
-/* urgent = attention (red), placed after the generic green checked rule and with higher specificity so it wins */
-.chip.chip-urgent input:checked + span { background: var(--red-wash); border-color: var(--red); }
-.chip.chip-urgent input:checked + span::before { border-left-color: var(--red); border-bottom-color: var(--red); }
 .chip input:focus-visible + span { outline: 3px solid var(--green); outline-offset: 3px; }
 .builder-out { display: grid; gap: 14px; align-content: start; }
 .preview-term { border: 2px dashed var(--red); transition: border-color .25s var(--ease); }

@@ -30,7 +30,7 @@
     E_BRACE: ['error', 'فيه قوس «{open}» مفتوح ومش مقفول.'],
     E_UNDECLARED: ['error', '«{name}» مش متعرّف. نسيتوا تعرّفوه، ولا مكتوب غلط؟ الحروف الكبيرة والصغيرة بتفرق.'],
     E_REDECL: ['error', '«{name}» متعرّف قبل كده في نفس المكان.'],
-    E_ARGS: ['error', 'الدالة {name} محتاجة {n} مدخلات، وانتو حاطين {m}.'],
+    E_ARGS: ['error', 'الدالة {name} {nArgs}، وانتو {mArgs}.'],   // {nArgs}/{mArgs} from n/m in mkMsg (batch 4)
     E_TYPE: ['error', 'ما ينفعش تحطّوا {from} في {to}.'],
     E_CONST: ['error', '«{name}» ثابت (const)، ما ينفعش تغيّروه.'],
     E_NO_SETUP: ['error', 'الكود لازم يكون فيه void setup() وvoid loop().'],
@@ -86,10 +86,21 @@
   var MSG_PUBLIC = {};
   Object.keys(MSG).forEach(function (k) { MSG_PUBLIC[k] = { sev: MSG[k][0], ar: MSG[k][1] }; });
 
+  /* Arabic count agreement (batch 4): 0 → none, 1 → singular, 2 → dual, 3–10 → plural, 11+ → singular. */
+  function argsAr(n) { return n === 1 ? 'مدخل واحد' : n === 2 ? 'مدخلين' : n >= 3 && n <= 10 ? n + ' مدخلات' : n + ' مدخل'; }
+  function argsVars(v) {
+    var o = {}; for (var k in v) o[k] = v[k];
+    var r = /^(\d+)–(\d+)$/.exec(String(v.n));
+    o.nArgs = r ? (r[1] === '1' && r[2] === '2' ? 'محتاجة مدخل واحد أو اتنين' : 'محتاجة من ' + r[1] + ' لـ' + r[2] + (+r[2] <= 10 ? ' مدخلات' : ' مدخل'))
+      : +v.n === 0 ? 'ما بتاخدش مدخلات' : 'محتاجة ' + argsAr(+v.n);
+    o.mArgs = +v.m === 0 ? 'ما حطّيتوش ولا مدخل' : 'حاطين ' + argsAr(+v.m);
+    return o;
+  }
   /** Build a message object {code, sev, msg_ar, line?, col?, vars}. */
   function mkMsg(code, vars, line, col) {
     var m = MSG[code] || MSG.E_INTERNAL;
     vars = vars || {};
+    if (code === 'E_ARGS') vars = argsVars(vars);
     var ar = m[1].replace(/\{(\w+)\}/g, function (all, k) { return vars[k] != null ? String(vars[k]) : all; });
     var o = { code: MSG[code] ? code : 'E_INTERNAL', sev: m[0], msg_ar: ar, vars: vars };
     if (line) { o.line = line; o.col = col || 1; }

@@ -53,6 +53,9 @@ Plain static site — no framework, no build step required, no external requests
 - Retired, kept in the repo but no longer loaded: `assets/js/lab.js` (old 3D bench + command language) and `assets/js/esp-behavior.js`.
 - `assets/fonts` — local Alexandria and IBM Plex Sans Arabic (woff2 subsets)
 - `vercel.json` — clean URLs, caching and security headers
+- `robots.txt` (allow all + sitemap link) and `sitemap.xml` (`/`, `/lab`, `/results`). `/terms` and `/feedback` stay out: they carry `<meta name="robots" content="noindex, nofollow">`
+- Link preview: `assets/img/og-cover.png` (1200×630, rendered from the brand fonts/colors, logo and duck) via `og:image` / `twitter:image` on every page; `canonical` + `og:url` point to `https://beedak.vercel.app/...`
+- Icons: `favicon.ico` (32/48), `assets/img/beedak-icon-circle.svg`, `assets/img/apple-touch-icon.png` (180×180)
 
 ## Real numbers (`assets/data/stats.json`)
 
